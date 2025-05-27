@@ -33,6 +33,9 @@ public class ClientDTO {
         this.patronymic = patronymic;
     }
 
+    public ClientDTO() {
+    }
+
     public String getName() {
         return name;
     }

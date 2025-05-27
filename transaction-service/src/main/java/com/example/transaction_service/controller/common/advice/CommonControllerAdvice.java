@@ -1,8 +1,7 @@
-package com.example.transaction_service.controller.advice;
+package com.example.transaction_service.controller.common.advice;
 
-import com.example.transaction_service.controller.advice.handler.CommonControllerExceptionHandler;
+import com.example.transaction_service.controller.common.advice.handler.CommonControllerExceptionHandler;
 import com.example.transaction_service.exception.*;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

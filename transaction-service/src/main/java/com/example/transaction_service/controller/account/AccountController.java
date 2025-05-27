@@ -1,6 +1,6 @@
 package com.example.transaction_service.controller.account;
 
-import com.example.transaction_service.controller.advice.handler.CommonControllerExceptionHandler;
+import com.example.transaction_service.controller.common.advice.handler.CommonControllerExceptionHandler;
 import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.model.account.entity.Account;
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;

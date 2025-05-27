@@ -11,6 +11,19 @@ spring:
     change-log: db/changelog/main/main-changelog.yml
     enabled: true
 
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT_INNER}
+      lifetime: ${REDIS_SUBJECT_LIFE_TIME}
+      password: ${REDIS_PASSWORD}
+  jpa:
+    show-sql: true
+
+method:
+  runtime:
+    limit: 10000
+
 account:
   credit:
     start-balance: ${ACCOUNT_CREDIT_START_BALANCE}

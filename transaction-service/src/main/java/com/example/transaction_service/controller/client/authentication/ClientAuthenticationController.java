@@ -1,6 +1,6 @@
 package com.example.transaction_service.controller.client.authentication;
 
-import com.example.transaction_service.controller.advice.handler.CommonControllerExceptionHandler;
+import com.example.transaction_service.controller.common.advice.handler.CommonControllerExceptionHandler;
 import com.example.transaction_service.model.client.dto.ClientDTO;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.service.client.authentication.AbstractClientAuthenticationService;

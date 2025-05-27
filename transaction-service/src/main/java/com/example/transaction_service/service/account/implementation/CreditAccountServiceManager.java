@@ -11,7 +11,10 @@ import com.example.transaction_service.repository.AccountRepository;
 import com.example.transaction_service.repository.AccountTypeRepository;
 import com.example.transaction_service.repository.ClientRepository;
 import com.example.transaction_service.service.account.AbstractCreditAccountService;
+import com.example.transaction_service.service.common.aop.annotation.Cached;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,6 +50,7 @@ public class CreditAccountServiceManager extends AbstractCreditAccountService<Ac
     }
 
     @Override
+    @Cached
     public Account getById(long id) {
         return accountRepository.findAccountById(id).orElseThrow(() -> new NotFoundException(String.format("client by id is not found\nid : %s", id)));
     }

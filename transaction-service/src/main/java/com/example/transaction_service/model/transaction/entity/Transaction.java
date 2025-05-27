@@ -4,6 +4,7 @@ import com.example.transaction_service.model.account.entity.Account;
 import com.example.transaction_service.model.transaction.type.entity.TransactionType;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "transaction")
-public class Transaction {
+public class Transaction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

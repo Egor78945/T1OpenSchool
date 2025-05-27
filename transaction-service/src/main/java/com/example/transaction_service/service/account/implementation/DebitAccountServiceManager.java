@@ -10,6 +10,7 @@ import com.example.transaction_service.repository.AccountRepository;
 import com.example.transaction_service.repository.AccountTypeRepository;
 import com.example.transaction_service.repository.ClientRepository;
 import com.example.transaction_service.service.account.AbstractDebitAccountService;
+import com.example.transaction_service.service.common.aop.annotation.Cached;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,7 @@ public class DebitAccountServiceManager extends AbstractDebitAccountService<Acco
     }
 
     @Override
+    @Cached
     public Account getById(long id) {
         return accountRepository.findAccountById(id).orElseThrow(() -> new NotFoundException(String.format("client by id is not found\nid : %s", id)));
     }
