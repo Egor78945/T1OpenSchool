@@ -44,7 +44,6 @@ public class DebitAccountServiceManager extends AbstractDebitAccountService<Acco
     }
 
     @Override
-    @Cached
     public Account getById(long id) {
         return accountRepository.findAccountById(id).orElseThrow(() -> new NotFoundException(String.format("client by id is not found\nid : %s", id)));
     }
