@@ -3,6 +3,7 @@ version: '3.9'
 services:
   postgres:
     container_name: ${POSTGRES_HOST}
+    hostname: ${POSTGRES_HOST}
     image: postgres
     environment:
       - POSTGRES_DB=${POSTGRES_DATABASE_NAME}
@@ -16,6 +17,7 @@ services:
 
   transaction-service:
     container_name: ${TRANSACTION_SERVICE_HOST}
+    hostname: ${TRANSACTION_SERVICE_HOST}
     build:
       context: ./transaction-service
       dockerfile: Dockerfile
@@ -25,9 +27,11 @@ services:
     restart: on-failure
     depends_on:
       - postgres
+      - redis
     env_file:
       - ./env/transaction-service.env
       - ./env/redis.env
+      - ./env/kafka.env
       - .env
     ports:
       - ${TRANSACTION_SERVICE_PORT_OUTER}:${TRANSACTION_SERVICE_PORT_INNER}
@@ -35,6 +39,7 @@ services:
   redis:
     image: redis:${REDIS_VERSION}
     container_name: ${REDIS_HOST}
+    hostname: ${REDIS_HOST}
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_MAXMEMORY=${REDIS_MAX_MEMORY}
@@ -44,3 +49,50 @@ services:
     ports:
       - ${REDIS_PORT_OUTER}:${REDIS_PORT_INNER}
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:${ZOOKEEPER_VERSION}
+    hostname: ${ZOOKEEPER_HOST}
+    container_name: ${ZOOKEEPER_HOST}
+    ports:
+      - ${ZOOKEEPER_PORT_OUTER}:${ZOOKEEPER_PORT_INNER}
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT_INNER}
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka1:
+    image: confluentinc/cp-kafka:${KAFKA_VERSION}
+    hostname: ${KAFKA1_HOST}
+    container_name: ${KAFKA1_HOST}
+    depends_on:
+      - zookeeper
+    ports:
+      - ${KAFKA1_PORT_PLAINTEXT_OUTER}:${KAFKA1_PORT_PLAINTEXT_INNER}
+      - ${KAFKA1_PORT_OUTER}:${KAFKA1_PORT_INNER}
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT_INNER}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA1_HOST}:${KAFKA1_PORT_PLAINTEXT_INNER},PLAINTEXT_HOST://${KAFKA1_HOST}:${KAFKA1_PORT_INNER}
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  kafka2:
+    image: confluentinc/cp-kafka:${KAFKA_VERSION}
+    hostname: ${KAFKA2_HOST}
+    container_name: ${KAFKA2_HOST}
+    depends_on:
+      - zookeeper
+    ports:
+      - ${KAFKA2_PORT_PLAINTEXT_OUTER}:${KAFKA2_PORT_PLAINTEXT_INNER}
+      - ${KAFKA2_PORT_OUTER}:${KAFKA2_PORT_INNER}
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT_INNER}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA2_HOST}:${KAFKA2_PORT_PLAINTEXT_INNER},PLAINTEXT_HOST://${KAFKA2_HOST}:${KAFKA2_PORT_INNER}
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0

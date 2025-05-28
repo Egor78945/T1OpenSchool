@@ -17,6 +17,7 @@ spring:
       port: ${REDIS_PORT_INNER}
       lifetime: ${REDIS_SUBJECT_LIFE_TIME}
       password: ${REDIS_PASSWORD}
+
   jpa:
     show-sql: true
 
@@ -33,6 +34,22 @@ account:
       max: ${ACCOUNT_TRANSACTION_MAX_AMOUNT}
   balance:
     max: ${ACCOUNT_BALANCE_MAX_AMOUNT}
+
+kafka:
+  bootstrap:
+    servers: ${KAFKA1_HOST}:${KAFKA1_PORT_PLAINTEXT_INNER}, ${KAFKA2_HOST}:${KAFKA2_PORT_PLAINTEXT_INNER}
+  topic:
+    metric:
+      name: ${KAFKA_TOPIC_METRIC}
+      transaction-id: metric-transaction-id
+    replication-factor: ${KAFKA_TOPIC_REPLICATION_FACTOR}
+  listener:
+    ack-mode: record
+  consumer:
+    auto-offset-reset: earliest
+  producer:
+    retries: 1000
+
 
 server:
   port: ${TRANSACTION_SERVICE_PORT_INNER}

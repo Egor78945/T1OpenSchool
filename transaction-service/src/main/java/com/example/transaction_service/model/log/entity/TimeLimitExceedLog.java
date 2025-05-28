@@ -1,13 +1,15 @@
 package com.example.transaction_service.model.log.entity;
 
+import com.example.transaction_service.model.log.Log;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
 @Table(name = "time_limit_exceed_log")
-public class TimeLimitExceedLog {
+public class TimeLimitExceedLog extends Log implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
