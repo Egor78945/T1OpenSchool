@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.transaction_service.model.client.entity.Client;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Контроллер, принимающий запросы, связанные с клиентскими аккаунтами
@@ -32,31 +33,31 @@ public class AccountController {
      * @param accountTypeId Id существующего типа клиентского аккаунта {@link AccountTypeEnumeration}
      */
     @PostMapping("/registration")
-    public void registerAccount(@RequestParam(value = "clientId", defaultValue = "-1") long clientId, @RequestParam(value = "accountTypeId", defaultValue = "1") long accountTypeId) {
+    public void registerAccount(@RequestParam(value = "clientId", defaultValue = "-1") String clientId, @RequestParam(value = "accountTypeId", defaultValue = "1") long accountTypeId) {
         AccountTypeEnumeration accountTypeEnumeration = AccountTypeEnumeration.getById(accountTypeId)
                 .orElseThrow(() -> new NotFoundException(String.format("unknown account type\naccount type id : %s", accountTypeId)));
         accountServiceRouter.getByAccountTypeEnumeration(accountTypeEnumeration)
                 .orElseThrow(() -> new NotFoundException(String.format("account service by AccountTypeEnumeration is not found.\nAccountTypeEnumeration : %s", accountTypeEnumeration)))
-                .save(clientId, accountTypeId);
+                .save(UUID.fromString(clientId), accountTypeId);
     }
 
     /**
      * Метод, возвращающий список аккаунтов определённого клиента по его Id
-     * @param id Id существующего клиента {@link Client}
+     * @param clientId Id существующего клиента {@link Client}
      * @param accountTypeId Id существующего типа клиентского аккаунта {@link AccountTypeEnumeration}
      * @return Список клиентских аккаунтов {@link List}
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<List<Account>> getAccountsByClientId(@PathVariable("id") long id, @RequestParam(value = "accountTypeId", defaultValue = "-1") long accountTypeId) {
+    @GetMapping("/{clientId}")
+    public ResponseEntity<List<Account>> getAccountsByClientId(@PathVariable("clientId") String clientId, @RequestParam(value = "accountTypeId", defaultValue = "-1") long accountTypeId) {
         AbstractAccountService<Account> accountService;
         if (accountTypeId != -1) {
             AccountTypeEnumeration accountTypeEnumeration = AccountTypeEnumeration.getById(accountTypeId).orElseThrow(() ->
                     new NotFoundException(String.format("unknown account type id\nid : %s", accountTypeId)));
             accountService = accountServiceRouter.getByAccountTypeEnumeration(accountTypeEnumeration).orElseThrow(() -> new NotFoundException(String.format("account service by AccountTypeEnumeration is not found.\nAccountTypeEnumeration : %s", accountTypeEnumeration)));
-            return ResponseEntity.ok(accountService.getByClientIdAndAccountType(id));
+            return ResponseEntity.ok(accountService.getByClientIdAndAccountType(UUID.fromString(clientId)));
         } else {
             accountService = accountServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.DEBIT).get();
-            return ResponseEntity.ok(accountService.getByClientId(id));
+            return ResponseEntity.ok(accountService.getByClientId(UUID.fromString(clientId)));
         }
 
     }

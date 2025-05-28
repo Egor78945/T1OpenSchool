@@ -8,7 +8,6 @@ import com.example.transaction_service.service.common.aop.annotation.Metric;
 import com.example.transaction_service.service.kafka.producer.KafkaProducerService;
 import com.example.transaction_service.service.kafka.producer.router.KafkaProducerServiceRouter;
 import com.example.transaction_service.service.logging.LoggingService;
-import com.example.transaction_service.service.logging.router.LoggingServiceRouter;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.common.header.internals.RecordHeaders;
