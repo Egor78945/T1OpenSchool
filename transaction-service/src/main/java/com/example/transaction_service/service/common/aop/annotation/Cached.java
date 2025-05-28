@@ -1,11 +1,12 @@
-package com.example.transaction_service.controller.advice.handler;
+package com.example.transaction_service.service.common.aop.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CommonControllerExceptionHandler {
+public @interface Cached {
+    String name() default "";
 }

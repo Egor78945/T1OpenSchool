@@ -17,5 +17,5 @@ public abstract class AbstractAuthenticationService <L, R> {
      * Выполнить регистрацию
      * @param registrationModel DTO, хранящий основную информацию для проведения регистрации
      */
-    public abstract void registration(R registrationModel);
+    public abstract String registration(R registrationModel);
 }

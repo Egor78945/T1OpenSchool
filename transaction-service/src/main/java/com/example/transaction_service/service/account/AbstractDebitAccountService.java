@@ -4,6 +4,7 @@ import com.example.transaction_service.model.account.entity.Account;
 import com.example.transaction_service.repository.AccountRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Абстрактный класс, выполняющий действия, связанные с клиентскими аккаунтами {@link Account} типа <b>DEBIT</b>
@@ -16,11 +17,11 @@ public abstract class AbstractDebitAccountService <A extends Account> extends Ab
     }
 
     @Override
-    public abstract void save(long clientId, long accountTypeId);
+    public abstract void save(UUID clientId, long accountTypeId);
 
     @Override
     public abstract A getById(long id);
 
     @Override
-    public abstract List<A> getByClientIdAndAccountType(long clientId);
+    public abstract List<A> getByClientIdAndAccountType(UUID clientId);
 }

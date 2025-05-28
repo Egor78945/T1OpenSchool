@@ -4,6 +4,7 @@ import com.example.transaction_service.model.account.type.entity.AccountType;
 import com.example.transaction_service.model.client.entity.Client;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -11,13 +12,13 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "account")
-public class Account {
+public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
     private Client client;
     @ManyToOne
     @JoinColumn(name = "account_type_id")

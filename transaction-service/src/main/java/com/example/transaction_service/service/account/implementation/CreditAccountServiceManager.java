@@ -11,10 +11,14 @@ import com.example.transaction_service.repository.AccountRepository;
 import com.example.transaction_service.repository.AccountTypeRepository;
 import com.example.transaction_service.repository.ClientRepository;
 import com.example.transaction_service.service.account.AbstractCreditAccountService;
+import com.example.transaction_service.service.common.aop.annotation.Cached;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Класс, выполняющий действия, связанные с клиентскими аккаунтами {@link Account} типа <b>CREDIT</b>
@@ -34,9 +38,9 @@ public class CreditAccountServiceManager extends AbstractCreditAccountService<Ac
 
     @Override
     @LogDatasourceError
-    public void save(long clientId, long accountTypeId) {
+    public void save(UUID clientId, long accountTypeId) {
         AccountType accountType = accountTypeRepository.findById(accountTypeId).orElseThrow(() -> new NotFoundException(String.format("unknown account type id\naccount type id : %s", accountTypeId)));
-        Client client = clientRepository.findById(clientId).orElseThrow(() -> new NotFoundException(String.format("client not found by id\nid : %s", clientId)));
+        Client client = clientRepository.findByClientId(clientId).orElseThrow(() -> new NotFoundException(String.format("client not found by id\nid : %s", clientId)));
         if (accountType.getId() == AccountTypeEnumeration.CREDIT.getId() && accountRepository.findAccountCountByClientIdAndAccountTypeId(clientId, AccountTypeEnumeration.CREDIT.getId()) < 1) {
             Account account = new Account(client, accountType);
             account.setBalance(accountEnvironment.getACCOUNT_CREDIT_START_BALANCE());
@@ -52,7 +56,7 @@ public class CreditAccountServiceManager extends AbstractCreditAccountService<Ac
     }
 
     @Override
-    public List<Account> getByClientIdAndAccountType(long clientId){
+    public List<Account> getByClientIdAndAccountType(UUID clientId){
         return accountRepository.findAccountByClientIdAndAccountTypeId(clientId, AccountTypeEnumeration.CREDIT.getId());
     }
 }
