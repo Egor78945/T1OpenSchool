@@ -15,6 +15,7 @@ import com.example.transaction_service.service.common.aop.annotation.LogDatasour
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Класс, выполняющий действия, связанные с клиентскими аккаунтами {@link Account} типа <b>DEBIT</b>
@@ -32,9 +33,9 @@ public class DebitAccountServiceManager extends AbstractDebitAccountService<Acco
 
     @Override
     @LogDatasourceError
-    public void save(long clientId, long accountTypeId) {
+    public void save(UUID clientId, long accountTypeId) {
         AccountType accountType = accountTypeRepository.findById(accountTypeId).orElseThrow(() -> new NotFoundException(String.format("unknown account type id\naccount type id : %s", accountTypeId)));
-        Client client = clientRepository.findById(clientId).orElseThrow(() -> new NotFoundException(String.format("client not found by id\nid : %s", clientId)));
+        Client client = clientRepository.findByClientId(clientId).orElseThrow(() -> new NotFoundException(String.format("client not found by id\nid : %s", clientId)));
         if (accountType.getId() == AccountTypeEnumeration.DEBIT.getId() && accountRepository.findAccountCountByClientIdAndAccountTypeId(clientId, AccountTypeEnumeration.DEBIT.getId()) < 1) {
             Account account = new Account(client, accountType);
             accountRepository.save(account);
@@ -49,7 +50,7 @@ public class DebitAccountServiceManager extends AbstractDebitAccountService<Acco
     }
 
     @Override
-    public List<Account> getByClientIdAndAccountType(long clientId){
+    public List<Account> getByClientIdAndAccountType(UUID clientId){
         return accountRepository.findAccountByClientIdAndAccountTypeId(clientId, AccountTypeEnumeration.DEBIT.getId());
     }
 }

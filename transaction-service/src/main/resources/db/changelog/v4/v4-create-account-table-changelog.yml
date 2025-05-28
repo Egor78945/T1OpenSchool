@@ -21,12 +21,12 @@ databaseChangeLog:
                   autoIncrement: true
               - column:
                   name: client_id
-                  type: bigint
+                  type: uuid
                   constraints:
                     nullable: false
                     foreignKeyName: account_client_fk
                     referencedTableName: client
-                    referencedColumnNames: id
+                    referencedColumnNames: client_id
               - column:
                   name: account_type_id
                   type: bigint

@@ -6,6 +6,7 @@ import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Абстрактный класс, выполняющий действия, связанные с пользовательскими аккаунтами
@@ -23,7 +24,7 @@ public abstract class AbstractAccountService<A extends Account> {
      * @param clientId Id существующего клиента {@link Client}
      * @param accountTypeId Id существующего типа клиентского аккаунта {@link AccountTypeEnumeration}
      */
-    public abstract void save(long clientId, long accountTypeId);
+    public abstract void save(UUID clientId, long accountTypeId);
 
     /**
      * Получить существующий клиентский аккаунт {@link Account} по его Id
@@ -37,14 +38,14 @@ public abstract class AbstractAccountService<A extends Account> {
      * @param clientId Id существующего клиента
      * @return Список {@link List} существующих клиентских аккаунтов {@link Account} определённого клиента {@link Client} по его Id и типу клиентского аккаунта {@link AccountTypeEnumeration}
      */
-    public abstract List<A> getByClientIdAndAccountType(long clientId);
+    public abstract List<A> getByClientIdAndAccountType(UUID clientId);
 
     /**
      * Получить список {@link List} существующих клиентских аккаунтов {@link Account} по Id клиентского аккаунта {@link Client}
      * @param id Id существующего клиента
      * @return Список {@link List} существующих клиентских аккаунтов {@link Account} определённого клиента {@link Client} по его Id
      */
-    public List<Account> getByClientId(long id) {
+    public List<Account> getByClientId(UUID id) {
         return accountRepository.findAccountByClientId(id);
     }
 }

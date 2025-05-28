@@ -7,6 +7,7 @@ import com.example.transaction_service.service.client.authentication.AbstractCli
 import com.example.transaction_service.service.client.mapper.ClientMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +29,10 @@ public class ClientAuthenticationController {
     /**
      * Метод, выполняющий регистрацию нового клиента
      * @param clientDTO Регистрационные данные нового клиента {@link Client}
+     * @return <b>UUID</b> идентификатор новосозданного клиента
      */
     @PostMapping("/registration")
-    public void registration(@RequestBody @Valid ClientDTO clientDTO) {
-        clientAuthenticationService.registration(ClientMapper.mapTo(clientDTO));
+    public ResponseEntity<String> registration(@RequestBody @Valid ClientDTO clientDTO) {
+        return ResponseEntity.ok(clientAuthenticationService.registration(ClientMapper.mapTo(clientDTO)));
     }
 }

@@ -20,6 +20,12 @@ databaseChangeLog:
                     unique: true
                   autoIncrement: true
               - column:
+                  name: client_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
                   name: name
                   type: varchar(30)
                   constraints:

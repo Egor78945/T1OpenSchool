@@ -18,7 +18,7 @@ public class Account implements Serializable {
     @Column(name = "id")
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
     private Client client;
     @ManyToOne
     @JoinColumn(name = "account_type_id")
