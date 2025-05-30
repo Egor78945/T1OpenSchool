@@ -12,6 +12,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.messaging.Message;
 
+/**
+ * Конфигурация для KafkaTemplate
+ */
 @Configuration
 public class KafkaTemplateConfiguration {
     private final KafkaEnvironment kafkaEnvironment;
@@ -22,11 +25,15 @@ public class KafkaTemplateConfiguration {
 
     @Bean
     public KafkaTemplate<String, DatasourceErrorLog> datasourceErrorLogKafkaTemplate(ProducerFactory<String, DatasourceErrorLog> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
+        KafkaTemplate<String, DatasourceErrorLog> kafkaTemplate = new KafkaTemplate<>(producerFactory);
+//        kafkaTemplate.setTransactionIdPrefix(kafkaEnvironment.getKAFKA_TOPIC_METRIC_TRANSACTION_ID());
+        return kafkaTemplate;
     }
 
     @Bean
     public KafkaTemplate<String, TimeLimitExceedLog> timeLimitExceedLogKafkaTemplate(ProducerFactory<String, TimeLimitExceedLog> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
+        KafkaTemplate<String, TimeLimitExceedLog> kafkaTemplate = new KafkaTemplate<>(producerFactory);
+//        kafkaTemplate.setTransactionIdPrefix(kafkaEnvironment.getKAFKA_TOPIC_METRIC_TRANSACTION_ID());
+        return kafkaTemplate;
     }
 }

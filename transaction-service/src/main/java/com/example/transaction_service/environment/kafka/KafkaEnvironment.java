@@ -3,6 +3,9 @@ package com.example.transaction_service.environment.kafka;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * Класс, хранящий переменные окружения, связанные с <b>Kafka</b>
+ */
 @Component
 public class KafkaEnvironment {
     private final String KAFKA_BOOTSTRAP_SERVER;

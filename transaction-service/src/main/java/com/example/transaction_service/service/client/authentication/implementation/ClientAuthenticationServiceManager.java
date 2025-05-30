@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
+/**
+ * Реализация абстрактного сервиса по аутентификации клиентов {@link Client}
+ */
 @Service
 public class ClientAuthenticationServiceManager extends AbstractClientAuthenticationService<Client, Client> {
     private final AbstractClientService<Client> clientService;
@@ -27,8 +30,6 @@ public class ClientAuthenticationServiceManager extends AbstractClientAuthentica
     }
 
     @Override
-    @LogDatasourceError
-    @Metric
     public String registration(Client registrationModel) {
         if (registrationModel.getId() == null) {
             return clientService.save(registrationModel).toString();

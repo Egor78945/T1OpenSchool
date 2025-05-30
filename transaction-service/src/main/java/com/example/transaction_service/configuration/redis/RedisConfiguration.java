@@ -13,6 +13,9 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 
 import java.time.Duration;
 
+/**
+ * Конфигурация Redis
+ */
 @Configuration
 public class RedisConfiguration {
     protected final RedisEnvironment redisEnvironment;

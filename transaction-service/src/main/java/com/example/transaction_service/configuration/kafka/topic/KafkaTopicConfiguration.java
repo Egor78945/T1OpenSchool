@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
+/**
+ * Конфигурация топиков в Kafka
+ */
 @Configuration
 public class KafkaTopicConfiguration {
     private final KafkaEnvironment kafkaEnvironment;

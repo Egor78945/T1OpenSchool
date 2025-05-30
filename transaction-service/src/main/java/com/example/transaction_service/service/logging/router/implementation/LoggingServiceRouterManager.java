@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Реализация интерфейса, предоставляющего функционал для маршрутизации сервисов логгирования
+ */
 @Service
 public class LoggingServiceRouterManager implements LoggingServiceRouter {
     private final Map<Class<? extends Log>, LoggingService<? extends Log>> loggingServiceMap;

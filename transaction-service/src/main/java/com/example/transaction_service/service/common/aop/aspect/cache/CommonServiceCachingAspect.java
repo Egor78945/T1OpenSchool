@@ -24,6 +24,14 @@ public class CommonServiceCachingAspect {
         this.cacheService = cacheService;
     }
 
+    /**
+     * Advice, отслеживающий выполнение методов, помеченных аннотацией {@link Cached} и проверяющий, есть ли возвращаемое значение в кэше
+     * Если да, то возвращает из кэша, иначе из базы данных.
+     * @param joinPoint Точка среза
+     * @param cached Аннотация метода
+     * @return Возвращённый из базы данных или из кэша объект
+     * @throws Throwable Возможное исключение
+     */
     @Around("@annotation(cached)")
     public Object getCachedData(ProceedingJoinPoint joinPoint, Cached cached) throws Throwable {
         String cacheKey = cached.name().isEmpty() ? ((MethodSignature) joinPoint.getSignature()).getReturnType().getSimpleName() : cached.name();
