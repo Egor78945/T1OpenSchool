@@ -1,4 +1,4 @@
-package com.example.transaction_service.service.cache;
+package com.example.transaction_service.service.common.cache;
 
 public abstract class AbstractCacheService {
     public abstract <K, O> O get(K key);

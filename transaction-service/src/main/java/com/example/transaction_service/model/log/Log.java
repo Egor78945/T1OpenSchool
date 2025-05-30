@@ -1,6 +1,9 @@
 package com.example.transaction_service.model.log;
 
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 
-public abstract class Log implements Serializable {
+@Component
+public class Log implements Serializable {
 }

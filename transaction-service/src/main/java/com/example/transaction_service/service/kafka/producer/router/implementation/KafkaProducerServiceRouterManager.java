@@ -4,9 +4,8 @@ import com.example.transaction_service.model.log.Log;
 import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.model.log.entity.TimeLimitExceedLog;
 import com.example.transaction_service.service.kafka.producer.KafkaProducerService;
-import com.example.transaction_service.service.kafka.producer.implementation.DatasourceErrorLogKafkaProducerService;
-import com.example.transaction_service.service.kafka.producer.implementation.TimeLimitExceedLogKafkaProducerService;
 import com.example.transaction_service.service.kafka.producer.router.KafkaProducerServiceRouter;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -14,15 +13,16 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-public class KafkaProducerServiceRouterManager implements KafkaProducerServiceRouter<String, Log> {
-    private final Map<Class<Log>, KafkaProducerService<String, Serializable>> kafkaProducerServiceByClass;
+public class KafkaProducerServiceRouterManager implements KafkaProducerServiceRouter {
+    private final Map<Class<? extends Serializable>, KafkaProducerService<? extends Serializable, ? extends Serializable>> kafkaProducerServiceMap;
 
-    public KafkaProducerServiceRouterManager(DatasourceErrorLogKafkaProducerService datasourceErrorLogKafkaProducerService, TimeLimitExceedLogKafkaProducerService timeLimitExceedLogKafkaProducerService) {
-        this.kafkaProducerServiceByClass = Map.of(DatasourceErrorLog.class, datasourceErrorLogKafkaProducerService, TimeLimitExceedLog.class, timeLimitExceedLogKafkaProducerService);
+    public KafkaProducerServiceRouterManager(KafkaProducerService<String, DatasourceErrorLog> datasourceErrorLogKafkaProducerService, KafkaProducerService<String, TimeLimitExceedLog> timeLimitExceedLogKafkaProducerService) {
+        this.kafkaProducerServiceMap = Map.of(DatasourceErrorLog.class, datasourceErrorLogKafkaProducerService, TimeLimitExceedLog.class, timeLimitExceedLogKafkaProducerService);
     }
 
+
     @Override
-    public Optional<KafkaProducerService<String, Log>> getKafkaProducerService(Class<Log> targetClass) {
-        return Optional.ofNullable(kafkaProducerServiceByClass.get(targetClass));
+    public <K extends Serializable, V extends Serializable> Optional<KafkaProducerService<K, V>> getKafkaProducerService(Class<V> targetClass) {
+        return Optional.ofNullable((KafkaProducerService<K, V>) kafkaProducerServiceMap.get(targetClass));
     }
 }

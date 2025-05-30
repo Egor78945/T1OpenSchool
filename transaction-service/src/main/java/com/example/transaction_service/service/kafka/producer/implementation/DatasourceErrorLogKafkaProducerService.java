@@ -1,6 +1,8 @@
 package com.example.transaction_service.service.kafka.producer.implementation;
 
 import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
+import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
+import com.example.transaction_service.service.common.aop.annotation.Metric;
 import com.example.transaction_service.service.kafka.producer.KafkaProducerService;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,6 +17,8 @@ public class DatasourceErrorLogKafkaProducerService implements KafkaProducerServ
     }
 
     @Override
+    @LogDatasourceError
+    @Metric
     public void send(ProducerRecord<String, DatasourceErrorLog> producerRecord) {
         kafkaTemplate.send(producerRecord);
     }

@@ -5,6 +5,6 @@ import com.example.transaction_service.service.kafka.producer.KafkaProducerServi
 import java.io.Serializable;
 import java.util.Optional;
 
-public interface KafkaProducerServiceRouter <K extends Serializable, V extends Serializable> {
-    Optional<KafkaProducerService<K, V>> getKafkaProducerService(Class<V> targetClass);
+public interface KafkaProducerServiceRouter {
+    <K extends Serializable, V extends Serializable> Optional<KafkaProducerService<K,V>> getKafkaProducerService(Class<V> targetClass);
 }

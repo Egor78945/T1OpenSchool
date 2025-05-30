@@ -1,4 +1,4 @@
-package com.example.transaction_service.service.cache;
+package com.example.transaction_service.service.common.cache;
 
 public abstract class AbstractRedisCacheService extends AbstractCacheService {
     @Override

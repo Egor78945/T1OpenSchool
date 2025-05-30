@@ -11,6 +11,15 @@ spring:
     change-log: db/changelog/main/main-changelog.yml
     enabled: true
 
+  kafka:
+    bootstrap-servers: ${KAFKA1_HOST}:${KAFKA1_PORT_PLAINTEXT_INNER}, ${KAFKA2_HOST}:${KAFKA2_PORT_PLAINTEXT_INNER}
+    listener:
+      ack-mode: record
+    consumer:
+      auto-offset-reset: earliest
+    producer:
+      retries: 1000
+
   data:
     redis:
       host: ${REDIS_HOST}
@@ -36,19 +45,11 @@ account:
     max: ${ACCOUNT_BALANCE_MAX_AMOUNT}
 
 kafka:
-  bootstrap:
-    servers: ${KAFKA1_HOST}:${KAFKA1_PORT_PLAINTEXT_INNER}, ${KAFKA2_HOST}:${KAFKA2_PORT_PLAINTEXT_INNER}
   topic:
     metric:
       name: ${KAFKA_TOPIC_METRIC}
       transaction-id: metric-transaction-id
     replication-factor: ${KAFKA_TOPIC_REPLICATION_FACTOR}
-  listener:
-    ack-mode: record
-  consumer:
-    auto-offset-reset: earliest
-  producer:
-    retries: 1000
 
 
 server:

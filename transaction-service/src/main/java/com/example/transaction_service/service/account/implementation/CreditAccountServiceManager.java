@@ -13,6 +13,7 @@ import com.example.transaction_service.repository.ClientRepository;
 import com.example.transaction_service.service.account.AbstractCreditAccountService;
 import com.example.transaction_service.service.common.aop.annotation.Cached;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
+import com.example.transaction_service.service.common.aop.annotation.Metric;
 import org.hibernate.annotations.Cache;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class CreditAccountServiceManager extends AbstractCreditAccountService<Ac
 
     @Override
     @LogDatasourceError
+    @Metric
     public void save(UUID clientId, long accountTypeId) {
         AccountType accountType = accountTypeRepository.findById(accountTypeId).orElseThrow(() -> new NotFoundException(String.format("unknown account type id\naccount type id : %s", accountTypeId)));
         Client client = clientRepository.findByClientId(clientId).orElseThrow(() -> new NotFoundException(String.format("client not found by id\nid : %s", clientId)));

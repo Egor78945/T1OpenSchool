@@ -12,7 +12,7 @@ public class KafkaEnvironment {
     private final int KAFKA_TOPIC_REPLICATION_FACTOR;
     private final int KAFKA_PRODUCER_RETRY_COUNT;
 
-    public KafkaEnvironment(@Value("${kafka.bootstrap.servers}") String KAFKA_BOOTSTRAP_SERVER, @Value("${kafka.consumer.auto-offset-reset}") String KAFKA_AUTO_OFFSET_RESET, @Value("${kafka.topic.metric.name}") String KAFKA_TOPIC_METRIC_NAME, @Value("${kafka.topic.metric.transaction-id}") String KAFKA_TOPIC_METRIC_TRANSACTION_ID, @Value("${kafka.producer.retries}") int KAFKA_PRODUCER_RETRY_COUNT, @Value("${kafka.topic.replication-factor}") int KAFKA_TOPIC_REPLICATION_FACTOR) {
+    public KafkaEnvironment(@Value("${spring.kafka.bootstrap-servers}") String KAFKA_BOOTSTRAP_SERVER, @Value("${spring.kafka.consumer.auto-offset-reset}") String KAFKA_AUTO_OFFSET_RESET, @Value("${kafka.topic.metric.name}") String KAFKA_TOPIC_METRIC_NAME, @Value("${kafka.topic.metric.transaction-id}") String KAFKA_TOPIC_METRIC_TRANSACTION_ID, @Value("${spring.kafka.producer.retries}") int KAFKA_PRODUCER_RETRY_COUNT, @Value("${kafka.topic.replication-factor}") int KAFKA_TOPIC_REPLICATION_FACTOR) {
         this.KAFKA_BOOTSTRAP_SERVER = KAFKA_BOOTSTRAP_SERVER;
         this.KAFKA_AUTO_OFFSET_RESET = KAFKA_AUTO_OFFSET_RESET;
         this.KAFKA_TOPIC_METRIC_NAME = KAFKA_TOPIC_METRIC_NAME;

@@ -7,6 +7,7 @@ import com.example.transaction_service.service.client.AbstractClientService;
 import com.example.transaction_service.service.client.implementation.ClientServiceManager;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
 import com.example.transaction_service.service.client.authentication.AbstractClientAuthenticationService;
+import com.example.transaction_service.service.common.aop.annotation.Metric;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class ClientAuthenticationServiceManager extends AbstractClientAuthentica
 
     @Override
     @LogDatasourceError
+    @Metric
     public String registration(Client registrationModel) {
         if (registrationModel.getId() == null) {
             return clientService.save(registrationModel).toString();
