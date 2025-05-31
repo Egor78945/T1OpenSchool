@@ -4,12 +4,16 @@ import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.exception.ProcessingException;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.repository.ClientRepository;
-import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
 import com.example.transaction_service.service.client.AbstractClientService;
+import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
+import com.example.transaction_service.service.common.aop.annotation.Metric;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Реализация абстрактного сервиса по работе с клиентами {@link }
+ */
 @Service
 public class ClientServiceManager extends AbstractClientService<Client> {
     public ClientServiceManager(ClientRepository clientRepository) {
@@ -18,6 +22,7 @@ public class ClientServiceManager extends AbstractClientService<Client> {
 
     @Override
     @LogDatasourceError
+    @Metric
     public UUID save(Client client) {
         client.setClient_id(UUID.randomUUID());
         for(int i = 0; i < 10; i++){

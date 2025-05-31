@@ -3,6 +3,9 @@ package com.example.transaction_service.environment.redis;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * Класс, хранящий переменные окружения, связанные с <b>Redis</b>
+ */
 @Component
 public class RedisEnvironment {
     private final String REDIS_HOST;

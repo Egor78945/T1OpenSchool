@@ -3,6 +3,9 @@ package com.example.transaction_service.environment.common;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * Класс, хранящий переменные окружения, являющиеся общими для всего приложения
+ */
 @Component
 public class CommonEnvironment {
     private final long METHOD_RUNTIME_LIMIT;

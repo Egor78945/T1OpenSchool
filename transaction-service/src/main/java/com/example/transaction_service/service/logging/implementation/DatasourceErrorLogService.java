@@ -2,13 +2,15 @@ package com.example.transaction_service.service.logging.implementation;
 
 import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.repository.DatasourceErrorLogRepository;
+import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
+import com.example.transaction_service.service.common.aop.annotation.Metric;
 import com.example.transaction_service.service.logging.LoggingService;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 /**
  * Реализация сервиса по логгированию {@link LoggingService} для логгирования {@link DatasourceErrorLog}
  */
-@Repository
+@Service
 public class DatasourceErrorLogService implements LoggingService<DatasourceErrorLog> {
     private final DatasourceErrorLogRepository datasourceErrorLogRepository;
 
@@ -17,6 +19,8 @@ public class DatasourceErrorLogService implements LoggingService<DatasourceError
     }
 
     @Override
+    @LogDatasourceError
+    @Metric
     public void log(DatasourceErrorLog loggingSubject) {
         datasourceErrorLogRepository.save(loggingSubject);
     }

@@ -1,10 +1,18 @@
 package com.example.transaction_service.service.common.aop.aspect.log;
 
 import com.example.transaction_service.environment.common.CommonEnvironment;
+import com.example.transaction_service.environment.kafka.KafkaEnvironment;
+import com.example.transaction_service.exception.NotFoundException;
+import com.example.transaction_service.model.common.error.enumeration.ErrorEnumeration;
 import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.model.log.entity.TimeLimitExceedLog;
+import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
 import com.example.transaction_service.service.common.aop.annotation.Metric;
-import com.example.transaction_service.service.logging.LoggingService;
+import com.example.transaction_service.service.kafka.producer.router.KafkaProducerServiceRouter;
+import com.example.transaction_service.service.logging.router.LoggingServiceRouter;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.header.internals.RecordHeader;
+import org.apache.kafka.common.header.internals.RecordHeaders;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
@@ -12,11 +20,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-
-import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
+import java.util.List;
 
 /**
  * Общий класс-аспект, выполняющий действия с логгированием
@@ -25,13 +33,15 @@ import com.example.transaction_service.service.common.aop.annotation.LogDatasour
 @Aspect
 public class CommonServiceLoggingAspect {
     private final CommonEnvironment commonEnvironment;
-    private final LoggingService<DatasourceErrorLog> datasourceLoggingService;
-    private final LoggingService<TimeLimitExceedLog> timeLimitExceedLogLoggingService;
+    private final LoggingServiceRouter loggingServiceRouter;
+    private final KafkaProducerServiceRouter kafkaProducerServiceRouter;
+    private final KafkaEnvironment kafkaEnvironment;
 
-    public CommonServiceLoggingAspect(@Qualifier("datasourceErrorLogService") LoggingService<DatasourceErrorLog> datasourceLoggingService, @Qualifier("timeLimitExceedLogService") LoggingService<TimeLimitExceedLog> timeLimitExceedLogService, CommonEnvironment commonEnvironment) {
+    public CommonServiceLoggingAspect(@Qualifier("loggingServiceRouterManager") LoggingServiceRouter loggingServiceRouter, @Qualifier("kafkaProducerServiceRouterManager") KafkaProducerServiceRouter kafkaProducerServiceRouter, CommonEnvironment commonEnvironment, KafkaEnvironment kafkaEnvironment) {
         this.commonEnvironment = commonEnvironment;
-        this.datasourceLoggingService = datasourceLoggingService;
-        this.timeLimitExceedLogLoggingService = timeLimitExceedLogService;
+        this.kafkaEnvironment = kafkaEnvironment;
+        this.loggingServiceRouter = loggingServiceRouter;
+        this.kafkaProducerServiceRouter = kafkaProducerServiceRouter;
     }
 
     /**
@@ -41,12 +51,20 @@ public class CommonServiceLoggingAspect {
      */
     @AfterThrowing(pointcut = "@annotation(com.example.transaction_service.service.common.aop.annotation.LogDatasourceError)", throwing = "e")
     public void logAfterMethodThrowing(Exception e) {
-        datasourceLoggingService.log(new DatasourceErrorLog(e.getClass().getSimpleName(), Arrays.toString(e.getStackTrace()), e.getMessage(), Timestamp.valueOf(LocalDateTime.now())));
+        DatasourceErrorLog datasourceErrorLog = new DatasourceErrorLog(e.getClass().getSimpleName(), Arrays.toString(e.getStackTrace()), e.getMessage(), Timestamp.valueOf(LocalDateTime.now()));
+        try {
+            kafkaProducerServiceRouter.getKafkaProducerService(DatasourceErrorLog.class)
+                    .orElseThrow(() -> new NotFoundException(String.format("kafka service is not found by class\nClass : %s", DatasourceErrorLog.class)))
+                    .send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_METRIC_NAME(), null, datasourceErrorLog.getTime().toString(), datasourceErrorLog, new RecordHeaders(List.of(new RecordHeader("error type", ErrorEnumeration.DATA_SOURCE.name().getBytes())))));
+        } catch (Exception exception) {
+            loggingServiceRouter.getByTargetClass(DatasourceErrorLog.class).orElseThrow(() -> new NotFoundException(String.format("logging service is not found by class\nClass : %s", DatasourceErrorLog.class))).log(datasourceErrorLog);
+        }
     }
 
     /**
      * Advice, отслеживающий время выполнения методов, помеченных с помощью аннотации {@link Metric}
      * и сохраняющий сообщение об превышении времени выполнения, если оно было
+     *
      * @return Оригинальный результат метода, помеченного аннотацией {@link Metric}
      * @throws Throwable возможное исключение метода, помеченного аннотацией {@link Metric}
      */
@@ -57,8 +75,15 @@ public class CommonServiceLoggingAspect {
             return joinPoint.proceed();
         } finally {
             long end = System.currentTimeMillis();
-            if(end - start > commonEnvironment.getMETHOD_RUNTIME_LIMIT()){
-                timeLimitExceedLogLoggingService.log(new TimeLimitExceedLog(joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(), end - start, Timestamp.valueOf(LocalDateTime.now())));
+            if (end - start > commonEnvironment.getMETHOD_RUNTIME_LIMIT()) {
+                TimeLimitExceedLog timeLimitExceedLog = new TimeLimitExceedLog(joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(), end - start, Timestamp.valueOf(LocalDateTime.now()));
+                try {
+                    kafkaProducerServiceRouter.getKafkaProducerService(TimeLimitExceedLog.class)
+                            .orElseThrow(() -> new NotFoundException(String.format("kafka service is not found by class\nClass : %s", DatasourceErrorLog.class)))
+                            .send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_METRIC_NAME(), null, timeLimitExceedLog.getTime().toString(), timeLimitExceedLog, new RecordHeaders(List.of(new RecordHeader("error type", ErrorEnumeration.METRICS.name().getBytes())))));
+                } catch (Exception e) {
+                    loggingServiceRouter.getByTargetClass(TimeLimitExceedLog.class).orElseThrow(() -> new NotFoundException(String.format("logging service is not found by class\nClass : %s", TimeLimitExceedLog.class))).log(timeLimitExceedLog);
+                }
             }
         }
     }

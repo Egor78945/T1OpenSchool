@@ -1,5 +1,8 @@
-package com.example.transaction_service.service.cache;
+package com.example.transaction_service.service.common.cache;
 
+/**
+ * Абстрактная реализация сервиса по работе с кэшем для работы с <b>Redis</b>
+ */
 public abstract class AbstractRedisCacheService extends AbstractCacheService {
     @Override
     public abstract <K, O> O get(K key);

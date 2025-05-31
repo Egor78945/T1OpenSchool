@@ -1,5 +1,6 @@
 package com.example.transaction_service.model.log.entity;
 
+import com.example.transaction_service.model.log.Log;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "datasource_error_log")
-public class DatasourceErrorLog implements Serializable {
+public class DatasourceErrorLog extends Log implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
