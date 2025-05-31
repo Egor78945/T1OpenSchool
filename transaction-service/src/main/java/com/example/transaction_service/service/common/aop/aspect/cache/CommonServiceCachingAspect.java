@@ -27,6 +27,7 @@ public class CommonServiceCachingAspect {
     /**
      * Advice, отслеживающий выполнение методов, помеченных аннотацией {@link Cached} и проверяющий, есть ли возвращаемое значение в кэше
      * Если да, то возвращает из кэша, иначе из базы данных.
+     * <b>СЛЕДУЕТ ИСПОЛЬЗОВАТЬ ТОЛЬКО ДЛЯ КЭШИРОВАНИЯ РЕДКООБНОВЛЯЕМЫХ ДАННЫХ</b>
      * @param joinPoint Точка среза
      * @param cached Аннотация метода
      * @return Возвращённый из базы данных или из кэша объект
@@ -48,6 +49,11 @@ public class CommonServiceCachingAspect {
         return originalObject;
     }
 
+    /**
+     * Генерирует ключ для доступа к кэшируемым данным, на основе параметров метода
+     * @param joinPoint JoinPoint, на основе которого генерируется ключ
+     * @return Готовый ключ для кэширумого объекта
+     */
     private String buildHashKey(JoinPoint joinPoint) {
         StringBuilder sb = new StringBuilder();
         sb.append(joinPoint.getSignature().toShortString());
