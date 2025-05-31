@@ -34,4 +34,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "from Account a " +
             "where a.client.client_id = :clientId and a.accountType.id = :accountTypeId")
     int findAccountCountByClientIdAndAccountTypeId(@Param("clientId") UUID clientId, @Param("accountTypeId") long accountTypeId);
+
+    @Query("select case when exists(from Account where accountId=:accountId) then true else false end")
+    boolean existsAccountByAccountId(@Param("accountId") UUID accountId);
 }

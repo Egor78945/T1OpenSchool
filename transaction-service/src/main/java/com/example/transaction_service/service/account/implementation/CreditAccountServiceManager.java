@@ -44,7 +44,7 @@ public class CreditAccountServiceManager extends AbstractCreditAccountService<Ac
         AccountType accountType = accountTypeRepository.findById(accountTypeId).orElseThrow(() -> new NotFoundException(String.format("unknown account type id\naccount type id : %s", accountTypeId)));
         Client client = clientRepository.findByClientId(clientId).orElseThrow(() -> new NotFoundException(String.format("client not found by id\nid : %s", clientId)));
         if (accountType.getId() == AccountTypeEnumeration.CREDIT.getId() && accountRepository.findAccountCountByClientIdAndAccountTypeId(clientId, AccountTypeEnumeration.CREDIT.getId()) < 1) {
-            Account account = new Account(client, accountType);
+            Account account = new Account(client, buildUUID(), accountType);
             account.setBalance(accountEnvironment.getACCOUNT_CREDIT_START_BALANCE());
             accountRepository.save(account);
         } else {

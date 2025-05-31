@@ -6,20 +6,14 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - sqlCheck:
             expectedResult: "0"
-            sql: "SELECT COUNT(*) FROM client"
+            sql: "SELECT COUNT(*) FROM account_status"
       changes:
         - loadData:
-            tableName: client
-            file: db/csv/client_table.csv
+            tableName: account_status
+            file: db/csv/account_status_table.csv
             separator: ","
             usePreparedStatements: true
             columns:
               - column:
                   name: name
-                  type: varchar(30)
-              - column:
-                  name: surname
-                  type: varchar(30)
-              - column:
-                  name: patronymic
                   type: varchar(30)

@@ -1,16 +1,16 @@
 databaseChangeLog:
   - changeSet:
-      id: v2-2
+      id: v4-2
       author: egor_petrov
       preConditions:
         - onFail: MARK_RAN
         - sqlCheck:
             expectedResult: "0"
-            sql: "SELECT COUNT(*) FROM transaction_type"
+            sql: "SELECT COUNT(*) FROM transaction_status"
       changes:
         - loadData:
-            tableName: transaction_type
-            file: db/csv/transaction_type_table.csv
+            tableName: transaction_status
+            file: db/csv/transaction_status_table.csv
             separator: ","
             usePreparedStatements: true
             columns:

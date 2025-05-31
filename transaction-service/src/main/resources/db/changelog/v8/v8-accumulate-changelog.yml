@@ -1,4 +1,4 @@
 databaseChangeLog:
   - include:
-      file: v7-create-transaction-table-changelog.yml
+      file: v8-create-datasource-error-log-table-changelog.yml
       relativeToChangelogFile: true

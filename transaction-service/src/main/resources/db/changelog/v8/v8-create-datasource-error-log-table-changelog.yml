@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: v6-1
+      id: v8-1
       author: egor_petrov
       preConditions:
         - onFail: MARK_RAN

@@ -18,9 +18,36 @@ public class KafkaTopicConfiguration {
     }
 
     @Bean
-    public NewTopic t1_demo_metricsTopic(){
+    public NewTopic t1_demo_metricsTopic() {
         return TopicBuilder
                 .name(kafkaEnvironment.getKAFKA_TOPIC_METRIC_NAME())
+                .replicas(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
+                .partitions(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
+                .build();
+    }
+
+    @Bean
+    public NewTopic t1_demo_transaction() {
+        return TopicBuilder
+                .name(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION())
+                .replicas(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
+                .partitions(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
+                .build();
+    }
+
+    @Bean
+    public NewTopic t1_demo_transaction_accept() {
+        return TopicBuilder
+                .name(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT())
+                .replicas(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
+                .partitions(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
+                .build();
+    }
+
+    @Bean
+    public NewTopic t1_demo_transaction_result() {
+        return TopicBuilder
+                .name(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_RESULT())
                 .replicas(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
                 .partitions(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
                 .build();

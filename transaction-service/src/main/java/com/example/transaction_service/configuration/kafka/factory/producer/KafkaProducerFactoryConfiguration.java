@@ -3,6 +3,7 @@ package com.example.transaction_service.configuration.kafka.factory.producer;
 import com.example.transaction_service.environment.kafka.KafkaEnvironment;
 import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.model.log.entity.TimeLimitExceedLog;
+import com.example.transaction_service.model.transaction.entity.Transaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -35,6 +36,14 @@ public class KafkaProducerFactoryConfiguration {
     @Bean
     public ProducerFactory<String, TimeLimitExceedLog> timeLimitExceedLogKafkaProducer(ObjectMapper objectMapper) {
         DefaultKafkaProducerFactory<String, TimeLimitExceedLog> producerFactory = new DefaultKafkaProducerFactory<>(buildAtMostOnceProducerProperties());
+        producerFactory.setValueSerializer(new JsonSerializer<>(objectMapper));
+
+        return producerFactory;
+    }
+
+    @Bean
+    public ProducerFactory<String, Transaction> transactionKafkaProducer(ObjectMapper objectMapper) {
+        DefaultKafkaProducerFactory<String, Transaction> producerFactory = new DefaultKafkaProducerFactory<>(buildAtMostOnceProducerProperties());
         producerFactory.setValueSerializer(new JsonSerializer<>(objectMapper));
 
         return producerFactory;

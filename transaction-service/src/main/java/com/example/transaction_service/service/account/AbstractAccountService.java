@@ -1,5 +1,6 @@
 package com.example.transaction_service.service.account;
 
+import com.example.transaction_service.exception.ProcessingException;
 import com.example.transaction_service.model.account.entity.Account;
 import com.example.transaction_service.repository.AccountRepository;
 import com.example.transaction_service.model.client.entity.Client;
@@ -47,5 +48,17 @@ public abstract class AbstractAccountService<A extends Account> {
      */
     public List<Account> getByClientId(UUID id) {
         return accountRepository.findAccountByClientId(id);
+    }
+
+    public UUID buildUUID(){
+        UUID uuid = UUID.randomUUID();
+        for(int i = 0; i < 10; i++){
+            if(accountRepository.existsAccountByAccountId(uuid)){
+                uuid = UUID.randomUUID();
+            } else {
+                return uuid;
+            }
+        }
+        throw new ProcessingException("uuid is not generated");
     }
 }

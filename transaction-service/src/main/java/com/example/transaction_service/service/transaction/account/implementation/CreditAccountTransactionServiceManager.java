@@ -4,11 +4,14 @@ import com.example.transaction_service.environment.account.AccountEnvironment;
 import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.exception.TransactionException;
 import com.example.transaction_service.model.account.entity.Account;
+import com.example.transaction_service.model.account.status.entity.enumeration.AccountStatusEnumeration;
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;
 import com.example.transaction_service.model.transaction.entity.Transaction;
+import com.example.transaction_service.model.transaction.status.enumeration.TransactionStatusEnumeration;
 import com.example.transaction_service.model.transaction.type.enumeration.TransactionTypeEnumeration;
 import com.example.transaction_service.repository.AccountRepository;
 import com.example.transaction_service.repository.TransactionRepository;
+import com.example.transaction_service.repository.TransactionStatusRepository;
 import com.example.transaction_service.repository.TransactionTypeRepository;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
 import com.example.transaction_service.service.common.aop.annotation.Metric;
@@ -26,16 +29,8 @@ import java.util.List;
  */
 @Service
 public class CreditAccountTransactionServiceManager extends AbstractCreditAccountTransactionService<Transaction> {
-    private final TransactionRepository transactionRepository;
-    private final AccountRepository accountRepository;
-    private final AccountEnvironment accountEnvironment;
-    private final TransactionTypeRepository transactionTypeRepository;
-
-    public CreditAccountTransactionServiceManager(TransactionRepository transactionRepository, AccountRepository accountRepository, TransactionTypeRepository transactionTypeRepository, AccountEnvironment accountEnvironment) {
-        this.transactionRepository = transactionRepository;
-        this.accountRepository = accountRepository;
-        this.accountEnvironment = accountEnvironment;
-        this.transactionTypeRepository = transactionTypeRepository;
+    public CreditAccountTransactionServiceManager(TransactionRepository transactionRepository, AccountRepository accountRepository, TransactionTypeRepository transactionTypeRepository, AccountEnvironment accountEnvironment, TransactionStatusRepository transactionStatusRepository) {
+        super(transactionRepository, accountRepository, accountEnvironment, transactionTypeRepository, transactionStatusRepository);
     }
 
     @Override
@@ -44,7 +39,7 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
     @Metric
     public double insert(long recipientAccountId, double amount) {
         Account recipient = accountRepository.findAccountById(recipientAccountId).orElseThrow(() -> new NotFoundException(String.format("account is not found\nid : %s", recipientAccountId)));
-        Transaction transaction = new Transaction(recipient, recipient, transactionTypeRepository.findById(TransactionTypeEnumeration.INSERT.getId()).orElseThrow(() -> new NotFoundException(String.format("transaction type is not found by id\nid : %s", TransactionTypeEnumeration.INSERT.getId()))), amount, Timestamp.valueOf(LocalDateTime.now()));
+        Transaction transaction = buildInsertTransaction(recipient, amount);
         if (isValidInsert(transaction)) {
             recipient.setBalance(recipient.getBalance() + amount);
             transactionRepository.save(transaction);
@@ -62,7 +57,7 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
     public double transfer(long senderAccountId, long recipientAccountId, double amount) {
         Account recipient = accountRepository.findAccountById(recipientAccountId).orElseThrow(() -> new NotFoundException(String.format("account is not found\nid : %s", recipientAccountId)));
         Account sender = accountRepository.findAccountById(senderAccountId).orElseThrow(() -> new NotFoundException(String.format("account is not found\nid : %s", senderAccountId)));
-        Transaction transaction = new Transaction(sender, recipient, transactionTypeRepository.findById(TransactionTypeEnumeration.TRANSFER.getId()).orElseThrow(() -> new NotFoundException(String.format("transaction type is not found by id\nid : %s", TransactionTypeEnumeration.TRANSFER.getId()))), amount, Timestamp.valueOf(LocalDateTime.now()));
+        Transaction transaction = buildTransferTransaction(sender, recipient, amount);
         if (isValidTransfer(transaction)) {
             recipient.setBalance(recipient.getBalance() + amount);
             sender.setBalance(sender.getBalance() - amount);
@@ -79,7 +74,8 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
         return transaction.getRecipient().getAccountType().getId() == AccountTypeEnumeration.CREDIT.getId() &&
                 transaction.getAmount() <= accountEnvironment.getACCOUNT_TRANSACTION_MAX_AMOUNT() &&
                 transaction.getAmount() >= accountEnvironment.getACCOUNT_TRANSACTION_MIN_AMOUNT() &&
-                transaction.getRecipient().getBalance() + transaction.getAmount() <= accountEnvironment.getACCOUNT_BALANCE_MAX_AMOUNT();
+                transaction.getRecipient().getBalance() + transaction.getAmount() <= accountEnvironment.getACCOUNT_BALANCE_MAX_AMOUNT() &&
+                transaction.getRecipient().getAccountStatus().getId().equals(AccountStatusEnumeration.OPEN.getId());
 
     }
 
@@ -91,6 +87,8 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
                 transaction.getAmount() >= accountEnvironment.getACCOUNT_TRANSACTION_MIN_AMOUNT() &&
                 transaction.getRecipient().getBalance() + transaction.getAmount() <= accountEnvironment.getACCOUNT_BALANCE_MAX_AMOUNT() &&
                 transaction.getSender().getBalance() >= accountEnvironment.getACCOUNT_CREDIT_START_BALANCE() &&
-                transaction.getSender().getBalance() - transaction.getAmount() >= 0;
+                transaction.getSender().getBalance() - transaction.getAmount() >= 0 &&
+                transaction.getSender().getAccountStatus().getId().equals(AccountStatusEnumeration.OPEN.getId()) &&
+                transaction.getRecipient().getAccountStatus().getId().equals(AccountStatusEnumeration.OPEN.getId());
     }
 }

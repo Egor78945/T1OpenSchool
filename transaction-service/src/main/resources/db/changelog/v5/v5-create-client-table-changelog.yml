@@ -1,15 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: v7-1
+      id: v5-1
       author: egor_petrov
       preConditions:
         - onFail: MARK_RAN
         - not:
             tableExists:
-              tableName: time_limit_exceed_log
+              tableName: client
       changes:
         - createTable:
-            tableName: time_limit_exceed_log
+            tableName: client
             columns:
               - column:
                   name: id
@@ -20,22 +20,23 @@ databaseChangeLog:
                     unique: true
                   autoIncrement: true
               - column:
-                  name: class
-                  type: varchar(100)
+                  name: client_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: name
+                  type: varchar(30)
                   constraints:
                     nullable: false
               - column:
-                  name: method
-                  type: varchar(100)
+                  name: surname
+                  type: varchar(30)
                   constraints:
                     nullable: false
               - column:
-                  name: runtime
-                  type: bigint
-                  constraints:
-                    nullable: false
-              - column:
-                  name: time
-                  type: timestamp
+                  name: patronymic
+                  type: varchar(30)
                   constraints:
                     nullable: false

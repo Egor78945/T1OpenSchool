@@ -8,15 +8,12 @@ databaseChangeLog:
             expectedResult: "0"
             sql: "SELECT COUNT(*) FROM account_type"
       changes:
-        - insert:
+        - loadData:
             tableName: account_type
+            file: db/csv/account_type_table.csv
+            separator: ","
+            usePreparedStatements: true
             columns:
               - column:
                   name: name
-                  value: DEBIT
-        - insert:
-            tableName: account_type
-            columns:
-              - column:
-                  name: name
-                  value: CREDIT
+                  type: varchar(30)
