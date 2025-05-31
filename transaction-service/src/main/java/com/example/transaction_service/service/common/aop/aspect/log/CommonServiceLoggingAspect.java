@@ -20,6 +20,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -54,7 +55,7 @@ public class CommonServiceLoggingAspect {
         try {
             kafkaProducerServiceRouter.getKafkaProducerService(DatasourceErrorLog.class)
                     .orElseThrow(() -> new NotFoundException(String.format("kafka service is not found by class\nClass : %s", DatasourceErrorLog.class)))
-                    .send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_METRIC_NAME(), null, "datasource error", datasourceErrorLog, new RecordHeaders(List.of(new RecordHeader("error type", ErrorEnumeration.DATA_SOURCE.name().getBytes())))));
+                    .send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_METRIC_NAME(), null, datasourceErrorLog.getTime().toString(), datasourceErrorLog, new RecordHeaders(List.of(new RecordHeader("error type", ErrorEnumeration.DATA_SOURCE.name().getBytes())))));
         } catch (Exception exception) {
             loggingServiceRouter.getByTargetClass(DatasourceErrorLog.class).orElseThrow(() -> new NotFoundException(String.format("logging service is not found by class\nClass : %s", DatasourceErrorLog.class))).log(datasourceErrorLog);
         }
@@ -79,7 +80,7 @@ public class CommonServiceLoggingAspect {
                 try {
                     kafkaProducerServiceRouter.getKafkaProducerService(TimeLimitExceedLog.class)
                             .orElseThrow(() -> new NotFoundException(String.format("kafka service is not found by class\nClass : %s", DatasourceErrorLog.class)))
-                            .send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_METRIC_NAME(), null, "time limit exceed error", timeLimitExceedLog, new RecordHeaders(List.of(new RecordHeader("error type", ErrorEnumeration.METRICS.name().getBytes())))));
+                            .send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_METRIC_NAME(), null, timeLimitExceedLog.getTime().toString(), timeLimitExceedLog, new RecordHeaders(List.of(new RecordHeader("error type", ErrorEnumeration.METRICS.name().getBytes())))));
                 } catch (Exception e) {
                     loggingServiceRouter.getByTargetClass(TimeLimitExceedLog.class).orElseThrow(() -> new NotFoundException(String.format("logging service is not found by class\nClass : %s", TimeLimitExceedLog.class))).log(timeLimitExceedLog);
                 }
