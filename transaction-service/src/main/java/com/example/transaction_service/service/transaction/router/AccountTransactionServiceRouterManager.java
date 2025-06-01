@@ -1,10 +1,11 @@
-package com.example.transaction_service.service.transaction.account.router;
+package com.example.transaction_service.service.transaction.router;
 
+import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;
 import com.example.transaction_service.model.transaction.entity.Transaction;
-import com.example.transaction_service.service.transaction.account.AbstractAccountTransactionService;
-import com.example.transaction_service.service.transaction.account.AbstractCreditAccountTransactionService;
-import com.example.transaction_service.service.transaction.account.AbstractDebitAccountTransactionService;
+import com.example.transaction_service.service.transaction.AbstractAccountTransactionService;
+import com.example.transaction_service.service.transaction.AbstractCreditAccountTransactionService;
+import com.example.transaction_service.service.transaction.AbstractDebitAccountTransactionService;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -22,7 +23,7 @@ public class AccountTransactionServiceRouterManager implements AccountTransactio
     }
 
     @Override
-    public Optional<AbstractAccountTransactionService<Transaction>> getByAccountTypeEnumeration(AccountTypeEnumeration accountTypeEnumeration) {
-        return Optional.ofNullable(transactionServiceByAccountTypeEnumeration.get(accountTypeEnumeration));
+    public AbstractAccountTransactionService<Transaction> getByAccountTypeEnumeration(AccountTypeEnumeration accountTypeEnumeration) {
+        return Optional.ofNullable(transactionServiceByAccountTypeEnumeration.get(accountTypeEnumeration)).orElseThrow(() -> new NotFoundException(String.format("unknown account transaction service by account type enumeration\nAccountTypeEnumeration : %s", accountTypeEnumeration)));
     }
 }

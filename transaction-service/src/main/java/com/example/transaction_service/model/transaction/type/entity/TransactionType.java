@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Entity типа транзакций по клиентским аккаунтам
+ * Entity типа транзакции
  */
 @Entity
 @Table(name = "transaction_type")

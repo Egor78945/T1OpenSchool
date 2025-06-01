@@ -35,10 +35,11 @@ public class Account implements Serializable {
     @Column(name = "balance")
     private double balance;
 
-    public Account(Client client, UUID accountId, AccountType accountType) {
+    public Account(Client client, UUID accountId, AccountType accountType, AccountStatus accountStatus) {
         this.client = client;
         this.accountId = accountId;
         this.accountType = accountType;
+        this.accountStatus = accountStatus;
     }
 
     public Account() {

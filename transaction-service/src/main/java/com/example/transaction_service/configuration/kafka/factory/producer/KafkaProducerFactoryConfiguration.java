@@ -17,6 +17,9 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс, отвечающий за конфигурацию {@link ProducerFactory}
+ */
 @Configuration
 public class KafkaProducerFactoryConfiguration {
     private final KafkaEnvironment kafkaEnvironment;
@@ -49,11 +52,11 @@ public class KafkaProducerFactoryConfiguration {
         return producerFactory;
     }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new JsonMapper();
-    }
-
+    /**
+     * Моделирует базовые конфигурации для {@link ProducerFactory}, соответствующие принципу '<b>EXACTLY ONCE</b>'
+     * @param transactionId Идентификатор для транзакции
+     * @return {@link Map}, хранящий нужные настройки
+     */
     private Map<String, Object> buildExactlyOnceProducerProperties(String transactionId) {
         Map<String, Object> producerProperties = new HashMap<>();
 
@@ -67,6 +70,11 @@ public class KafkaProducerFactoryConfiguration {
 
         return producerProperties;
     }
+
+    /**
+     * Моделирует базовые конфигурации для {@link ProducerFactory}, соответствующие принципу '<b>AT MOST ONCE</b>'
+     * @return {@link Map}, хранящий нужные настройки
+     */
     private Map<String, Object> buildAtMostOnceProducerProperties() {
         Map<String, Object> producerProperties = new HashMap<>();
 

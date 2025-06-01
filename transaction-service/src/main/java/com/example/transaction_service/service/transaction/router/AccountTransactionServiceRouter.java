@@ -1,8 +1,8 @@
-package com.example.transaction_service.service.transaction.account.router;
+package com.example.transaction_service.service.transaction.router;
 
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;
 import com.example.transaction_service.model.transaction.entity.Transaction;
-import com.example.transaction_service.service.transaction.account.AbstractAccountTransactionService;
+import com.example.transaction_service.service.transaction.AbstractAccountTransactionService;
 
 import java.util.Optional;
 
@@ -18,5 +18,5 @@ public interface AccountTransactionServiceRouter<T extends AbstractAccountTransa
      * @param accountTypeEnumeration тип клиентского аккаунта {@link AccountTypeEnumeration}
      * @return Абстрактный сервис по работе с транзакциями
      */
-    Optional<T> getByAccountTypeEnumeration(AccountTypeEnumeration accountTypeEnumeration);
+    T getByAccountTypeEnumeration(AccountTypeEnumeration accountTypeEnumeration);
 }

@@ -37,4 +37,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("select case when exists(from Account where accountId=:accountId) then true else false end")
     boolean existsAccountByAccountId(@Param("accountId") UUID accountId);
+
+    @Query("from Account where accountId=:accountId")
+    Optional<Account> findAccountByAccountId(@Param("accountId") UUID accountId);
 }

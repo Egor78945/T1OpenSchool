@@ -1,10 +1,15 @@
 package com.example.transaction_service.service.account;
 
+import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.exception.ProcessingException;
 import com.example.transaction_service.model.account.entity.Account;
+import com.example.transaction_service.model.account.status.entity.AccountStatus;
+import com.example.transaction_service.model.account.type.entity.AccountType;
 import com.example.transaction_service.repository.AccountRepository;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;
+import com.example.transaction_service.repository.AccountStatusRepository;
+import com.example.transaction_service.repository.AccountTypeRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,24 +20,22 @@ import java.util.UUID;
  */
 public abstract class AbstractAccountService<A extends Account> {
     protected AccountRepository accountRepository;
+    protected AccountTypeRepository accountTypeRepository;
+    protected AccountStatusRepository accountStatusRepository;
 
-    public AbstractAccountService(AccountRepository accountRepository) {
+    public AbstractAccountService(AccountRepository accountRepository, AccountTypeRepository accountTypeRepository, AccountStatusRepository accountStatusRepository) {
         this.accountRepository = accountRepository;
+        this.accountTypeRepository = accountTypeRepository;
+        this.accountStatusRepository = accountStatusRepository;
     }
 
     /**
      * Создать и сохранить новый несуществующий клиентский аккаунт {@link Account}
      * @param clientId Id существующего клиента {@link Client}
-     * @param accountTypeId Id существующего типа клиентского аккаунта {@link AccountTypeEnumeration}
+     * @param accountType Тип клиентского аккаунта {@link AccountType}
+     * @param accountStatus Статус клиентского аккаунта {@link AccountStatus}
      */
-    public abstract void save(UUID clientId, long accountTypeId);
-
-    /**
-     * Получить существующий клиентский аккаунт {@link Account} по его Id
-     * @param id Id существующего клиентского аккаунта
-     * @return Существующий клиентский аккаунт {@link Account}
-     */
-    public abstract A getById(long id);
+    public abstract UUID save(UUID clientId, AccountType accountType, AccountStatus accountStatus);
 
     /**
      * Получить список {@link List} существующих клиентских аккаунтов {@link Account} по Id и типу клиентского аккаунта {@link AccountTypeEnumeration}
@@ -48,6 +51,19 @@ public abstract class AbstractAccountService<A extends Account> {
      */
     public List<Account> getByClientId(UUID id) {
         return accountRepository.findAccountByClientId(id);
+    }
+
+    /**
+     * Получить существующий клиентский аккаунт {@link Account} по его Id
+     * @param id Id существующего клиентского аккаунта
+     * @return Существующий клиентский аккаунт {@link Account}
+     */
+    public Account getById(long id) {
+        return accountRepository.findAccountById(id).orElseThrow(() -> new NotFoundException(String.format("account by client id is not found\nid : %s", id)));
+    }
+
+    public Account getByAccountId(UUID id) {
+        return accountRepository.findAccountByAccountId(id).orElseThrow(() -> new NotFoundException(String.format("account by account id is not found\naccount id : %s", id)));
     }
 
     public UUID buildUUID(){

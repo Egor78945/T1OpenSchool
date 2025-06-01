@@ -1,4 +1,4 @@
-package com.example.transaction_service.service.transaction.account;
+package com.example.transaction_service.service.transaction;
 
 import com.example.transaction_service.environment.account.AccountEnvironment;
 import com.example.transaction_service.model.transaction.entity.Transaction;
@@ -18,10 +18,10 @@ public abstract class AbstractDebitAccountTransactionService<T extends Transacti
     }
 
     @Override
-    public abstract double insert(long recipientAccountId, double amount);
+    public abstract void insert(Transaction transaction);
 
     @Override
-    public abstract double transfer(long senderAccountId, long recipientAccountId, double amount);
+    public abstract void transfer(Transaction transaction);
 
     @Override
     public abstract boolean isValidInsert(T transaction);

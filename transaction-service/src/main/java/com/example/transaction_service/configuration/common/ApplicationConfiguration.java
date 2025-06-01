@@ -1,5 +1,7 @@
 package com.example.transaction_service.configuration.common;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,5 +27,10 @@ public class ApplicationConfiguration {
     @Primary
     public PlatformTransactionManager jpaTransactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new JsonMapper();
     }
 }

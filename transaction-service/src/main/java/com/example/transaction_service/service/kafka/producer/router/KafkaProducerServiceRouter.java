@@ -16,5 +16,5 @@ public interface KafkaProducerServiceRouter {
      * @param <K> Тип объекта ключа
      * @param <V> Тип объекта значения
      */
-    <K extends Serializable, V extends Serializable> Optional<KafkaProducerService<K,V>> getKafkaProducerService(Class<V> targetClass);
+    <K extends Serializable, V extends Serializable> KafkaProducerService<K,V> getKafkaProducerService(Class<V> targetClass);
 }

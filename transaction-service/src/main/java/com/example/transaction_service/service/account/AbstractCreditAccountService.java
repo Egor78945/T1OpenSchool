@@ -1,7 +1,11 @@
 package com.example.transaction_service.service.account;
 
 import com.example.transaction_service.model.account.entity.Account;
+import com.example.transaction_service.model.account.status.entity.AccountStatus;
+import com.example.transaction_service.model.account.type.entity.AccountType;
 import com.example.transaction_service.repository.AccountRepository;
+import com.example.transaction_service.repository.AccountStatusRepository;
+import com.example.transaction_service.repository.AccountTypeRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,15 +16,12 @@ import java.util.UUID;
  */
 public abstract class AbstractCreditAccountService<A extends Account> extends AbstractAccountService<A> {
 
-    public AbstractCreditAccountService(AccountRepository accountRepository) {
-        super(accountRepository);
+    public AbstractCreditAccountService(AccountRepository accountRepository, AccountTypeRepository accountTypeRepository, AccountStatusRepository accountStatusRepository) {
+        super(accountRepository, accountTypeRepository, accountStatusRepository);
     }
 
     @Override
-    public abstract void save(UUID clientId, long accountTypeId);
-
-    @Override
-    public abstract A getById(long id);
+    public abstract UUID save(UUID clientId, AccountType accountType, AccountStatus accountStatus);
 
     @Override
     public abstract List<A> getByClientIdAndAccountType(UUID clientId);

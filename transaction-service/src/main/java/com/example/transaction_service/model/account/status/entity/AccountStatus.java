@@ -2,11 +2,15 @@ package com.example.transaction_service.model.account.status.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Entity статуса клиентского аккаунта
+ */
 @Entity
 @Table(name = "account_status")
-public class AccountStatus {
+public class AccountStatus implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
