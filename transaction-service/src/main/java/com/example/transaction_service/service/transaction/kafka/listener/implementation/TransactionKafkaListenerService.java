@@ -43,7 +43,6 @@ public class TransactionKafkaListenerService implements KafkaListenerService<Str
         Transaction transaction = listenableObject.value();
         AbstractAccountTransactionService<Transaction> transactionService = accountTransactionServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.getById(transaction.getSender().getAccountType().getId()));
         try {
-            transaction.setTransactionStatus(transactionStatusService.getById(TransactionStatusEnumeration.ACCEPTED.getId()));
             if (transaction.getTransactionType().getId().equals(TransactionTypeEnumeration.INSERT.getId())) {
                 kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.INSERT.toString(), transaction));
                 transactionService.insert(transaction);
