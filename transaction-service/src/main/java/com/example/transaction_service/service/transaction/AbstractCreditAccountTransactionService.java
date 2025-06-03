@@ -18,7 +18,7 @@ public abstract class AbstractCreditAccountTransactionService<T extends Transact
     }
 
     @Override
-    public abstract void insert(Transaction transaction);
+    public abstract T insert(Transaction transaction);
 
     @Override
     public abstract void transfer(Transaction transaction);

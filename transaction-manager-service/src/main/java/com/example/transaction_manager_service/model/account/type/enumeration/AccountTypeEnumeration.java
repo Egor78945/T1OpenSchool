@@ -1,6 +1,7 @@
 package com.example.transaction_manager_service.model.account.type.enumeration;
 
-import com.example.transaction_service.exception.NotFoundException;
+
+import com.example.transaction_manager_service.exception.NotFoundException;
 
 import java.util.Map;
 import java.util.Optional;

@@ -1,8 +1,8 @@
 package com.example.transaction_manager_service.model.account.entity;
 
-import com.example.transaction_service.model.account.status.entity.AccountStatus;
-import com.example.transaction_service.model.account.type.entity.AccountType;
-import com.example.transaction_service.model.client.entity.Client;
+import com.example.transaction_manager_service.model.account.status.entity.AccountStatus;
+import com.example.transaction_manager_service.model.account.type.entity.AccountType;
+import com.example.transaction_manager_service.model.client.entity.Client;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 

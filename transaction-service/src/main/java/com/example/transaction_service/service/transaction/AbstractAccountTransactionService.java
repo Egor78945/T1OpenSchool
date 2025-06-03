@@ -30,7 +30,7 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
         this.transactionStatusRepository = transactionStatusRepository;
     }
 
-    public abstract void insert(T transaction);
+    public abstract T insert(T transaction);
 
     public abstract void transfer(T transaction);
 

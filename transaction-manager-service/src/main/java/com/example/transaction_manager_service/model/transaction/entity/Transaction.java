@@ -1,8 +1,8 @@
 package com.example.transaction_manager_service.model.transaction.entity;
 
-import com.example.transaction_service.model.account.entity.Account;
-import com.example.transaction_service.model.transaction.status.entity.TransactionStatus;
-import com.example.transaction_service.model.transaction.type.entity.TransactionType;
+import com.example.transaction_manager_service.model.account.entity.Account;
+import com.example.transaction_manager_service.model.transaction.status.entity.TransactionStatus;
+import com.example.transaction_manager_service.model.transaction.type.entity.TransactionType;
 import jakarta.persistence.*;
 
 import java.io.Serializable;

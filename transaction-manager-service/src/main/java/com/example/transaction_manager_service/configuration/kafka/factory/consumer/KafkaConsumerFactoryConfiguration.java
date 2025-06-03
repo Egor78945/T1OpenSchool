@@ -2,8 +2,6 @@ package com.example.transaction_manager_service.configuration.kafka.factory.cons
 
 import com.example.transaction_manager_service.environment.kafka.KafkaEnvironment;
 import com.example.transaction_manager_service.model.transaction.entity.Transaction;
-import com.example.transaction_service.environment.kafka.KafkaEnvironment;
-import com.example.transaction_service.model.transaction.entity.Transaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -29,7 +27,7 @@ public class KafkaConsumerFactoryConfiguration {
 
     @Bean
     public ConsumerFactory<String, Transaction> transactionConsumerFactory(ObjectMapper objectMapper) {
-        var kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, Transaction>(buildKafkaConsumerProperties("com.example.transaction_service.model.transaction.entity.Transaction", "com.example.transaction_service.model.transaction.entity.Transaction", kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_TRANSACTION_ID()));
+        var kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, Transaction>(buildKafkaConsumerProperties("com.example.transaction_service.model.transaction.entity.Transaction", "com.example.transaction_manager_service.model.transaction.entity.Transaction", kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT_TRANSACTION_ID()));
         kafkaConsumerFactory.setValueDeserializer(new JsonDeserializer<>(objectMapper));
 
         return kafkaConsumerFactory;

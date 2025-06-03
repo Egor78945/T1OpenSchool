@@ -32,13 +32,12 @@ public class DebitAccountTransactionServiceManager extends AbstractDebitAccountT
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @LogDatasourceError
     @Metric
-    public void insert(Transaction transaction) {
+    public Transaction insert(Transaction transaction) {
         Account recipient = transaction.getRecipient();
-
         if (isValidInsert(transaction)) {
             recipient.setBalance(recipient.getBalance() + transaction.getAmount());
-            transactionRepository.save(transaction);
             accountRepository.save(recipient);
+            return transactionRepository.save(transaction);
         } else {
             throw new TransactionException(String.format("insert transaction can not be done successfully\nRecipient : %s\ntransaction amount : %s", recipient, transaction.getAmount()));
         }
