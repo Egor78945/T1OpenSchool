@@ -62,7 +62,8 @@ public class DebitAccountTransactionServiceManager extends AbstractDebitAccountT
 
     @Override
     public boolean isValidInsert(Transaction transaction) {
-        return transaction.getRecipient().getAccountType().getId() == AccountTypeEnumeration.DEBIT.getId() &&
+        return accountRepository.existsAccountByAccountId(transaction.getRecipient().getAccountId()) &&
+                transaction.getRecipient().getAccountType().getId() == AccountTypeEnumeration.DEBIT.getId() &&
                 transaction.getAmount() <= accountEnvironment.getACCOUNT_TRANSACTION_MAX_AMOUNT() &&
                 transaction.getAmount() >= accountEnvironment.getACCOUNT_TRANSACTION_MIN_AMOUNT() &&
                 transaction.getRecipient().getBalance() + transaction.getAmount() <= accountEnvironment.getACCOUNT_BALANCE_MAX_AMOUNT() &&
@@ -71,7 +72,9 @@ public class DebitAccountTransactionServiceManager extends AbstractDebitAccountT
 
     @Override
     public boolean isValidTransfer(Transaction transaction) {
-        return !transaction.getSender().getId().equals(transaction.getRecipient().getId()) &&
+        return accountRepository.existsAccountByAccountId(transaction.getSender().getAccountId()) &&
+                accountRepository.existsAccountByAccountId(transaction.getRecipient().getAccountId()) &&
+                !transaction.getSender().getId().equals(transaction.getRecipient().getId()) &&
                 transaction.getSender().getAccountType().getId() == AccountTypeEnumeration.DEBIT.getId() &&
                 transaction.getAmount() <= accountEnvironment.getACCOUNT_TRANSACTION_MAX_AMOUNT() &&
                 transaction.getAmount() >= accountEnvironment.getACCOUNT_TRANSACTION_MIN_AMOUNT() &&

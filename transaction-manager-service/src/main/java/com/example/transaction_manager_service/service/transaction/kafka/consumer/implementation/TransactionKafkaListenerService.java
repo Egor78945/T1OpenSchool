@@ -1,10 +1,9 @@
-package com.example.transaction_manager_service.service.transaction.kafka.listener.implementation;
+package com.example.transaction_manager_service.service.transaction.kafka.consumer.implementation;
 
-import com.example.transaction_manager_service.environment.kafka.KafkaEnvironment;
 import com.example.transaction_manager_service.model.transaction.entity.Transaction;
-import com.example.transaction_manager_service.service.transaction.kafka.listener.KafkaListenerService;
+import com.example.transaction_manager_service.service.transaction.TransactionProcessorService;
+import com.example.transaction_manager_service.service.kafka.consumer.KafkaListenerService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -15,15 +14,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TransactionKafkaListenerService implements KafkaListenerService<String, Transaction> {
-    private final KafkaEnvironment kafkaEnvironment;
+    private final TransactionProcessorService<Transaction> transactionProcessorService;
 
-    public TransactionKafkaListenerService(KafkaEnvironment kafkaEnvironment) {
-        this.kafkaEnvironment = kafkaEnvironment;
+    public TransactionKafkaListenerService(@Qualifier("transactionProcessorServiceManager") TransactionProcessorService<Transaction> transactionProcessorService) {
+        this.transactionProcessorService = transactionProcessorService;
     }
 
     @Override
     @KafkaListener(topics = "${kafka.topic.transaction-accept.name}", groupId = "${kafka.topic.transaction-accept.transaction-id}", containerFactory = "transactionListenerContainerFactory")
     public void listen(ConsumerRecord<String, Transaction> listenableObject) {
-        System.out.println(listenableObject.value().toString());
+        transactionProcessorService.accept(listenableObject.value());
     }
 }

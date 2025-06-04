@@ -17,20 +17,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-
 
 /**
  * Реализация {@link KafkaListenerService} для считывания сообщений, хранящих {@link Transaction}
  */
 @Service
-public class TransactionKafkaListenerService implements KafkaListenerService<String, Transaction> {
+public class RequestTransactionKafkaListenerService implements KafkaListenerService<String, Transaction> {
     private final AccountTransactionServiceRouter<AbstractAccountTransactionService<Transaction>> accountTransactionServiceRouter;
     private final TransactionStatusService<TransactionStatus> transactionStatusService;
     private final KafkaProducerService<String, Transaction> kafkaProducerService;
     private final KafkaEnvironment kafkaEnvironment;
 
-    public TransactionKafkaListenerService(@Qualifier("accountTransactionServiceRouterManager") AccountTransactionServiceRouter<AbstractAccountTransactionService<Transaction>> accountTransactionServiceRouter, @Qualifier("transactionStatusServiceManager") TransactionStatusService<TransactionStatus> transactionStatusService, @Qualifier("transactionKafkaProducerService") KafkaProducerService<String, Transaction> kafkaProducerService, KafkaEnvironment kafkaEnvironment) {
+    public RequestTransactionKafkaListenerService(@Qualifier("accountTransactionServiceRouterManager") AccountTransactionServiceRouter<AbstractAccountTransactionService<Transaction>> accountTransactionServiceRouter, @Qualifier("transactionStatusServiceManager") TransactionStatusService<TransactionStatus> transactionStatusService, @Qualifier("transactionKafkaProducerService") KafkaProducerService<String, Transaction> kafkaProducerService, KafkaEnvironment kafkaEnvironment) {
         this.accountTransactionServiceRouter = accountTransactionServiceRouter;
         this.transactionStatusService = transactionStatusService;
         this.kafkaProducerService = kafkaProducerService;

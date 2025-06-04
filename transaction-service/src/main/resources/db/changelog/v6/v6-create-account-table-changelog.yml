@@ -54,3 +54,8 @@ databaseChangeLog:
                   type: double
                   constraints:
                     nullable: false
+              - column:
+                  name: frozen_balance
+                  type: double
+                  constraints:
+                    nullable: false

@@ -34,6 +34,8 @@ public class Account implements Serializable {
     private AccountStatus accountStatus;
     @Column(name = "balance")
     private double balance;
+    @Column(name = "frozen_balance")
+    private double frozen_balance;
 
     public Account(Client client, UUID accountId, AccountType accountType, AccountStatus accountStatus) {
         this.client = client;
@@ -93,6 +95,14 @@ public class Account implements Serializable {
         this.balance = balance;
     }
 
+    public double getFrozen_balance() {
+        return frozen_balance;
+    }
+
+    public void setFrozen_balance(double frozen_balance) {
+        this.frozen_balance = frozen_balance;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -114,6 +124,7 @@ public class Account implements Serializable {
                 ", accountType=" + accountType +
                 ", accountStatus=" + accountStatus +
                 ", balance=" + balance +
+                ", frozen_balance=" + frozen_balance +
                 '}';
     }
 }

@@ -46,6 +46,15 @@ public class DebitAccountServiceManager extends AbstractDebitAccountService<Acco
     }
 
     @Override
+    public Account update(Account account) {
+        if(accountRepository.existsById(account.getId()) && accountRepository.existsAccountByAccountId(account.getAccountId())){
+            return accountRepository.save(account);
+        } else {
+            return account;
+        }
+    }
+
+    @Override
     public List<Account> getByClientIdAndAccountType(UUID clientId){
         return accountRepository.findAccountByClientIdAndAccountTypeId(clientId, AccountTypeEnumeration.DEBIT.getId());
     }

@@ -37,6 +37,8 @@ public abstract class AbstractAccountService<A extends Account> {
      */
     public abstract UUID save(UUID clientId, AccountType accountType, AccountStatus accountStatus);
 
+    public abstract A update(A account);
+
     /**
      * Получить список {@link List} существующих клиентских аккаунтов {@link Account} по Id и типу клиентского аккаунта {@link AccountTypeEnumeration}
      * @param clientId Id существующего клиента

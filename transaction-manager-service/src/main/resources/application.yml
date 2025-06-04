@@ -30,5 +30,10 @@ kafka:
       name: ${KAFKA_TOPIC_TRANSACTION_RESULT}
       transaction-id: transaction-result-transaction-id
 
+transaction:
+  request:
+    max-count: 5
+    per-minute: 1
+
 server:
   port: ${TRANSACTION_MANAGER_SERVICE_PORT_INNER}

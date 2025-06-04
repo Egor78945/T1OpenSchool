@@ -9,9 +9,17 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query("from Transaction t where t.sender=:sender and t.time>=:after")
-    List<Transaction> findAllBySenderAndTimeAfterOrEqual(@Param("sender") Sender sender, @Param("after") Timestamp after);
+    @Query("from Transaction t where t.sender.id=:senderId and t.time>=:after")
+    List<Transaction> findAllBySenderIdAndTimeAfterOrEqual(@Param("senderId") long id, @Param("after") Timestamp after);
+
+    @Query("select case when exists(from Transaction t where t.transaction_id=:transactionId) then true else false end")
+    boolean existsByTransaction_id(@Param("transactionId") UUID uuid);
+
+    @Query("from Transaction t where t.transaction_id=:transactionId")
+    Optional<Transaction> findTransactionByTransaction_id(@Param("transactionId") UUID uuid);
 }

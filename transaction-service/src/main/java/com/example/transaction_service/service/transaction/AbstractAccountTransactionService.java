@@ -34,6 +34,8 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
 
     public abstract void transfer(T transaction);
 
+    public abstract T update(T transaction);
+
     public abstract boolean isValidInsert(T transaction);
 
     public abstract boolean isValidTransfer(T transaction);

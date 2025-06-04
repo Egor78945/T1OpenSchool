@@ -24,5 +24,8 @@ public abstract class AbstractDebitAccountService <A extends Account> extends Ab
     public abstract UUID save(UUID clientId, AccountType accountType, AccountStatus accountStatus);
 
     @Override
+    public abstract A update(A account);
+
+    @Override
     public abstract List<A> getByClientIdAndAccountType(UUID clientId);
 }
