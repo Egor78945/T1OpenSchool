@@ -27,7 +27,7 @@ public class KafkaConsumerFactoryConfiguration {
 
     @Bean
     public ConsumerFactory<String, Transaction> transactionConsumerFactory(ObjectMapper objectMapper) {
-        var kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, Transaction>(buildKafkaConsumerProperties("com.example.transaction_service.model.transaction.entity.Transaction", "com.example.transaction_service.model.transaction.entity.Transaction", kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_TRANSACTION_ID()));
+        var kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, Transaction>(buildKafkaConsumerProperties("com.example.transaction_manager_service.model.transaction.entity.Transaction", "com.example.transaction_service.model.transaction.entity.Transaction", kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_TRANSACTION_ID()));
         kafkaConsumerFactory.setValueDeserializer(new JsonDeserializer<>(objectMapper));
 
         return kafkaConsumerFactory;
@@ -47,6 +47,7 @@ public class KafkaConsumerFactoryConfiguration {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.put(JsonDeserializer.TYPE_MAPPINGS, String.format("%s:%s", classPathFrom, classPathTo));
+        properties.put(JsonDeserializer.TRUSTED_PACKAGES, "com.example.transaction_manager_service.*");
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaEnvironment.getKAFKA_BOOTSTRAP_SERVER());
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, kafkaEnvironment.getKAFKA_AUTO_OFFSET_RESET());
 

@@ -21,7 +21,7 @@ public abstract class AbstractDebitAccountTransactionService<T extends Transacti
     public abstract T insert(Transaction transaction);
 
     @Override
-    public abstract void transfer(Transaction transaction);
+    public abstract T transfer(Transaction transaction);
 
     @Override
     public abstract T update(T transaction);

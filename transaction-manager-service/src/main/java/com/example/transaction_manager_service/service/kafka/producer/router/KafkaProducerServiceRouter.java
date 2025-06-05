@@ -1,6 +1,6 @@
 package com.example.transaction_manager_service.service.kafka.producer.router;
 
-import com.example.transaction_service.service.kafka.producer.KafkaProducerService;
+import com.example.transaction_manager_service.service.kafka.producer.KafkaProducerService;
 
 import java.io.Serializable;
 

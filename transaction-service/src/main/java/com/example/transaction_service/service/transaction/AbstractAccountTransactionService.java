@@ -32,7 +32,7 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
 
     public abstract T insert(T transaction);
 
-    public abstract void transfer(T transaction);
+    public abstract T transfer(T transaction);
 
     public abstract T update(T transaction);
 

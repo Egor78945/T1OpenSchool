@@ -42,11 +42,10 @@ public class RequestTransactionKafkaListenerService implements KafkaListenerServ
         AbstractAccountTransactionService<Transaction> transactionService = accountTransactionServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.getById(transaction.getSender().getAccountType().getId()));
         try {
             if (transaction.getTransactionType().getId().equals(TransactionTypeEnumeration.INSERT.getId())) {
-                kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.INSERT.toString(), transaction));
-                transactionService.insert(transaction);
+                kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.INSERT.toString(), transactionService.insert(transaction)));
+
             } else if (transaction.getTransactionType().getId().equals(TransactionTypeEnumeration.TRANSFER.getId())) {
-                kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.TRANSFER.toString(), transaction));
-                transactionService.transfer(transaction);
+                kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.TRANSFER.toString(), transactionService.transfer(transaction)));
             }
         } catch (Exception e){
             transaction.setTransactionStatus(transactionStatusService.getById(TransactionStatusEnumeration.REJECTED.getId()));

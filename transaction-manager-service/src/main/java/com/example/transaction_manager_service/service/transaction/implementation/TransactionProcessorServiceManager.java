@@ -36,11 +36,11 @@ public class TransactionProcessorServiceManager implements TransactionProcessorS
 
     @Override
     public void accept(Transaction transaction) {
-        List<Transaction> transactions = transactionService.getBySenderIdAfter(transaction.getSender().getId(), Timestamp.valueOf(Timestamp.valueOf(LocalDateTime.now()).toInstant().minus(transactionEnvironment.getTRANSACTION_REQUEST_PER_MINUTE(), ChronoUnit.MINUTES).toString()));
+        List<Transaction> transactions = transactionService.getBySenderIdAfter(transaction.getSender().getId(), Timestamp.from(transaction.getTime().toInstant().minus(transactionEnvironment.getTRANSACTION_REQUEST_PER_MINUTE(), ChronoUnit.MINUTES)));
         if (transactions.size() + 1 > transactionEnvironment.getTRANSACTION_REQUEST_MAX_COUNT()) {
             transactions.add(transaction);
             for(Transaction t: transactions){
-                reject(t);
+                block(t);
             }
         } else {
             transaction.setTransactionStatus(transactionStatusService.getById(TransactionStatusEnumeration.ACCEPTED.getId()));
@@ -49,7 +49,7 @@ public class TransactionProcessorServiceManager implements TransactionProcessorS
     }
 
     @Override
-    public void reject(Transaction transaction) {
+    public void block(Transaction transaction) {
         transaction.setTransactionStatus(transactionStatusService.getById(TransactionStatusEnumeration.BLOCKED.getId()));
         transactionKafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_RESULT(), transaction.getTransactionType().getName(), transaction));
     }

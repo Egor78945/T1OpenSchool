@@ -47,16 +47,25 @@ public class DebitAccountTransactionServiceManager extends AbstractDebitAccountT
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @LogDatasourceError
     @Metric
-    public void transfer(Transaction transaction) {
+    public Transaction transfer(Transaction transaction) {
         Account recipient = transaction.getRecipient();
         Account sender = transaction.getSender();
         if (isValidTransfer(transaction)) {
             recipient.setBalance(recipient.getBalance() + transaction.getAmount());
             sender.setBalance(sender.getBalance() - transaction.getAmount());
-            transactionRepository.save(transaction);
             accountRepository.saveAll(List.of(sender, recipient));
+            return transactionRepository.save(transaction);
         } else {
             throw new TransactionException(String.format("insert transaction can not be done successfully\nSender : %s\nRecipient : %s\ntransaction amount : %s", sender, recipient, transaction.getAmount()));
+        }
+    }
+
+    @Override
+    public Transaction update(Transaction transaction) {
+        if(transactionRepository.existsById(transaction.getId()) && transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())){
+            return transactionRepository.save(transaction);
+        } else {
+            return transaction;
         }
     }
 

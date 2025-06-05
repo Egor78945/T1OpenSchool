@@ -14,12 +14,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-public class InsertTransactionProcessorServiceManager implements TransactionProcessorService<Transaction> {
+public class TransferTransactionProcessorServiceManager implements TransactionProcessorService<Transaction> {
     private final AbstractAccountTransactionService<Transaction> transactionService;
     private final AccountStatusService<AccountStatus> accountStatusService;
     private final AbstractAccountService<Account> accountService;
 
-    public InsertTransactionProcessorServiceManager(@Qualifier("debitAccountTransactionServiceManager") AbstractAccountTransactionService<Transaction> transactionService, @Qualifier("accountStatusServiceManager") AccountStatusService<AccountStatus> accountStatusService, @Qualifier("debitAccountServiceManager") AbstractAccountService<Account> accountService) {
+    public TransferTransactionProcessorServiceManager(@Qualifier("debitAccountTransactionServiceManager") AbstractAccountTransactionService<Transaction> transactionService, @Qualifier("accountStatusServiceManager") AccountStatusService<AccountStatus> accountStatusService, @Qualifier("debitAccountServiceManager") AbstractAccountService<Account> accountService) {
         this.transactionService = transactionService;
         this.accountStatusService = accountStatusService;
         this.accountService = accountService;
@@ -41,10 +41,14 @@ public class InsertTransactionProcessorServiceManager implements TransactionProc
     @Override
     public void block(Transaction transaction) {
         if(transaction.getTransactionStatus().getId().equals(TransactionStatusEnumeration.BLOCKED.getId())){
+            Account sender = transaction.getSender();
             Account recipient = transaction.getRecipient();
-            recipient.setFrozen_balance(recipient.getFrozen_balance() + transaction.getAmount());
-            recipient.setBalance(recipient.getBalance()-transaction.getAmount());
-            recipient.setAccountStatus(accountStatusService.getById(AccountStatusEnumeration.BLOCKED.getId()));
+            sender.setAccountStatus(accountStatusService.getById(AccountStatusEnumeration.BLOCKED.getId()));
+            if(recipient.getBalance() >= transaction.getAmount()){
+                recipient.setBalance(recipient.getBalance() - transaction.getAmount());
+                sender.setFrozen_balance(sender.getFrozen_balance() + transaction.getAmount());
+            }
+            accountService.update(sender);
             accountService.update(recipient);
             transactionService.update(transaction);
         } else {
