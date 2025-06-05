@@ -1,33 +1,8 @@
 # IDEA
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
 
-# GRADLE
-transaction-service/.gradle
-transaction-service/build
-transaction-service/gradle
-settings.gradle
-gradlew
-gradlew.bat
-HELP.md
-
-# GIT
-*.gitattributes
-
 # COMPILED CLASS FILES
 *.class
-
-# PACKAGE FILES
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# VM CACHE
-hs_err_pid*
-replay_pid*
