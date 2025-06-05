@@ -1,13 +1,13 @@
 # IDEA
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
 
 # GRADLE
-transaction-service/.gradle
-transaction-service/build
-transaction-service/gradle
+.gradle/
+build/
+gradle/
 settings.gradle
 gradlew
 gradlew.bat
