@@ -1,0 +1,17 @@
+# IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# GRADLE
+transaction-service/.gradle
+transaction-service/build
+transaction-service/gradle
+settings.gradle
+gradlew
+gradlew.bat
+HELP.md
+
+# GIT
+*.gitattributes
