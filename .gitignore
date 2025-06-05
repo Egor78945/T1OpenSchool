@@ -8,13 +8,7 @@
 .gradle/
 build/
 gradle/
-settings.gradle
-gradlew
 gradlew.bat
-HELP.md
-
-# GIT
-*.gitattributes
 
 # COMPILED CLASS FILES
 *.class
