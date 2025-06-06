@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: v5-2
+      author: egor_petrov
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM client"
+      changes:
+        - loadData:
+            tableName: client
+            file: db/csv/client_table.csv
+            separator: ","
+            usePreparedStatements: true
+            columns:
+              - column:
+                  name: client_id
+                  type: uuid
+              - column:
+                  name: name
+                  type: varchar(30)
+              - column:
+                  name: surname
+                  type: varchar(30)
+              - column:
+                  name: patronymic
+                  type: varchar(30)

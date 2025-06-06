@@ -1,10 +1,12 @@
 package com.example.transaction_service.model.account.type.enumeration;
 
+import com.example.transaction_service.exception.NotFoundException;
+
 import java.util.Map;
 import java.util.Optional;
 
 /**
- * Перечисление типов клиентских аккаунтов
+ * Перечисление типов клиентского аккаунта
  */
 public enum AccountTypeEnumeration {
     DEBIT(1), CREDIT(2);
@@ -25,11 +27,11 @@ public enum AccountTypeEnumeration {
         return id;
     }
 
-    public static Optional<AccountTypeEnumeration> getById(long id) {
-        return Optional.ofNullable(accountTypeEnumerationById.get(id));
+    public static AccountTypeEnumeration getById(long id) {
+        return Optional.ofNullable(accountTypeEnumerationById.get(id)).orElseThrow(() -> new NotFoundException(String.format("unknown account type enumeration by id\naccount type id : %s", id)));
     }
 
-    public static Optional<AccountTypeEnumeration> getByName(String name) {
-        return Optional.ofNullable(accountTypeEnumerationByName.get(name));
+    public static AccountTypeEnumeration getByName(String name) {
+        return Optional.ofNullable(accountTypeEnumerationByName.get(name)).orElseThrow(() -> new NotFoundException(String.format("unknown account type enumeration by name\naccount type name : %s", name)));
     }
 }

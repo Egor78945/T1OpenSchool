@@ -4,17 +4,21 @@ import com.example.transaction_service.environment.account.AccountEnvironment;
 import com.example.transaction_service.exception.InvalidDataException;
 import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.model.account.entity.Account;
+import com.example.transaction_service.model.account.status.entity.AccountStatus;
 import com.example.transaction_service.model.account.type.entity.AccountType;
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.repository.AccountRepository;
+import com.example.transaction_service.repository.AccountStatusRepository;
 import com.example.transaction_service.repository.AccountTypeRepository;
 import com.example.transaction_service.repository.ClientRepository;
 import com.example.transaction_service.service.account.AbstractCreditAccountService;
+import com.example.transaction_service.service.client.AbstractClientService;
 import com.example.transaction_service.service.common.aop.annotation.Cached;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
 import com.example.transaction_service.service.common.aop.annotation.Metric;
 import org.hibernate.annotations.Cache;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -26,39 +30,40 @@ import java.util.UUID;
  */
 @Service
 public class CreditAccountServiceManager extends AbstractCreditAccountService<Account> {
-    private final ClientRepository clientRepository;
-    private final AccountTypeRepository accountTypeRepository;
     private final AccountEnvironment accountEnvironment;
+    private final AbstractClientService<Client> clientService;
 
-    public CreditAccountServiceManager(AccountRepository accountRepository, ClientRepository clientRepository, AccountTypeRepository accountTypeRepository, AccountEnvironment accountEnvironment) {
-        super(accountRepository);
-        this.clientRepository = clientRepository;
-        this.accountTypeRepository = accountTypeRepository;
+    public CreditAccountServiceManager(AccountRepository accountRepository, AccountTypeRepository accountTypeRepository, AccountStatusRepository accountStatusRepository, @Qualifier("clientServiceManager") AbstractClientService<Client> clientService, AccountEnvironment accountEnvironment) {
+        super(accountRepository, accountTypeRepository, accountStatusRepository);
         this.accountEnvironment = accountEnvironment;
+        this.clientService = clientService;
     }
 
     @Override
     @LogDatasourceError
     @Metric
-    public void save(UUID clientId, long accountTypeId) {
-        AccountType accountType = accountTypeRepository.findById(accountTypeId).orElseThrow(() -> new NotFoundException(String.format("unknown account type id\naccount type id : %s", accountTypeId)));
-        Client client = clientRepository.findByClientId(clientId).orElseThrow(() -> new NotFoundException(String.format("client not found by id\nid : %s", clientId)));
+    public UUID save(UUID clientId, AccountType accountType, AccountStatus accountStatus) {
+        Client client = clientService.getByClientId(clientId);
         if (accountType.getId() == AccountTypeEnumeration.CREDIT.getId() && accountRepository.findAccountCountByClientIdAndAccountTypeId(clientId, AccountTypeEnumeration.CREDIT.getId()) < 1) {
-            Account account = new Account(client, accountType);
+            Account account = new Account(client, buildUUID(), accountType, accountStatus);
             account.setBalance(accountEnvironment.getACCOUNT_CREDIT_START_BALANCE());
-            accountRepository.save(account);
+            return accountRepository.save(account).getAccountId();
         } else {
             throw new InvalidDataException(String.format("account can not be saved as credit one\naccount type : %s", accountType));
         }
     }
 
     @Override
-    public Account getById(long id) {
-        return accountRepository.findAccountById(id).orElseThrow(() -> new NotFoundException(String.format("client by id is not found\nid : %s", id)));
+    public Account update(Account account) {
+        if(accountRepository.existsById(account.getId()) && accountRepository.existsAccountByAccountId(account.getAccountId())){
+            return accountRepository.save(account);
+        } else {
+            return account;
+        }
     }
 
     @Override
-    public List<Account> getByClientIdAndAccountType(UUID clientId){
+    public List<Account> getByClientIdAndAccountType(UUID clientId) {
         return accountRepository.findAccountByClientIdAndAccountTypeId(clientId, AccountTypeEnumeration.CREDIT.getId());
     }
 }

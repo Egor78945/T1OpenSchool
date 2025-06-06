@@ -16,5 +16,5 @@ public interface AccountServiceRouter<A extends AbstractAccountService<? extends
      * @param accountTypeEnumeration тип клиентского аккаунта
      * @return абстрактный сервис по работе с клиентскими аккаутами
      */
-    Optional<A> getByAccountTypeEnumeration(AccountTypeEnumeration accountTypeEnumeration);
+    A getByAccountTypeEnumeration(AccountTypeEnumeration accountTypeEnumeration);
 }

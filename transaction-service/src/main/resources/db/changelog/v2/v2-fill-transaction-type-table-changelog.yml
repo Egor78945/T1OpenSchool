@@ -8,15 +8,12 @@ databaseChangeLog:
             expectedResult: "0"
             sql: "SELECT COUNT(*) FROM transaction_type"
       changes:
-        - insert:
+        - loadData:
             tableName: transaction_type
+            file: db/csv/transaction_type_table.csv
+            separator: ","
+            usePreparedStatements: true
             columns:
               - column:
                   name: name
-                  value: INSERT
-        - insert:
-            tableName: transaction_type
-            columns:
-              - column:
-                  name: name
-                  value: TRANSFER
+                  type: varchar(30)

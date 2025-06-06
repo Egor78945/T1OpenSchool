@@ -1,4 +1,4 @@
 databaseChangeLog:
   - include:
-      file: ./v7-create-time-limit-exceed-log-changelog.yml
+      file: v7-create-transaction-table-changelog.yml
       relativeToChangelogFile: true

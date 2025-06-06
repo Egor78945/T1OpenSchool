@@ -3,6 +3,7 @@ package com.example.transaction_service.configuration.kafka.template;
 import com.example.transaction_service.environment.kafka.KafkaEnvironment;
 import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.model.log.entity.TimeLimitExceedLog;
+import com.example.transaction_service.model.transaction.entity.Transaction;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -34,6 +35,13 @@ public class KafkaTemplateConfiguration {
     public KafkaTemplate<String, TimeLimitExceedLog> timeLimitExceedLogKafkaTemplate(ProducerFactory<String, TimeLimitExceedLog> producerFactory) {
         KafkaTemplate<String, TimeLimitExceedLog> kafkaTemplate = new KafkaTemplate<>(producerFactory);
 //        kafkaTemplate.setTransactionIdPrefix(kafkaEnvironment.getKAFKA_TOPIC_METRIC_TRANSACTION_ID());
+        return kafkaTemplate;
+    }
+
+    @Bean
+    public KafkaTemplate<String, Transaction> transactionKafkaTemplate(ProducerFactory<String, Transaction> producerFactory) {
+        KafkaTemplate<String, Transaction> kafkaTemplate = new KafkaTemplate<>(producerFactory);
+        kafkaTemplate.setTransactionIdPrefix(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_TRANSACTION_ID());
         return kafkaTemplate;
     }
 }

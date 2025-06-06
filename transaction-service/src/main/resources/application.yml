@@ -46,10 +46,19 @@ account:
 
 kafka:
   topic:
-    metric:
-      name: ${KAFKA_TOPIC_METRIC}
-      transaction-id: metric-transaction-id
     replication-factor: ${KAFKA_TOPIC_REPLICATION_FACTOR}
+    metric:
+     name: ${KAFKA_TOPIC_METRIC}
+     transaction-id: metric-transaction-id
+    transaction:
+      name: ${KAFKA_TOPIC_TRANSACTION}
+      transaction-id: transaction-transaction-id
+    transaction-accept:
+      name: ${KAFKA_TOPIC_TRANSACTION_ACCEPT}
+      transaction-id: transaction-accept-transaction-id
+    transaction-result:
+      name: ${KAFKA_TOPIC_TRANSACTION_RESULT}
+      transaction-id: transaction-result-transaction-id
 
 
 server:

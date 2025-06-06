@@ -1,5 +1,6 @@
 package com.example.transaction_service.service.client;
 
+import com.example.transaction_service.exception.ProcessingException;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.repository.ClientRepository;
 
@@ -40,4 +41,16 @@ public abstract class AbstractClientService<C extends Client> {
     }
 
     public abstract boolean existsByClientId(UUID clientId);
+
+    public UUID buildUUID(){
+        UUID uuid = UUID.randomUUID();
+        for(int i = 0; i < 10; i++){
+            if(existsByClientId(uuid)){
+                uuid = UUID.randomUUID();
+            } else {
+                return uuid;
+            }
+        }
+        throw new ProcessingException("uuid is not generated");
+    }
 }

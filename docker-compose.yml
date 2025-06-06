@@ -36,6 +36,27 @@ services:
     ports:
       - ${TRANSACTION_SERVICE_PORT_OUTER}:${TRANSACTION_SERVICE_PORT_INNER}
 
+  transaction-manager-service:
+    container_name: ${TRANSACTION_MANAGER_SERVICE_HOST}
+    hostname: ${TRANSACTION_MANAGER_SERVICE_HOST}
+    build:
+      context: ./transaction-manager-service
+      dockerfile: Dockerfile
+      args:
+        JAVA_VERSION: ${JAVA_VERSION}
+        TRANSACTION_SERVICE_PORT_OUTER: ${TRANSACTION_MANAGER_SERVICE_PORT_OUTER}
+    restart: on-failure
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ./env/transaction-service.env
+      - ./env/redis.env
+      - ./env/kafka.env
+      - .env
+    ports:
+      - ${TRANSACTION_MANAGER_SERVICE_PORT_OUTER}:${TRANSACTION_MANAGER_SERVICE_PORT_INNER}
+
   redis:
     image: redis:${REDIS_VERSION}
     container_name: ${REDIS_HOST}

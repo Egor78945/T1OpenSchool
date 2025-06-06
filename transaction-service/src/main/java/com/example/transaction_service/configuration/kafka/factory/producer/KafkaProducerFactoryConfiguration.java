@@ -3,6 +3,7 @@ package com.example.transaction_service.configuration.kafka.factory.producer;
 import com.example.transaction_service.environment.kafka.KafkaEnvironment;
 import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.model.log.entity.TimeLimitExceedLog;
+import com.example.transaction_service.model.transaction.entity.Transaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -16,6 +17,9 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс, отвечающий за конфигурацию {@link ProducerFactory}
+ */
 @Configuration
 public class KafkaProducerFactoryConfiguration {
     private final KafkaEnvironment kafkaEnvironment;
@@ -41,10 +45,18 @@ public class KafkaProducerFactoryConfiguration {
     }
 
     @Bean
-    public ObjectMapper objectMapper() {
-        return new JsonMapper();
+    public ProducerFactory<String, Transaction> transactionKafkaProducer(ObjectMapper objectMapper) {
+        DefaultKafkaProducerFactory<String, Transaction> producerFactory = new DefaultKafkaProducerFactory<>(buildExactlyOnceProducerProperties(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_TRANSACTION_ID()));
+        producerFactory.setValueSerializer(new JsonSerializer<>(objectMapper));
+
+        return producerFactory;
     }
 
+    /**
+     * Моделирует базовые конфигурации для {@link ProducerFactory}, соответствующие принципу '<b>EXACTLY ONCE</b>'
+     * @param transactionId Идентификатор для транзакции
+     * @return {@link Map}, хранящий нужные настройки
+     */
     private Map<String, Object> buildExactlyOnceProducerProperties(String transactionId) {
         Map<String, Object> producerProperties = new HashMap<>();
 
@@ -58,6 +70,11 @@ public class KafkaProducerFactoryConfiguration {
 
         return producerProperties;
     }
+
+    /**
+     * Моделирует базовые конфигурации для {@link ProducerFactory}, соответствующие принципу '<b>AT MOST ONCE</b>'
+     * @return {@link Map}, хранящий нужные настройки
+     */
     private Map<String, Object> buildAtMostOnceProducerProperties() {
         Map<String, Object> producerProperties = new HashMap<>();
 

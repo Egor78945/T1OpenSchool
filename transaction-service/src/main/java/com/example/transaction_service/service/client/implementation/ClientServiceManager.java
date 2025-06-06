@@ -1,5 +1,6 @@
 package com.example.transaction_service.service.client.implementation;
 
+import com.example.transaction_service.exception.AuthenticationException;
 import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.exception.ProcessingException;
 import com.example.transaction_service.model.client.entity.Client;
@@ -24,15 +25,12 @@ public class ClientServiceManager extends AbstractClientService<Client> {
     @LogDatasourceError
     @Metric
     public UUID save(Client client) {
-        client.setClient_id(UUID.randomUUID());
-        for(int i = 0; i < 10; i++){
-            if(existsByClientId(client.getClient_id())){
-                client.setClient_id(UUID.randomUUID());
-            } else {
-                return clientRepository.save(client).getClient_id();
-            }
+        if (client.getId() == null && client.getClient_id() == null) {
+            client.setClient_id(buildUUID());
+            return clientRepository.save(client).getClient_id();
+        } else {
+            throw new AuthenticationException(String.format("client can not be saved successfully\nClient : %s", client));
         }
-        throw new ProcessingException("uuid is not generated");
     }
 
     @Override

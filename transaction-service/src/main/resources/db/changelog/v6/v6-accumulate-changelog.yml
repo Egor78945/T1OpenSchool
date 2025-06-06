@@ -1,4 +1,4 @@
 databaseChangeLog:
   - include:
-      file: ./v6-create-datasource-error-log-table-changelog.yml
+      file: v6-create-account-table-changelog.yml
       relativeToChangelogFile: true

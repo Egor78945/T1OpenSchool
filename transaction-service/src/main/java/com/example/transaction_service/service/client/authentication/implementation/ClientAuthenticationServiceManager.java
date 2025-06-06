@@ -31,10 +31,6 @@ public class ClientAuthenticationServiceManager extends AbstractClientAuthentica
 
     @Override
     public String registration(Client registrationModel) {
-        if (registrationModel.getId() == null) {
-            return clientService.save(registrationModel).toString();
-        } else {
-            throw new AuthenticationException(String.format("client can not be registered successfully\nClient : %s", registrationModel));
-        }
+        return clientService.save(registrationModel).toString();
     }
 }
