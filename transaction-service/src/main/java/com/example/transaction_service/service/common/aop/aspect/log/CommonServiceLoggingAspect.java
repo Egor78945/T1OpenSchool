@@ -8,8 +8,8 @@ import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.model.log.entity.TimeLimitExceedLog;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
 import com.example.transaction_service.service.common.aop.annotation.Metric;
-import com.example.transaction_service.service.kafka.producer.router.KafkaProducerServiceRouter;
-import com.example.transaction_service.service.logging.router.LoggingServiceRouter;
+import com.example.transaction_service.service.common.kafka.producer.router.KafkaProducerServiceRouter;
+import com.example.transaction_service.service.common.logging.router.LoggingServiceRouter;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.common.header.internals.RecordHeaders;
@@ -20,7 +20,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;

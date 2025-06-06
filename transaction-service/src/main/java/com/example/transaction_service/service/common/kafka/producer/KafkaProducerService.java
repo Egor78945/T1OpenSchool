@@ -1,4 +1,4 @@
-package com.example.transaction_service.service.kafka.producer;
+package com.example.transaction_service.service.common.kafka.producer;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
-package com.example.transaction_service.service.kafka.producer.implementation;
+package com.example.transaction_service.service.common.kafka.producer.implementation;
 
 import com.example.transaction_service.model.transaction.entity.Transaction;
-import com.example.transaction_service.service.kafka.producer.KafkaProducerService;
+import com.example.transaction_service.service.common.kafka.producer.KafkaProducerService;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

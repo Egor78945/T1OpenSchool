@@ -1,12 +1,12 @@
-package com.example.transaction_service.service.logging.router.implementation;
+package com.example.transaction_service.service.common.logging.router.implementation;
 
 import com.example.transaction_service.model.log.Log;
 import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.model.log.entity.TimeLimitExceedLog;
-import com.example.transaction_service.service.logging.LoggingService;
-import com.example.transaction_service.service.logging.implementation.DatasourceErrorLogService;
-import com.example.transaction_service.service.logging.implementation.TimeLimitExceedLogService;
-import com.example.transaction_service.service.logging.router.LoggingServiceRouter;
+import com.example.transaction_service.service.common.logging.LoggingService;
+import com.example.transaction_service.service.common.logging.implementation.DatasourceErrorLogService;
+import com.example.transaction_service.service.common.logging.implementation.TimeLimitExceedLogService;
+import com.example.transaction_service.service.common.logging.router.LoggingServiceRouter;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

@@ -2,7 +2,7 @@ package com.example.transaction_service.service.transaction.kafka.implementation
 
 import com.example.transaction_service.environment.kafka.KafkaEnvironment;
 import com.example.transaction_service.model.transaction.entity.Transaction;
-import com.example.transaction_service.service.kafka.producer.KafkaProducerService;
+import com.example.transaction_service.service.common.kafka.producer.KafkaProducerService;
 import com.example.transaction_service.service.transaction.kafka.AbstractKafkaAccountTransactionService;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Qualifier;

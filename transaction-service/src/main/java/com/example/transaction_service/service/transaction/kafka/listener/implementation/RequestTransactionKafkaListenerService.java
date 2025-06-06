@@ -6,7 +6,7 @@ import com.example.transaction_service.model.transaction.entity.Transaction;
 import com.example.transaction_service.model.transaction.status.entity.TransactionStatus;
 import com.example.transaction_service.model.transaction.status.enumeration.TransactionStatusEnumeration;
 import com.example.transaction_service.model.transaction.type.enumeration.TransactionTypeEnumeration;
-import com.example.transaction_service.service.kafka.producer.KafkaProducerService;
+import com.example.transaction_service.service.common.kafka.producer.KafkaProducerService;
 import com.example.transaction_service.service.transaction.AbstractAccountTransactionService;
 import com.example.transaction_service.service.transaction.kafka.listener.KafkaListenerService;
 import com.example.transaction_service.service.transaction.router.AccountTransactionServiceRouter;

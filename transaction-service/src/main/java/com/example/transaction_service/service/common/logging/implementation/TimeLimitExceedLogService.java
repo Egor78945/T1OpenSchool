@@ -1,11 +1,10 @@
-package com.example.transaction_service.service.logging.implementation;
+package com.example.transaction_service.service.common.logging.implementation;
 
-import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.model.log.entity.TimeLimitExceedLog;
 import com.example.transaction_service.repository.TimeLimitExceedLogRepository;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
 import com.example.transaction_service.service.common.aop.annotation.Metric;
-import com.example.transaction_service.service.logging.LoggingService;
+import com.example.transaction_service.service.common.logging.LoggingService;
 import org.springframework.stereotype.Service;
 
 /**

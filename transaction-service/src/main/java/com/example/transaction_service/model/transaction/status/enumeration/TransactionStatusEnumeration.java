@@ -1,5 +1,7 @@
 package com.example.transaction_service.model.transaction.status.enumeration;
 
+import com.example.transaction_service.exception.NotFoundException;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -20,7 +22,7 @@ public enum TransactionStatusEnumeration {
         return id;
     }
 
-    public static Optional<TransactionStatusEnumeration> getById(long id){
-        return Optional.ofNullable(transactionStatusEnumerationById.get(id));
+    public static TransactionStatusEnumeration getById(long id){
+        return Optional.ofNullable(transactionStatusEnumerationById.get(id)).orElseThrow(() -> new NotFoundException(String.format("transaction status is not found by id\nid : %s", id)));
     }
 }

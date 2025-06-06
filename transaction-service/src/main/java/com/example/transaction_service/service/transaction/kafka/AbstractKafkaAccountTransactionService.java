@@ -2,7 +2,7 @@ package com.example.transaction_service.service.transaction.kafka;
 
 import com.example.transaction_service.environment.kafka.KafkaEnvironment;
 import com.example.transaction_service.model.transaction.entity.Transaction;
-import com.example.transaction_service.service.kafka.producer.KafkaProducerService;
+import com.example.transaction_service.service.common.kafka.producer.KafkaProducerService;
 
 import java.io.Serializable;
 

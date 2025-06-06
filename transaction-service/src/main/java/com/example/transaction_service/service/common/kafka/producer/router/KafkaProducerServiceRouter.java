@@ -1,9 +1,8 @@
-package com.example.transaction_service.service.kafka.producer.router;
+package com.example.transaction_service.service.common.kafka.producer.router;
 
-import com.example.transaction_service.service.kafka.producer.KafkaProducerService;
+import com.example.transaction_service.service.common.kafka.producer.KafkaProducerService;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Интерфейс, предоставляющий функционал для маршрутизации {@link KafkaProducerService}

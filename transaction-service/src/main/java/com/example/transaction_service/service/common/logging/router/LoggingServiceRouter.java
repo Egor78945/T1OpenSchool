@@ -1,7 +1,7 @@
-package com.example.transaction_service.service.logging.router;
+package com.example.transaction_service.service.common.logging.router;
 
 import com.example.transaction_service.model.log.Log;
-import com.example.transaction_service.service.logging.LoggingService;
+import com.example.transaction_service.service.common.logging.LoggingService;
 
 import java.util.Optional;
 

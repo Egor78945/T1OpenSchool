@@ -1,4 +1,4 @@
-package com.example.transaction_service.service.logging;
+package com.example.transaction_service.service.common.logging;
 
 /**
  * Интерфейс, предоставляющий функционал для логгирования
