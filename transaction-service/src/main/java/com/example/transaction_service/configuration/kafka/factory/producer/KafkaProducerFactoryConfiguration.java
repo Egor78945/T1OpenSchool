@@ -46,7 +46,7 @@ public class KafkaProducerFactoryConfiguration {
 
     @Bean
     public ProducerFactory<String, Transaction> transactionKafkaProducer(ObjectMapper objectMapper) {
-        DefaultKafkaProducerFactory<String, Transaction> producerFactory = new DefaultKafkaProducerFactory<>(buildAtMostOnceProducerProperties());
+        DefaultKafkaProducerFactory<String, Transaction> producerFactory = new DefaultKafkaProducerFactory<>(buildExactlyOnceProducerProperties(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_TRANSACTION_ID()));
         producerFactory.setValueSerializer(new JsonSerializer<>(objectMapper));
 
         return producerFactory;

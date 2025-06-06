@@ -1,6 +1,7 @@
 package com.example.transaction_service.configuration.kafka.transaction;
 
 import com.example.transaction_service.model.transaction.entity.Transaction;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.transaction.KafkaTransactionManager;
@@ -21,8 +22,8 @@ public class KafkaTransactionManagementConfiguration {
 //        return new KafkaTransactionManager<>(producerFactory);
 //    }
 //
-//    @Bean
-//    public PlatformTransactionManager kafkaTransactionTransactionManager(ProducerFactory<String, Transaction> producerFactory){
-//        return new KafkaTransactionManager<>(producerFactory);
-//    }
+    @Bean
+    public PlatformTransactionManager kafkaTransactionTransactionManager(ProducerFactory<String, Transaction> producerFactory){
+        return new KafkaTransactionManager<>(producerFactory);
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.transaction_manager_service.service.kafka.producer;
+package com.example.transaction_manager_service.service.common.kafka.producer;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 

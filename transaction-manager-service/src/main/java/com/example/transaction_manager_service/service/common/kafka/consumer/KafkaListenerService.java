@@ -1,4 +1,4 @@
-package com.example.transaction_manager_service.service.kafka.consumer;
+package com.example.transaction_manager_service.service.common.kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 

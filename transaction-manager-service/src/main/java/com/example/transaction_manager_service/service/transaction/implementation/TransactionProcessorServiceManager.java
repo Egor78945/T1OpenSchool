@@ -5,7 +5,7 @@ import com.example.transaction_manager_service.environment.transaction.Transacti
 import com.example.transaction_manager_service.model.transaction.entity.Transaction;
 import com.example.transaction_manager_service.model.transaction.status.entity.TransactionStatus;
 import com.example.transaction_manager_service.model.transaction.status.enumeration.TransactionStatusEnumeration;
-import com.example.transaction_manager_service.service.kafka.producer.KafkaProducerService;
+import com.example.transaction_manager_service.service.common.kafka.producer.KafkaProducerService;
 import com.example.transaction_manager_service.service.transaction.TransactionProcessorService;
 import com.example.transaction_manager_service.service.transaction.TransactionService;
 import com.example.transaction_manager_service.service.transaction.status.TransactionStatusService;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 

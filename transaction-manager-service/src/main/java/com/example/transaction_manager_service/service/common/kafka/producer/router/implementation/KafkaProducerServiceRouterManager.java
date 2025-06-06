@@ -1,9 +1,9 @@
-package com.example.transaction_manager_service.service.kafka.producer.router.implementation;
+package com.example.transaction_manager_service.service.common.kafka.producer.router.implementation;
 
 import com.example.transaction_manager_service.exception.NotFoundException;
 import com.example.transaction_manager_service.model.transaction.entity.Transaction;
-import com.example.transaction_manager_service.service.kafka.producer.KafkaProducerService;
-import com.example.transaction_manager_service.service.kafka.producer.router.KafkaProducerServiceRouter;
+import com.example.transaction_manager_service.service.common.kafka.producer.KafkaProducerService;
+import com.example.transaction_manager_service.service.common.kafka.producer.router.KafkaProducerServiceRouter;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
