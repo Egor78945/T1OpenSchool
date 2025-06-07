@@ -11,6 +11,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
+/**
+ * Реализация {@link KafkaListenerService} для считывания сообщений, хранящих {@link Transaction} из топика <b>TRANSACTION_RESULT</b>
+ */
 public class ResultTransactionKafkaListenerService implements KafkaListenerService<String, Transaction> {
     private final TransactionProcessorServiceRouter<Transaction, AbstractTransactionProcessorService<Transaction>> transactionProcessorServiceRouter;
 

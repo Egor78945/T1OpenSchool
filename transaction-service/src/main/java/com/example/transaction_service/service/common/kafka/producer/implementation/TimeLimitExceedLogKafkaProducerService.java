@@ -1,5 +1,6 @@
 package com.example.transaction_service.service.common.kafka.producer.implementation;
 
+import com.example.transaction_service.model.log.entity.DatasourceErrorLog;
 import com.example.transaction_service.model.log.entity.TimeLimitExceedLog;
 import com.example.transaction_service.service.common.kafka.producer.KafkaProducerService;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -7,7 +8,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 /**
- * Реализация сервиса по маршрутизации Kafka producers {@link KafkaProducerService} для K = <b>{@link String}</b> V = <b>{@link TimeLimitExceedLog}</b>
+ * Реализация сервиса {@link KafkaProducerService} для K = <b>{@link String}</b> V = <b>{@link TimeLimitExceedLog}</b>
  */
 @Service
 public class TimeLimitExceedLogKafkaProducerService implements KafkaProducerService<String, TimeLimitExceedLog> {
