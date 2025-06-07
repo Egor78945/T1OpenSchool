@@ -34,6 +34,9 @@ method:
   runtime:
     limit: 10000
 
+token:
+  lifetime: ${JWT_LIFETIME}
+
 account:
   credit:
     start-balance: ${ACCOUNT_CREDIT_START_BALANCE}
