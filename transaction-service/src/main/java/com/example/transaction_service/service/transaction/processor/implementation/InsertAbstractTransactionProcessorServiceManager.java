@@ -17,6 +17,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @Service
+/**
+ * Реализация {@link AbstractTransactionProcessorService} для работы с транзакциями типа <b>INSERT</b>
+ */
 public class InsertAbstractTransactionProcessorServiceManager extends AbstractTransactionProcessorService<Transaction> {
     private final AbstractAccountTransactionService<Transaction> transactionService;
     private final AccountStatusService<AccountStatus> accountStatusService;

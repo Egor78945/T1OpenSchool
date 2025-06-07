@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * Реализация {@link KafkaListenerService} для считывания сообщений, хранящих {@link Transaction}
+ * Реализация {@link KafkaListenerService} для считывания сообщений, хранящих {@link Transaction} из топика <b>TRANSACTION</b>
  */
 @Service
 public class RequestTransactionKafkaListenerService implements KafkaListenerService<String, Transaction> {
