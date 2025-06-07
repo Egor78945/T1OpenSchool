@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: ${TRANSACTION_MANAGER_SERVICE_HOST}
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT_INNER}/${POSTGRES_DATABASE_NAME}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+
+  kafka:
+    bootstrap-servers: ${KAFKA1_HOST}:${KAFKA1_PORT_PLAINTEXT_INNER}, ${KAFKA2_HOST}:${KAFKA2_PORT_PLAINTEXT_INNER}
+    listener:
+      ack-mode: record
+    consumer:
+      auto-offset-reset: earliest
+    producer:
+      retries: 1000
+
+  jpa:
+    show-sql: true
+
+kafka:
+  topic:
+    replication-factor: ${KAFKA_TOPIC_REPLICATION_FACTOR}
+    transaction-accept:
+      name: ${KAFKA_TOPIC_TRANSACTION_ACCEPT}
+      transaction-id: transaction-accept-transaction-id
+    transaction-result:
+      name: ${KAFKA_TOPIC_TRANSACTION_RESULT}
+      transaction-id: transaction-result-transaction-id
+
+transaction:
+  request:
+    max-count: 5
+    per-minute: 1
+
+server:
+  port: ${TRANSACTION_MANAGER_SERVICE_PORT_INNER}
