@@ -15,6 +15,12 @@ databaseChangeLog:
       file: ../v5/v5-accumulate-changelog.yml
       relativeToChangelogFile: true
   - include:
+      file: ../v13/v13-accumulate-changelog.yml
+      relativeToChangelogFile: true
+  - include:
+      file: ../v10/v10-accumulate-changelog.yml
+      relativeToChangelogFile: true
+  - include:
       file: ../v6/v6-accumulate-changelog.yml
       relativeToChangelogFile: true
   - include:
@@ -25,4 +31,10 @@ databaseChangeLog:
       relativeToChangelogFile: true
   - include:
       file: ../v9/v9-accumulate-changelog.yml
+      relativeToChangelogFile: true
+  - include:
+      file: ../v11/v11-accumulate-changelog.yml
+      relativeToChangelogFile: true
+  - include:
+      file: ../v12/v12-accumulate-changelog.yml
       relativeToChangelogFile: true

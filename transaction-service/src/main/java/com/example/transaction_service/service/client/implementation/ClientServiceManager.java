@@ -24,12 +24,21 @@ public class ClientServiceManager extends AbstractClientService<Client> {
     @Override
     @LogDatasourceError
     @Metric
-    public UUID save(Client client) {
+    public Client save(Client client) {
         if (client.getId() == null && client.getClient_id() == null) {
             client.setClient_id(buildUUID());
-            return clientRepository.save(client).getClient_id();
+            return clientRepository.save(client);
         } else {
             throw new AuthenticationException(String.format("client can not be saved successfully\nClient : %s", client));
+        }
+    }
+
+    @Override
+    public Client update(Client client) {
+        if(existsById(client.getId()) && existsByClientId(client.getClient_id())){
+            return clientRepository.save(client);
+        } else {
+            throw new AuthenticationException(String.format("client can not be updated successfully\nClient : %s", client));
         }
     }
 
@@ -41,6 +50,16 @@ public class ClientServiceManager extends AbstractClientService<Client> {
     @Override
     public Client getByClientId(UUID clientId) {
         return clientRepository.findByClientId(clientId).orElseThrow(() -> new NotFoundException(String.format("client by client id is not found\nclient id : %s", clientId)));
+    }
+
+    @Override
+    public Client getByUserId(long userId) {
+        return clientRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(String.format("client by user id is not found\nuser id : %s", userId)));
+    }
+
+    @Override
+    public Client getByUserEmail(String email) {
+        return clientRepository.findByUserEmail(email).orElseThrow(() -> new NotFoundException(String.format("client by user email is not found\nuser email : %s", email)));
     }
 
     @Override

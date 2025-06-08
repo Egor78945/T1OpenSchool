@@ -15,18 +15,21 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("from Account a " +
             "join fetch a.client " +
             "join fetch a.accountType " +
+            "join fetch a.accountStatus " +
             "where a.id = :id")
     Optional<Account> findAccountById(@Param("id") long id);
 
     @Query("from Account a " +
             "join fetch a.client " +
             "join fetch a.accountType " +
+            "join fetch a.accountStatus " +
             "where a.client.client_id = :clientId")
     List<Account> findAccountByClientId(@Param("clientId") UUID clientId);
 
     @Query("from Account a " +
             "join fetch a.client " +
             "join fetch a.accountType " +
+            "join fetch a.accountStatus " +
             "where a.client.client_id = :clientId and a.accountType.id = :accountTypeId")
     List<Account> findAccountByClientIdAndAccountTypeId(@Param("clientId") UUID clientId, @Param("accountTypeId") long accountTypeId);
 
@@ -38,6 +41,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("select case when exists(from Account where accountId=:accountId) then true else false end")
     boolean existsAccountByAccountId(@Param("accountId") UUID accountId);
 
-    @Query("from Account where accountId=:accountId")
+    @Query("from Account a " +
+            "join fetch a.client " +
+            "join fetch a.accountType " +
+            "join fetch a.accountStatus where a.accountId=:accountId")
     Optional<Account> findAccountByAccountId(@Param("accountId") UUID accountId);
 }

@@ -8,10 +8,10 @@ import java.util.UUID;
 /**
  * Абстрактная реализация абстрактного сервиса по аутентификации {@link AbstractAuthenticationService} для аутентификации клиентов {@link Client}
  */
-public abstract class AbstractClientAuthenticationService <L extends Client,R extends Client> extends AbstractAuthenticationService <L,R> {
+public abstract class AbstractClientAuthenticationService <R extends Client> extends AbstractAuthenticationService <R> {
     @Override
-    public abstract String login(L loginModel);
+    public abstract String login(String username, String password);
 
     @Override
-    public abstract String registration(R registrationModel);
+    public abstract R registration(R registrationModel);
 }

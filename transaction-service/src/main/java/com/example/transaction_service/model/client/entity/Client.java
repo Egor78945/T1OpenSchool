@@ -1,5 +1,7 @@
 package com.example.transaction_service.model.client.entity;
 
+import com.example.transaction_service.model.client.status.entity.ClientStatus;
+import com.example.transaction_service.model.user.entity.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
@@ -23,11 +25,19 @@ public class Client implements Serializable {
     private String surname;
     @Column(name = "patronymic")
     private String patronymic;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user_id;
+    @ManyToOne
+    @JoinColumn(name = "client_status_id")
+    private ClientStatus client_status_id;
 
-    public Client(String name, String surname, String patronymic) {
+    public Client(String name, String surname, String patronymic, User user, ClientStatus clientStatus) {
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
+        this.user_id = user;
+        this.client_status_id = clientStatus;
     }
 
     public Client() {
@@ -73,6 +83,22 @@ public class Client implements Serializable {
         this.patronymic = patronymic;
     }
 
+    public User getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
+    }
+
+    public ClientStatus getClient_status_id() {
+        return client_status_id;
+    }
+
+    public void setClient_status_id(ClientStatus client_status_id) {
+        this.client_status_id = client_status_id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -93,6 +119,8 @@ public class Client implements Serializable {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
+                ", user_id=" + user_id +
+                ", client_status_id=" + client_status_id +
                 '}';
     }
 }

@@ -2,12 +2,14 @@ package com.example.transaction_service.service.transaction;
 
 import com.example.transaction_service.environment.account.AccountEnvironment;
 import com.example.transaction_service.exception.ProcessingException;
+import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.model.transaction.entity.Transaction;
-import com.example.transaction_service.repository.AccountRepository;
-import com.example.transaction_service.repository.TransactionRepository;
-import com.example.transaction_service.repository.TransactionStatusRepository;
-import com.example.transaction_service.repository.TransactionTypeRepository;
+import com.example.transaction_service.model.user.entity.User;
+import com.example.transaction_service.repository.*;
+import com.example.transaction_service.service.client.AbstractClientService;
+import com.example.transaction_service.service.common.authentication.AuthenticationContextService;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
@@ -21,8 +23,10 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
     protected final AccountEnvironment accountEnvironment;
     protected final TransactionTypeRepository transactionTypeRepository;
     protected final TransactionStatusRepository transactionStatusRepository;
+    protected final AuthenticationContextService<User> userAuthenticationContextService;
 
-    public AbstractAccountTransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository, AccountEnvironment accountEnvironment, TransactionTypeRepository transactionTypeRepository, TransactionStatusRepository transactionStatusRepository) {
+    public AbstractAccountTransactionService(AuthenticationContextService<User> userAuthenticationContextService, TransactionRepository transactionRepository, AccountRepository accountRepository, AccountEnvironment accountEnvironment, TransactionTypeRepository transactionTypeRepository, TransactionStatusRepository transactionStatusRepository) {
+        this.userAuthenticationContextService = userAuthenticationContextService;
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
         this.accountEnvironment = accountEnvironment;
@@ -34,8 +38,6 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
 
     public abstract T transfer(T transaction);
 
-    public abstract T update(T transaction);
-
     public abstract boolean isValidInsert(T transaction);
 
     public abstract boolean isValidTransfer(T transaction);
@@ -46,6 +48,30 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
 
     public boolean existsByTransactionId(UUID uuid){
         return transactionRepository.existsTransactionByTransaction_id(uuid);
+    }
+
+    public Transaction update(Transaction transaction) {
+        if(transactionRepository.existsById(transaction.getId()) && transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())){
+            return transactionRepository.save(transaction);
+        } else {
+            throw new ProcessingException(String.format("transaction is not exists to update\nTransaction : %s", transaction));
+        }
+    }
+
+    public Transaction save(Transaction transaction){
+        if(!transactionRepository.existsById(transaction.getId()) && !transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())) {
+            return transactionRepository.save(transaction);
+        } else {
+            throw new ProcessingException(String.format("transaction is already exists to save\nTransaction : %s", transaction));
+        }
+    }
+
+    public int getBySenderAfterTime(UUID senderId, Timestamp after){
+        return transactionRepository.countRejectedTransactionsBySenderPerTimeByAccountId(senderId, after);
+    }
+
+    public int getByRecipientAfterTime(UUID recipientId, Timestamp after){
+        return transactionRepository.countRejectedTransactionsByRecipientPerTimeByAccountId(recipientId, after);
     }
 
     public UUID buildUUID(){

@@ -21,7 +21,9 @@ public abstract class AbstractClientService<C extends Client> {
      * Сохранить несуществующего клиента {@link Client}
      * @param client несуществующий клиент {@link Client}
      */
-    public abstract UUID save(C client);
+    public abstract C save(C client);
+
+    public abstract C update(C client);
 
     /**
      * Получить клиента {@link Client} по его Id
@@ -31,6 +33,9 @@ public abstract class AbstractClientService<C extends Client> {
     public abstract C getById(long id);
 
     public abstract C getByClientId(UUID clientId);
+
+    public abstract C getByUserId(long userId);
+    public abstract C getByUserEmail(String email);
     /**
      * Проверить, существует ли клиент {@link Client} по Id
      * @param id Id потенциально существующего клиента {@link Client}

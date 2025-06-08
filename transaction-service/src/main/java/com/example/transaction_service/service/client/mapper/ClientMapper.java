@@ -7,7 +7,7 @@ import com.example.transaction_service.model.client.entity.Client;
  * Класс, выполняющий изменение клиентов
  */
 public class ClientMapper {
-    public static Client mapTo(ClientDTO clientDTO){
-        return new Client(clientDTO.getName(), clientDTO.getSurname(), clientDTO.getPatronymic());
-    }
+//    public static Client mapTo(ClientDTO clientDTO){
+//        return new Client(clientDTO.getName(), clientDTO.getSurname(), clientDTO.getPatronymic());
+//    }
 }

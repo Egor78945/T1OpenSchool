@@ -32,6 +32,7 @@ services:
       - ./env/transaction-service.env
       - ./env/redis.env
       - ./env/kafka.env
+      - ./env/token.env
       - .env
     ports:
       - ${TRANSACTION_SERVICE_PORT_OUTER}:${TRANSACTION_SERVICE_PORT_INNER}

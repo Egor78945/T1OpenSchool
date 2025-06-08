@@ -5,14 +5,19 @@ import com.example.transaction_service.exception.TransactionException;
 import com.example.transaction_service.model.account.entity.Account;
 import com.example.transaction_service.model.account.status.entity.enumeration.AccountStatusEnumeration;
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;
+import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.model.transaction.entity.Transaction;
+import com.example.transaction_service.model.user.entity.User;
 import com.example.transaction_service.repository.AccountRepository;
 import com.example.transaction_service.repository.TransactionRepository;
 import com.example.transaction_service.repository.TransactionStatusRepository;
 import com.example.transaction_service.repository.TransactionTypeRepository;
+import com.example.transaction_service.service.client.AbstractClientService;
 import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
 import com.example.transaction_service.service.common.aop.annotation.Metric;
+import com.example.transaction_service.service.common.authentication.AuthenticationContextService;
 import com.example.transaction_service.service.transaction.AbstractCreditAccountTransactionService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +29,8 @@ import java.util.List;
  */
 @Service
 public class CreditAccountTransactionServiceManager extends AbstractCreditAccountTransactionService<Transaction> {
-    public CreditAccountTransactionServiceManager(TransactionRepository transactionRepository, AccountRepository accountRepository, TransactionTypeRepository transactionTypeRepository, AccountEnvironment accountEnvironment, TransactionStatusRepository transactionStatusRepository) {
-        super(transactionRepository, accountRepository, accountEnvironment, transactionTypeRepository, transactionStatusRepository);
+    public CreditAccountTransactionServiceManager(@Qualifier("userAuthenticationContextServiceManager") AuthenticationContextService<User> userAuthenticationContextService, TransactionRepository transactionRepository, AccountRepository accountRepository, TransactionTypeRepository transactionTypeRepository, AccountEnvironment accountEnvironment, TransactionStatusRepository transactionStatusRepository) {
+        super(userAuthenticationContextService, transactionRepository, accountRepository, accountEnvironment, transactionTypeRepository, transactionStatusRepository);
     }
 
     @Override
@@ -61,17 +66,9 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
     }
 
     @Override
-    public Transaction update(Transaction transaction) {
-        if(transactionRepository.existsById(transaction.getId()) && transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())){
-            return transactionRepository.save(transaction);
-        } else {
-            return transaction;
-        }
-    }
-
-    @Override
     public boolean isValidInsert(Transaction transaction) {
-        return accountRepository.existsAccountByAccountId(transaction.getRecipient().getAccountId()) &&
+        return transaction.getRecipient().getClient().getUser_id().getId().equals(userAuthenticationContextService.getCurrentAuthentication().getId()) &&
+                accountRepository.existsAccountByAccountId(transaction.getRecipient().getAccountId()) &&
                 transaction.getRecipient().getAccountType().getId() == AccountTypeEnumeration.CREDIT.getId() &&
                 transaction.getAmount() <= accountEnvironment.getACCOUNT_TRANSACTION_MAX_AMOUNT() &&
                 transaction.getAmount() >= accountEnvironment.getACCOUNT_TRANSACTION_MIN_AMOUNT() &&
@@ -82,7 +79,8 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
 
     @Override
     public boolean isValidTransfer(Transaction transaction) {
-        return accountRepository.existsAccountByAccountId(transaction.getSender().getAccountId()) &&
+        return transaction.getSender().getClient().getUser_id().getId().equals(userAuthenticationContextService.getCurrentAuthentication().getId()) &&
+                accountRepository.existsAccountByAccountId(transaction.getSender().getAccountId()) &&
                 accountRepository.existsAccountByAccountId(transaction.getRecipient().getAccountId()) &&
                 !transaction.getSender().getId().equals(transaction.getRecipient().getId()) &&
                 transaction.getSender().getAccountType().getId() == AccountTypeEnumeration.CREDIT.getId() &&
