@@ -14,9 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-/**
- * Реализация {@link AbstractTransactionProcessorService} для работы с транзакциями типа <b>TRANSFER</b>
- */
 public class TransferAbstractTransactionProcessorServiceManager extends AbstractTransactionProcessorService<Transaction> {
     private final AbstractAccountTransactionService<Transaction> transactionService;
     private final AccountStatusService<AccountStatus> accountStatusService;

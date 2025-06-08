@@ -7,7 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 /**
- * Реализация сервиса {@link KafkaProducerService} для K = <b>{@link String}</b> V = <b>{@link DatasourceErrorLog}</b>
+ * Реализация сервиса по маршрутизации Kafka producers {@link KafkaProducerService} для K = <b>{@link String}</b> V = <b>{@link DatasourceErrorLog}</b>
  */
 @Service
 public class DatasourceErrorLogKafkaProducerService implements KafkaProducerService<String, DatasourceErrorLog> {
