@@ -7,9 +7,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Реализация {@link KafkaProducerService} для работы с сообщениями, где ключ - {@link String}, а значение - {@link Transaction}
- */
 @Service
 public class TransactionKafkaProducerService implements KafkaProducerService<String, Transaction> {
     private final KafkaTemplate<String, Transaction> kafkaTemplate;
