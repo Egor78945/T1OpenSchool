@@ -37,7 +37,21 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
 
     public abstract T transfer(T transaction);
 
-    public abstract T update(T transaction);
+    public Transaction update(Transaction transaction) {
+        if(transactionRepository.existsById(transaction.getId()) && transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())){
+            return transactionRepository.save(transaction);
+        } else {
+            throw new ProcessingException(String.format("transaction is not exists to update\nTransaction : %s", transaction));
+        }
+    }
+
+    public Transaction save(Transaction transaction){
+        if(!transactionRepository.existsById(transaction.getId()) && !transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())) {
+            return transactionRepository.save(transaction);
+        } else {
+            throw new ProcessingException(String.format("transaction is already exists to save\nTransaction : %s", transaction));
+        }
+    }
 
     public abstract boolean isValidInsert(T transaction);
 

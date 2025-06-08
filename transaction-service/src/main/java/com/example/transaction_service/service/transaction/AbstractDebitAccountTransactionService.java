@@ -28,9 +28,6 @@ public abstract class AbstractDebitAccountTransactionService<T extends Transacti
     public abstract T transfer(Transaction transaction);
 
     @Override
-    public abstract T update(T transaction);
-
-    @Override
     public abstract boolean isValidInsert(T transaction);
 
     @Override

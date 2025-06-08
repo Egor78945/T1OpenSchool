@@ -13,8 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
     @Query("select case when exists(from User where email=:email) then true else false end")
     boolean existsUserByEmail(@Param("email") String email);
-    @Query("select case when exists(select User from Client c " +
-            "join fetch User u " +
+    @Query("select case when exists(from Client c " +
+            "join User u on c.user_id.id=u.id " +
             "where c.client_id=:clientId) then true else false end")
     boolean existsUserByClient_id(@Param("clientId") long clientId);
 }

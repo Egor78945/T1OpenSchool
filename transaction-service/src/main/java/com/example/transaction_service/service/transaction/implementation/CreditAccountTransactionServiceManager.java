@@ -39,7 +39,6 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
     @Metric
     public Transaction insert(Transaction transaction) {
         Account recipient = transaction.getRecipient();
-        Client client = recipient.getClient();
         if (isValidInsert(transaction)) {
             recipient.setBalance(recipient.getBalance() + transaction.getAmount());
             accountRepository.save(recipient);
@@ -63,15 +62,6 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
             return transactionRepository.save(transaction);
         } else {
             throw new TransactionException(String.format("insert transaction can not be done successfully\nSender : %s\nRecipient : %s\ntransaction amount : %s", sender, recipient, transaction.getAmount()));
-        }
-    }
-
-    @Override
-    public Transaction update(Transaction transaction) {
-        if(transactionRepository.existsById(transaction.getId()) && transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())){
-            return transactionRepository.save(transaction);
-        } else {
-            return transaction;
         }
     }
 

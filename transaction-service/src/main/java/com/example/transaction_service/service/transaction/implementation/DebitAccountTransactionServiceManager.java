@@ -66,15 +66,6 @@ public class DebitAccountTransactionServiceManager extends AbstractDebitAccountT
     }
 
     @Override
-    public Transaction update(Transaction transaction) {
-        if(transactionRepository.existsById(transaction.getId()) && transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())){
-            return transactionRepository.save(transaction);
-        } else {
-            return transaction;
-        }
-    }
-
-    @Override
     public boolean isValidInsert(Transaction transaction) {
         return transaction.getRecipient().getClient().getUser_id().getId().equals(userAuthenticationContextService.getCurrentAuthentication().getId()) &&
                 accountRepository.existsAccountByAccountId(transaction.getRecipient().getAccountId()) &&

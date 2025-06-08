@@ -41,8 +41,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("select case when exists(from Account where accountId=:accountId) then true else false end")
     boolean existsAccountByAccountId(@Param("accountId") UUID accountId);
 
-    @Query("from Account a join fetch a.client " +
+    @Query("from Account a " +
+            "join fetch a.client " +
             "join fetch a.accountType " +
-            "join fetch a.accountStatus where a=:accountId")
+            "join fetch a.accountStatus where a.accountId=:accountId")
     Optional<Account> findAccountByAccountId(@Param("accountId") UUID accountId);
 }

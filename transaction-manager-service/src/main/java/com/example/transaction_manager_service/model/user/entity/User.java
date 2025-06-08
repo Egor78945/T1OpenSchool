@@ -1,14 +1,12 @@
-package com.example.transaction_service.model.user.entity;
+package com.example.transaction_manager_service.model.user.entity;
 
-import com.example.transaction_service.model.client.entity.Client;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -49,11 +49,7 @@ public class RequestTransactionKafkaListenerService implements KafkaListenerServ
             }
         } catch (Exception e){
             transaction.setTransactionStatus(transactionStatusService.getById(TransactionStatusEnumeration.REJECTED.getId()));
-            if (transaction.getTransactionType().getId().equals(TransactionTypeEnumeration.INSERT.getId())) {
-                kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_RESULT(), TransactionTypeEnumeration.INSERT.toString(), transaction));
-            } else if (transaction.getTransactionType().getId().equals(TransactionTypeEnumeration.TRANSFER.getId())) {
-                kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_RESULT(), TransactionTypeEnumeration.TRANSFER.toString(), transaction));
-            }
+            accountTransactionServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.DEBIT).save(transaction);
         }
     }
 }

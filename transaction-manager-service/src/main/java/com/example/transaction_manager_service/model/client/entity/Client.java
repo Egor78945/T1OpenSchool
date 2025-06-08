@@ -1,5 +1,6 @@
 package com.example.transaction_manager_service.model.client.entity;
 
+import com.example.transaction_manager_service.model.user.entity.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
@@ -23,11 +24,15 @@ public class Client implements Serializable {
     private String surname;
     @Column(name = "patronymic")
     private String patronymic;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user_id;
 
-    public Client(String name, String surname, String patronymic) {
+    public Client(String name, String surname, String patronymic, User user) {
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
+        this.user_id = user;
     }
 
     public Client() {
@@ -73,6 +78,14 @@ public class Client implements Serializable {
         this.patronymic = patronymic;
     }
 
+    public User getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -93,6 +106,7 @@ public class Client implements Serializable {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
+                ", user_id=" + user_id +
                 '}';
     }
 }
