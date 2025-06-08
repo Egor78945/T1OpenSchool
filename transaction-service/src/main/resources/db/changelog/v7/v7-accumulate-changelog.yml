@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: v7-create-transaction-table-changelog.yml
+      relativeToChangelogFile: true

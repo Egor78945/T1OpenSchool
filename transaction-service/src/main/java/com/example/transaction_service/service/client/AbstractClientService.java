@@ -1,7 +1,10 @@
 package com.example.transaction_service.service.client;
 
+import com.example.transaction_service.exception.ProcessingException;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.repository.ClientRepository;
+
+import java.util.UUID;
 
 /**
  * Абстрактный класс, предоставляющий функционал для работы с клиентами {@link Client}
@@ -18,7 +21,7 @@ public abstract class AbstractClientService<C extends Client> {
      * Сохранить несуществующего клиента {@link Client}
      * @param client несуществующий клиент {@link Client}
      */
-    public abstract void save(C client);
+    public abstract UUID save(C client);
 
     /**
      * Получить клиента {@link Client} по его Id
@@ -27,6 +30,7 @@ public abstract class AbstractClientService<C extends Client> {
      */
     public abstract C getById(long id);
 
+    public abstract C getByClientId(UUID clientId);
     /**
      * Проверить, существует ли клиент {@link Client} по Id
      * @param id Id потенциально существующего клиента {@link Client}
@@ -34,5 +38,19 @@ public abstract class AbstractClientService<C extends Client> {
      */
     public boolean existsById(long id) {
         return clientRepository.existsById(id);
+    }
+
+    public abstract boolean existsByClientId(UUID clientId);
+
+    public UUID buildUUID(){
+        UUID uuid = UUID.randomUUID();
+        for(int i = 0; i < 10; i++){
+            if(existsByClientId(uuid)){
+                uuid = UUID.randomUUID();
+            } else {
+                return uuid;
+            }
+        }
+        throw new ProcessingException("uuid is not generated");
     }
 }

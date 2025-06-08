@@ -1,16 +1,22 @@
 package com.example.transaction_service.model.client.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 
+import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "client")
-public class Client {
+public class Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @NaturalId
+    @Column(name = "client_id")
+    private UUID client_id;
     @Column(name = "name")
     private String name;
     @Column(name = "surname")
@@ -33,6 +39,14 @@ public class Client {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getClient_id() {
+        return client_id;
+    }
+
+    public void setClient_id(UUID client_id) {
+        this.client_id = client_id;
     }
 
     public String getName() {
@@ -63,18 +77,19 @@ public class Client {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id);
+        return Objects.equals(id, client.id) && Objects.equals(client_id, client.client_id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id, client_id);
     }
 
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +
+                ", client_id=" + client_id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", patronymic='" + patronymic + '\'' +

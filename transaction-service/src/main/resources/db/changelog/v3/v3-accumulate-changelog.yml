@@ -1,7 +1,7 @@
 databaseChangeLog:
   - include:
-      file: ./v3-create-client-table-changelog.yml
+      file: ./v3-create-account-status-table-changelog.yml
       relativeToChangelogFile: true
   - include:
-      file: ./v3-fill-client-table-changelog.yml
+      file: ./v3-fill-account-status-table-changelog.yml
       relativeToChangelogFile: true

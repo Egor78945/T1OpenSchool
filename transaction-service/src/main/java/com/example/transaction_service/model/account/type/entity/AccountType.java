@@ -2,6 +2,7 @@ package com.example.transaction_service.model.account.type.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "account_type")
-public class AccountType {
+public class AccountType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -1,5 +1,7 @@
 package com.example.transaction_service.model.transaction.type.enumeration;
 
+import com.example.transaction_service.exception.NotFoundException;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,11 +27,11 @@ public enum TransactionTypeEnumeration {
         return id;
     }
 
-    public static Optional<TransactionTypeEnumeration> getById(long id) {
-        return Optional.ofNullable(transactionTypeEnumerationById.get(id));
+    public static TransactionTypeEnumeration getById(long id) {
+        return Optional.ofNullable(transactionTypeEnumerationById.get(id)).orElseThrow(() -> new NotFoundException(String.format("transaction type enumeration is not found by id\nid : %s", id)));
     }
 
-    public static Optional<TransactionTypeEnumeration> getByName(String name) {
-        return Optional.ofNullable(transactionTypeEnumerationByName.get(name));
+    public static TransactionTypeEnumeration getByName(String name) {
+        return Optional.ofNullable(transactionTypeEnumerationByName.get(name)).orElseThrow(() -> new NotFoundException(String.format("transaction type enumeration is not found by name\nname : %s", name)));
     }
 }

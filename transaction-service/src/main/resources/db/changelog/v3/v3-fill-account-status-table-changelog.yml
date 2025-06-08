@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: v3-2
+      author: egor_petrov
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM account_status"
+      changes:
+        - loadData:
+            tableName: account_status
+            file: db/csv/account_status_table.csv
+            separator: ","
+            usePreparedStatements: true
+            columns:
+              - column:
+                  name: name
+                  type: varchar(30)

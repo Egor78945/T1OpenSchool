@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: v8-create-datasource-error-log-table-changelog.yml
+      relativeToChangelogFile: true

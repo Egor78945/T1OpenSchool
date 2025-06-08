@@ -1,4 +1,7 @@
 databaseChangeLog:
   - include:
-      file: ./v4-create-account-table-changelog.yml
+      file: ./v4-create-transaction-status-table-changelog.yml
+      relativeToChangelogFile: true
+  - include:
+      file: ./v4-fill-transaction-status-table-changelog.yml
       relativeToChangelogFile: true
