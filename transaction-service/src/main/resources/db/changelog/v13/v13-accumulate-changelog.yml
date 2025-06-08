@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: ./v13-create-client-status-table-changelog.yml
+      relativeToChangelogFile: true
+  - include:
+      file: ./v13-fill-client-status-table-changelog.yml
+      relativeToChangelogFile: true

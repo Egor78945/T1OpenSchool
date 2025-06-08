@@ -9,6 +9,7 @@ import com.example.transaction_service.repository.*;
 import com.example.transaction_service.service.client.AbstractClientService;
 import com.example.transaction_service.service.common.authentication.AuthenticationContextService;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
@@ -37,6 +38,18 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
 
     public abstract T transfer(T transaction);
 
+    public abstract boolean isValidInsert(T transaction);
+
+    public abstract boolean isValidTransfer(T transaction);
+
+    public boolean existsById(long id){
+        return transactionRepository.existsById(id);
+    }
+
+    public boolean existsByTransactionId(UUID uuid){
+        return transactionRepository.existsTransactionByTransaction_id(uuid);
+    }
+
     public Transaction update(Transaction transaction) {
         if(transactionRepository.existsById(transaction.getId()) && transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())){
             return transactionRepository.save(transaction);
@@ -53,16 +66,12 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
         }
     }
 
-    public abstract boolean isValidInsert(T transaction);
-
-    public abstract boolean isValidTransfer(T transaction);
-
-    public boolean existsById(long id){
-        return transactionRepository.existsById(id);
+    public int getBySenderAfterTime(UUID senderId, Timestamp after){
+        return transactionRepository.countRejectedTransactionsBySenderPerTimeByAccountId(senderId, after);
     }
 
-    public boolean existsByTransactionId(UUID uuid){
-        return transactionRepository.existsTransactionByTransaction_id(uuid);
+    public int getByRecipientAfterTime(UUID recipientId, Timestamp after){
+        return transactionRepository.countRejectedTransactionsByRecipientPerTimeByAccountId(recipientId, after);
     }
 
     public UUID buildUUID(){

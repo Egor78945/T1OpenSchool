@@ -34,6 +34,15 @@ public class ClientServiceManager extends AbstractClientService<Client> {
     }
 
     @Override
+    public Client update(Client client) {
+        if(existsById(client.getId()) && existsByClientId(client.getClient_id())){
+            return clientRepository.save(client);
+        } else {
+            throw new AuthenticationException(String.format("client can not be updated successfully\nClient : %s", client));
+        }
+    }
+
+    @Override
     public Client getById(long id) {
         return clientRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("client by id is not found\nid : %s", id)));
     }

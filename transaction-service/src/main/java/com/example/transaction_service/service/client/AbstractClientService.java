@@ -23,6 +23,8 @@ public abstract class AbstractClientService<C extends Client> {
      */
     public abstract C save(C client);
 
+    public abstract C update(C client);
+
     /**
      * Получить клиента {@link Client} по его Id
      * @param id Id существующего клиента

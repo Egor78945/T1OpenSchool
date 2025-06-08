@@ -9,6 +9,8 @@ import com.example.transaction_service.model.transaction.type.enumeration.Transa
 import com.example.transaction_service.service.common.kafka.producer.KafkaProducerService;
 import com.example.transaction_service.service.transaction.AbstractAccountTransactionService;
 import com.example.transaction_service.service.transaction.kafka.listener.KafkaListenerService;
+import com.example.transaction_service.service.transaction.kafka.listener.processor.AbstractKafkaAccountTransactionProcessorService;
+import com.example.transaction_service.service.transaction.kafka.listener.processor.router.AbstractKafkaAccountTransactionProcessorServiceRouter;
 import com.example.transaction_service.service.transaction.router.AccountTransactionServiceRouter;
 import com.example.transaction_service.service.transaction.status.TransactionStatusService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -25,28 +27,20 @@ import org.springframework.stereotype.Service;
 public class RequestTransactionKafkaListenerService implements KafkaListenerService<String, Transaction> {
     private final AccountTransactionServiceRouter<AbstractAccountTransactionService<Transaction>> accountTransactionServiceRouter;
     private final TransactionStatusService<TransactionStatus> transactionStatusService;
-    private final KafkaProducerService<String, Transaction> kafkaProducerService;
-    private final KafkaEnvironment kafkaEnvironment;
+    private final AbstractKafkaAccountTransactionProcessorServiceRouter<String, Transaction> kafkaAccountTransactionProcessorServiceRouter;
 
-    public RequestTransactionKafkaListenerService(@Qualifier("accountTransactionServiceRouterManager") AccountTransactionServiceRouter<AbstractAccountTransactionService<Transaction>> accountTransactionServiceRouter, @Qualifier("transactionStatusServiceManager") TransactionStatusService<TransactionStatus> transactionStatusService, @Qualifier("transactionKafkaProducerService") KafkaProducerService<String, Transaction> kafkaProducerService, KafkaEnvironment kafkaEnvironment) {
+    public RequestTransactionKafkaListenerService(@Qualifier("accountTransactionServiceRouterManager") AccountTransactionServiceRouter<AbstractAccountTransactionService<Transaction>> accountTransactionServiceRouter, @Qualifier("transactionStatusServiceManager") TransactionStatusService<TransactionStatus> transactionStatusService, @Qualifier("kafkaAccountTransactionProcessorServiceManager") AbstractKafkaAccountTransactionProcessorServiceRouter<String, Transaction> kafkaAccountTransactionProcessorServiceRouter) {
         this.accountTransactionServiceRouter = accountTransactionServiceRouter;
         this.transactionStatusService = transactionStatusService;
-        this.kafkaProducerService = kafkaProducerService;
-        this.kafkaEnvironment = kafkaEnvironment;
+        this.kafkaAccountTransactionProcessorServiceRouter = kafkaAccountTransactionProcessorServiceRouter;
     }
 
     @Override
     @KafkaListener(topics = "${kafka.topic.transaction.name}", groupId = "${kafka.topic.transaction.transaction-id}", containerFactory = "transactionListenerContainerFactory")
     public void listen(ConsumerRecord<String, Transaction> listenableObject) {
         Transaction transaction = listenableObject.value();
-        AbstractAccountTransactionService<Transaction> transactionService = accountTransactionServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.getById(transaction.getSender().getAccountType().getId()));
         try {
-            if (transaction.getTransactionType().getId().equals(TransactionTypeEnumeration.INSERT.getId())) {
-                kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.INSERT.toString(), transactionService.insert(transaction)));
-
-            } else if (transaction.getTransactionType().getId().equals(TransactionTypeEnumeration.TRANSFER.getId())) {
-                kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.TRANSFER.toString(), transactionService.transfer(transaction)));
-            }
+            kafkaAccountTransactionProcessorServiceRouter.getBy(TransactionTypeEnumeration.getById(transaction.getTransactionType().getId())).process(listenableObject);
         } catch (Exception e){
             transaction.setTransactionStatus(transactionStatusService.getById(TransactionStatusEnumeration.REJECTED.getId()));
             accountTransactionServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.DEBIT).save(transaction);

@@ -37,6 +37,11 @@ method:
 token:
   lifetime: ${TOKEN_LIFETIME}
 
+client:
+  transaction-manager:
+    host: ${TRANSACTION_MANAGER_SERVICE_HOST}
+    port: ${TRANSACTION_MANAGER_SERVICE_PORT_INNER}
+
 account:
   credit:
     start-balance: ${ACCOUNT_CREDIT_START_BALANCE}

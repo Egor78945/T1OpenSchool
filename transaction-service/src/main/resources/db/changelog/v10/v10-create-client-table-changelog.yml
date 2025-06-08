@@ -49,3 +49,11 @@ databaseChangeLog:
                     foreignKeyName: client_user_fk
                     referencedTableName: users
                     referencedColumnNames: id
+              - column:
+                  name: client_status_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: client_status_fk
+                    referencedTableName: client_status
+                    referencedColumnNames: id
