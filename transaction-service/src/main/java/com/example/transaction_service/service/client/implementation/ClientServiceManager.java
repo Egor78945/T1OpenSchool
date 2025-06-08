@@ -45,7 +45,12 @@ public class ClientServiceManager extends AbstractClientService<Client> {
 
     @Override
     public Client getByUserId(long userId) {
-        return null;
+        return clientRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(String.format("client by user id is not found\nuser id : %s", userId)));
+    }
+
+    @Override
+    public Client getByUserEmail(String email) {
+        return clientRepository.findByUserEmail(email).orElseThrow(() -> new NotFoundException(String.format("client by user email is not found\nuser email : %s", email)));
     }
 
     @Override

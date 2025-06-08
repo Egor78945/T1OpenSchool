@@ -9,10 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserAuthenticationContextService implements AuthenticationContextService<User> {
+public class UserAuthenticationContextServiceManager implements AuthenticationContextService<User> {
     private final UserService<User> userService;
 
-    public UserAuthenticationContextService(@Qualifier("userServiceManager") UserService<User> userService) {
+    public UserAuthenticationContextServiceManager(@Qualifier("userServiceManager") UserService<User> userService) {
         this.userService = userService;
     }
 

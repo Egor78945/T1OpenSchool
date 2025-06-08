@@ -16,14 +16,10 @@ public class User {
     private String email;
     @Column(name = "password")
     private String password;
-    @OneToOne
-    @JoinColumn(name = "client_id")
-    private Client client_id;
 
-    public User(String email, String password, Client client_id) {
+    public User(String email, String password) {
         this.email = email;
         this.password = password;
-        this.client_id = client_id;
     }
 
     public User() {
@@ -53,14 +49,6 @@ public class User {
         this.password = password;
     }
 
-    public Client getClient_id() {
-        return client_id;
-    }
-
-    public void setClient_id(Client client_id) {
-        this.client_id = client_id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -78,7 +66,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", client_id=" + client_id +
                 '}';
     }
 }

@@ -51,7 +51,8 @@ public class UserAuthenticationService extends AbstractAuthenticationService<Use
     @Override
     public UserDetailsDTO registration(UserDetailsDTO registrationModel) {
         if (!userService.existsByEmail(registrationModel.getEmail().toLowerCase())) {
-            User user = new User(registrationModel.getEmail().toLowerCase(), passwordEncoder.encode(registrationModel.getPassword()), clientAuthenticationService.registration(new Client(registrationModel.getName(), registrationModel.getSurname(), registrationModel.getPatronymic())));
+            User user = new User(registrationModel.getEmail().toLowerCase(), passwordEncoder.encode(registrationModel.getPassword()));
+            clientAuthenticationService.registration(new Client(registrationModel.getName(), registrationModel.getSurname(), registrationModel.getPatronymic(), user));
             UserRole userRole = new UserRole(userService.save(user), roleService.getById(RoleEnumeration.ROLE_USER.getId()));
             userRoleService.save(userRole);
             return registrationModel;

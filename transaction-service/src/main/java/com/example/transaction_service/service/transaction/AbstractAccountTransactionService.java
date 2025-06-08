@@ -2,11 +2,12 @@ package com.example.transaction_service.service.transaction;
 
 import com.example.transaction_service.environment.account.AccountEnvironment;
 import com.example.transaction_service.exception.ProcessingException;
+import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.model.transaction.entity.Transaction;
-import com.example.transaction_service.repository.AccountRepository;
-import com.example.transaction_service.repository.TransactionRepository;
-import com.example.transaction_service.repository.TransactionStatusRepository;
-import com.example.transaction_service.repository.TransactionTypeRepository;
+import com.example.transaction_service.model.user.entity.User;
+import com.example.transaction_service.repository.*;
+import com.example.transaction_service.service.client.AbstractClientService;
+import com.example.transaction_service.service.common.authentication.AuthenticationContextService;
 
 import java.util.UUID;
 
@@ -21,8 +22,10 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
     protected final AccountEnvironment accountEnvironment;
     protected final TransactionTypeRepository transactionTypeRepository;
     protected final TransactionStatusRepository transactionStatusRepository;
+    protected final AuthenticationContextService<User> userAuthenticationContextService;
 
-    public AbstractAccountTransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository, AccountEnvironment accountEnvironment, TransactionTypeRepository transactionTypeRepository, TransactionStatusRepository transactionStatusRepository) {
+    public AbstractAccountTransactionService(AuthenticationContextService<User> userAuthenticationContextService, TransactionRepository transactionRepository, AccountRepository accountRepository, AccountEnvironment accountEnvironment, TransactionTypeRepository transactionTypeRepository, TransactionStatusRepository transactionStatusRepository) {
+        this.userAuthenticationContextService = userAuthenticationContextService;
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
         this.accountEnvironment = accountEnvironment;

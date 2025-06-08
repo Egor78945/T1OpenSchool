@@ -8,11 +8,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("from User where client_id.id=:clientId")
+    @Query("select User from Client c join fetch User u where c.client_id=:clientId")
     User findByClient_id(@Param("clientId") long clientId);
     User findByEmail(String email);
     @Query("select case when exists(from User where email=:email) then true else false end")
     boolean existsUserByEmail(@Param("email") String email);
-    @Query("select case when exists(from User where client_id.id=:clientId) then true else false end")
+    @Query("select case when exists(select User from Client c " +
+            "join fetch User u " +
+            "where c.client_id=:clientId) then true else false end")
     boolean existsUserByClient_id(@Param("clientId") long clientId);
 }

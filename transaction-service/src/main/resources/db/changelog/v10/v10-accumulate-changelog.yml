@@ -1,4 +1,7 @@
 databaseChangeLog:
   - include:
-      file: ./v10-create-users-table-changelog.yml
+      file: v10-create-client-table-changelog.yml
       relativeToChangelogFile: true
+#  - include:
+#      file: v10-fill-client-table-changelog.yml
+#      relativeToChangelogFile: true

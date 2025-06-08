@@ -11,11 +11,27 @@ import java.util.UUID;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    @Query("from Client c where c.client_id=:clientId")
+    @Query("from Client c " +
+            "join fetch c.user_id" +
+            " where c.client_id=:clientId")
     Optional<Client> findByClientId(@Param("clientId") UUID clientId);
 
     @Query("select case when exists(from Client where client_id=:clientId) then true else false end")
     boolean existsClientByClientId(@Param("clientId") UUID clientId);
 
-    Optional<Client> findByUserId();
+    @Query("from Client c " +
+            "join fetch c.user_id " +
+            "u where u.id=:userId")
+    Optional<Client> findByUserId(@Param("userId") long userId);
+
+    @Query("from Client c " +
+            "join fetch c.user_id u " +
+            "where u.email=:userEmail")
+    Optional<Client> findByUserEmail(@Param("userEmail") String userEmail);
+
+    @Query("from Account a " +
+            "join fetch Client c " +
+            "join fetch User u " +
+            "where a.accountId = :accountId and a.client.client_id=c.client_id")
+    Optional<Client> findClientByAccountId(@Param("accountId") long accountId);
 }

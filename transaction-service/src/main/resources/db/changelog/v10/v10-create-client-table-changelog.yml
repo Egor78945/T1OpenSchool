@@ -1,15 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: v10-1
+      id: v5-1
       author: egor_petrov
       preConditions:
         - onFail: MARK_RAN
         - not:
             tableExists:
-              tableName: users
+              tableName: client
       changes:
         - createTable:
-            tableName: users
+            tableName: client
             columns:
               - column:
                   name: id
@@ -20,21 +20,32 @@ databaseChangeLog:
                     unique: true
                   autoIncrement: true
               - column:
-                  name: email
-                  type: varchar(100)
+                  name: client_id
+                  type: uuid
                   constraints:
                     nullable: false
                     unique: true
               - column:
-                  name: password
-                  type: varchar(300)
+                  name: name
+                  type: varchar(30)
                   constraints:
                     nullable: false
               - column:
-                  name: client_id
+                  name: surname
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: patronymic
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
                   type: bigint
                   constraints:
+                    nullable: false
                     unique: true
-                    foreignKeyName: users_client_fk
-                    referencedTableName: client
+                    foreignKeyName: client_user_fk
+                    referencedTableName: users
                     referencedColumnNames: id
