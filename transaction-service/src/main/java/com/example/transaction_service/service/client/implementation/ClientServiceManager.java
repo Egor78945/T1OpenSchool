@@ -44,6 +44,11 @@ public class ClientServiceManager extends AbstractClientService<Client> {
     }
 
     @Override
+    public Client getByUserId(long userId) {
+        return null;
+    }
+
+    @Override
     public boolean existsByClientId(UUID clientId) {
         return clientRepository.existsClientByClientId(clientId);
     }

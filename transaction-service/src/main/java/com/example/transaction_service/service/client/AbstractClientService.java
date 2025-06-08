@@ -31,6 +31,8 @@ public abstract class AbstractClientService<C extends Client> {
     public abstract C getById(long id);
 
     public abstract C getByClientId(UUID clientId);
+
+    public abstract C getByUserId(long userId);
     /**
      * Проверить, существует ли клиент {@link Client} по Id
      * @param id Id потенциально существующего клиента {@link Client}

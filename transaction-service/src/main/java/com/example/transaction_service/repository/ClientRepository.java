@@ -16,4 +16,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     @Query("select case when exists(from Client where client_id=:clientId) then true else false end")
     boolean existsClientByClientId(@Param("clientId") UUID clientId);
+
+    Optional<Client> findByUserId();
 }
