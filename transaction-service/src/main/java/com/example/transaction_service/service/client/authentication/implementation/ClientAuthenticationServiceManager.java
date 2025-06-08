@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * Реализация абстрактного сервиса по аутентификации клиентов {@link Client}
  */
 @Service
-public class ClientAuthenticationServiceManager extends AbstractClientAuthenticationService<Client, Client> {
+public class ClientAuthenticationServiceManager extends AbstractClientAuthenticationService<Client> {
     private final AbstractClientService<Client> clientService;
 
     public ClientAuthenticationServiceManager(@Qualifier("clientServiceManager") AbstractClientService<Client> clientService) {
@@ -24,13 +24,13 @@ public class ClientAuthenticationServiceManager extends AbstractClientAuthentica
     }
 
     @Override
-    public String login(Client loginModel) {
+    public String login(String username, String password) {
         //TODO
         return null;
     }
 
     @Override
-    public String registration(Client registrationModel) {
-        return clientService.save(registrationModel).toString();
+    public Client registration(Client registrationModel) {
+        return clientService.save(registrationModel);
     }
 }

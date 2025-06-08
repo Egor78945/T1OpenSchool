@@ -1,6 +1,6 @@
 package com.example.transaction_service.configuration.security.filter;
 
-import com.example.transaction_service.model.user.dto.UserCredential;
+import com.example.transaction_service.model.user.dto.UserCredentialDTO;
 import com.example.transaction_service.service.common.security.token.TokenService;
 import com.example.transaction_service.service.security.user.credential.UserCredentialService;
 import jakarta.servlet.FilterChain;
@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class TokenFilter extends OncePerRequestFilter {
-    private final TokenService<String, UserCredential> tokenService;
-    private final UserCredentialService<UserCredential> userCredentialService;
+    private final TokenService<String, UserCredentialDTO> tokenService;
+    private final UserCredentialService<UserCredentialDTO> userCredentialService;
 
-    public TokenFilter(@Qualifier("JWTService") TokenService<String, UserCredential> tokenService, @Qualifier("userCredentialServiceManager") UserCredentialService<UserCredential> userCredentialService) {
+    public TokenFilter(@Qualifier("JWTService") TokenService<String, UserCredentialDTO> tokenService, @Qualifier("userCredentialServiceManager") UserCredentialService<UserCredentialDTO> userCredentialService) {
         this.tokenService = tokenService;
         this.userCredentialService = userCredentialService;
     }

@@ -21,7 +21,7 @@ public abstract class AbstractClientService<C extends Client> {
      * Сохранить несуществующего клиента {@link Client}
      * @param client несуществующий клиент {@link Client}
      */
-    public abstract UUID save(C client);
+    public abstract C save(C client);
 
     /**
      * Получить клиента {@link Client} по его Id

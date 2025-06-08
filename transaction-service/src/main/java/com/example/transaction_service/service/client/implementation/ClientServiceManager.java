@@ -24,10 +24,10 @@ public class ClientServiceManager extends AbstractClientService<Client> {
     @Override
     @LogDatasourceError
     @Metric
-    public UUID save(Client client) {
+    public Client save(Client client) {
         if (client.getId() == null && client.getClient_id() == null) {
             client.setClient_id(buildUUID());
-            return clientRepository.save(client).getClient_id();
+            return clientRepository.save(client);
         } else {
             throw new AuthenticationException(String.format("client can not be saved successfully\nClient : %s", client));
         }

@@ -1,7 +1,7 @@
 package com.example.transaction_service.service.common.security.token.implementation;
 
 import com.example.transaction_service.environment.token.TokenEnvironment;
-import com.example.transaction_service.model.user.dto.UserCredential;
+import com.example.transaction_service.model.user.dto.UserCredentialDTO;
 import com.example.transaction_service.service.common.security.token.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class JWTService implements TokenService<String, UserCredential> {
+public class JWTService implements TokenService<String, UserCredentialDTO> {
     private final TokenEnvironment tokenEnvironment;
 
     public JWTService(TokenEnvironment tokenEnvironment) {
@@ -22,7 +22,7 @@ public class JWTService implements TokenService<String, UserCredential> {
     }
 
     @Override
-    public String generateToken(UserCredential credential) {
+    public String generateToken(UserCredentialDTO credential) {
         return Jwts.builder()
                 .claims(Map.of("roles", credential.getUserRole()
                         .stream()

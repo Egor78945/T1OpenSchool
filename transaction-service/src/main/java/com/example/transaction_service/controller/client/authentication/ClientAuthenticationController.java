@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/authentication")
 @CommonControllerExceptionHandler
 public class ClientAuthenticationController {
-    private final AbstractClientAuthenticationService<Client, Client> clientAuthenticationService;
+    private final AbstractClientAuthenticationService<Client> clientAuthenticationService;
 
-    public ClientAuthenticationController(@Qualifier("clientAuthenticationServiceManager") AbstractClientAuthenticationService<Client, Client> clientAuthenticationService) {
+    public ClientAuthenticationController(@Qualifier("clientAuthenticationServiceManager") AbstractClientAuthenticationService<Client> clientAuthenticationService) {
         this.clientAuthenticationService = clientAuthenticationService;
     }
 
@@ -33,6 +33,6 @@ public class ClientAuthenticationController {
      */
     @PostMapping("/registration")
     public ResponseEntity<String> registration(@RequestBody @Valid ClientDTO clientDTO) {
-        return ResponseEntity.ok(clientAuthenticationService.registration(ClientMapper.mapTo(clientDTO)));
+        return ResponseEntity.ok(clientAuthenticationService.registration(ClientMapper.mapTo(clientDTO)).getClient_id().toString());
     }
 }

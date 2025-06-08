@@ -35,7 +35,7 @@ method:
     limit: 10000
 
 token:
-  lifetime: ${JWT_LIFETIME}
+  lifetime: ${TOKEN_LIFETIME}
 
 account:
   credit:
