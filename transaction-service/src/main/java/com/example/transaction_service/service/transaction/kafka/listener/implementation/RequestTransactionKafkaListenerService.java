@@ -1,26 +1,22 @@
 package com.example.transaction_service.service.transaction.kafka.listener.implementation;
 
-import com.example.transaction_service.environment.kafka.KafkaEnvironment;
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;
 import com.example.transaction_service.model.transaction.entity.Transaction;
 import com.example.transaction_service.model.transaction.status.entity.TransactionStatus;
 import com.example.transaction_service.model.transaction.status.enumeration.TransactionStatusEnumeration;
 import com.example.transaction_service.model.transaction.type.enumeration.TransactionTypeEnumeration;
-import com.example.transaction_service.service.common.kafka.producer.KafkaProducerService;
 import com.example.transaction_service.service.transaction.AbstractAccountTransactionService;
 import com.example.transaction_service.service.transaction.kafka.listener.KafkaListenerService;
-import com.example.transaction_service.service.transaction.kafka.listener.processor.AbstractKafkaAccountTransactionProcessorService;
 import com.example.transaction_service.service.transaction.kafka.listener.processor.router.AbstractKafkaAccountTransactionProcessorServiceRouter;
 import com.example.transaction_service.service.transaction.router.AccountTransactionServiceRouter;
 import com.example.transaction_service.service.transaction.status.TransactionStatusService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 
-/**
+/**git
  * Реализация {@link KafkaListenerService} для считывания сообщений, хранящих {@link Transaction} из топика <b>TRANSACTION</b>
  */
 @Service
