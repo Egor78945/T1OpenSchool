@@ -19,14 +19,13 @@ import java.time.LocalDateTime;
  */
 @Service
 public class AccountTransactionBuilderServiceManager extends AbstractAccountTransactionBuilderService<Transaction, Account> {
-    public AccountTransactionBuilderServiceManager(@Qualifier("debitAccountTransactionServiceManager") AbstractAccountTransactionService<Transaction> transactionService, @Qualifier("transactionTypeServiceManager") TransactionTypeService<TransactionType> transactionTypeService) {
-        super(transactionService, transactionTypeService);
+    public AccountTransactionBuilderServiceManager(@Qualifier("transactionTypeServiceManager") TransactionTypeService<TransactionType> transactionTypeService) {
+        super(transactionTypeService);
     }
 
     @Override
     public Transaction buildInsert(Account recipient, double amount, TransactionStatus transactionStatus) {
         return Transaction.builder()
-                .setTransactionId(buildUUID())
                 .setSender(recipient)
                 .setRecipient(recipient)
                 .setTransactionType(transactionTypeService.getById(TransactionTypeEnumeration.INSERT.getId()))
@@ -39,7 +38,6 @@ public class AccountTransactionBuilderServiceManager extends AbstractAccountTran
     @Override
     public Transaction buildTransfer(Account sender, Account recipient, double amount, TransactionStatus transactionStatus) {
         return Transaction.builder()
-                .setTransactionId(buildUUID())
                 .setSender(sender)
                 .setRecipient(recipient)
                 .setTransactionType(transactionTypeService.getById(TransactionTypeEnumeration.TRANSFER.getId()))

@@ -4,7 +4,7 @@ databaseChangeLog:
       author: egor_petrov
       preConditions:
         - onFail: MARK_RAN
-        - sql:
+        - sqlCheck:
             expectedResult: "0"
             sql: "SELECT COUNT(*) FROM client_status"
       changes:

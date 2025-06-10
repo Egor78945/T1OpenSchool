@@ -17,6 +17,7 @@ import com.example.transaction_service.service.common.aop.annotation.LogDatasour
 import com.example.transaction_service.service.common.aop.annotation.Metric;
 import com.example.transaction_service.service.common.authentication.AuthenticationContextService;
 import com.example.transaction_service.service.transaction.AbstractCreditAccountTransactionService;
+import com.example.transaction_service.service.transaction.builder.AbstractAccountTransactionBuilderService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -42,7 +43,7 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
         if (isValidInsert(transaction)) {
             recipient.setBalance(recipient.getBalance() + transaction.getAmount());
             accountRepository.save(recipient);
-            return transactionRepository.save(transaction);
+            return save(transaction);
         } else {
             throw new TransactionException(String.format("insert transaction can not be done successfully\nRecipient : %s\ntransaction amount : %s", recipient, transaction.getAmount()));
         }
@@ -59,7 +60,7 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
             recipient.setBalance(recipient.getBalance() + transaction.getAmount());
             sender.setBalance(sender.getBalance() - transaction.getAmount());
             accountRepository.saveAll(List.of(sender, recipient));
-            return transactionRepository.save(transaction);
+            return save(transaction);
         } else {
             throw new TransactionException(String.format("insert transaction can not be done successfully\nSender : %s\nRecipient : %s\ntransaction amount : %s", sender, recipient, transaction.getAmount()));
         }

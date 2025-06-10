@@ -16,11 +16,9 @@ import java.util.UUID;
  * @param <A> Тип, представляющий {@link Account} или его наследника
  */
 public abstract class AbstractAccountTransactionBuilderService<T extends Transaction, A extends Account> {
-    protected final AbstractAccountTransactionService<T> transactionService;
     protected final TransactionTypeService<TransactionType> transactionTypeService;
 
-    public AbstractAccountTransactionBuilderService(AbstractAccountTransactionService<T> transactionRepository, TransactionTypeService<TransactionType> transactionTypeService) {
-        this.transactionService = transactionRepository;
+    public AbstractAccountTransactionBuilderService(TransactionTypeService<TransactionType> transactionTypeService) {
         this.transactionTypeService = transactionTypeService;
     }
 
@@ -41,20 +39,4 @@ public abstract class AbstractAccountTransactionBuilderService<T extends Transac
      * @return {@link Transaction} или его наследник
      */
     public abstract T buildTransfer(A sender, A recipient, double amount, TransactionStatus transactionStatus);
-
-    /**
-     * Смоделировать уникаольный {@link UUID}
-     * @return уникальный {@link UUID}
-     */
-    protected UUID buildUUID(){
-        UUID uuid = UUID.randomUUID();
-        for(int i = 0; i < 10; i++){
-            if(transactionService.existsByTransactionId(uuid)){
-                uuid = UUID.randomUUID();
-            } else {
-                return uuid;
-            }
-        }
-        throw new ProcessingException("uuid is not generated");
-    }
 }

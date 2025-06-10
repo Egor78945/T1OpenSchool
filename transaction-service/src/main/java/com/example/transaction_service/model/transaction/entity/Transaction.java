@@ -201,10 +201,7 @@ public class Transaction implements Serializable {
         }
 
         public Transaction build() {
-            if (transaction_id != null && sender != null && recipient != null && transactionType != null && transactionStatus != null && amount != null && time != null) {
-                return new Transaction(this);
-            }
-            throw new NullPointerException("not all fields is initialized");
+            return new Transaction(this);
         }
     }
 }
