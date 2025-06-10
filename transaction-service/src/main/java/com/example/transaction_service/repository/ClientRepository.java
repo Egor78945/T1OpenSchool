@@ -21,9 +21,9 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     boolean existsClientByClientId(@Param("clientId") UUID clientId);
 
     @Query("from Client c " +
-            "join fetch c.user_id " +
-            "join fetch c.client_status_id " +
-            "u where u.id=:userId")
+            "join fetch c.user_id u " +
+            "join fetch c.client_status_id s " +
+            "where u.id=:userId")
     Optional<Client> findByUserId(@Param("userId") long userId);
 
     @Query("from Client c " +

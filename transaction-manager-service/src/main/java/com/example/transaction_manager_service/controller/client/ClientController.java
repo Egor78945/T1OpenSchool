@@ -16,7 +16,7 @@ public class ClientController {
     }
 
     @GetMapping("/blocked")
-    public ResponseEntity<Boolean> checkClientIsInBlackList(@RequestBody ClientAccountDTO clientAccountDTO){
+    public ResponseEntity<Boolean> checkClientIsInBlackList(@RequestParam("clientId") String clientId, @RequestParam("accountId") String accountId){
         return ResponseEntity.ok(random.nextBoolean());
     }
 }

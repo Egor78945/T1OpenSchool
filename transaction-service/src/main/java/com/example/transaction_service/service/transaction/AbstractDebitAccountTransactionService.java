@@ -1,6 +1,7 @@
 package com.example.transaction_service.service.transaction;
 
 import com.example.transaction_service.environment.account.AccountEnvironment;
+import com.example.transaction_service.model.account.entity.Account;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.model.transaction.entity.Transaction;
 import com.example.transaction_service.model.user.entity.User;
@@ -10,6 +11,8 @@ import com.example.transaction_service.repository.TransactionStatusRepository;
 import com.example.transaction_service.repository.TransactionTypeRepository;
 import com.example.transaction_service.service.client.AbstractClientService;
 import com.example.transaction_service.service.common.authentication.AuthenticationContextService;
+import com.example.transaction_service.service.transaction.builder.AbstractAccountTransactionBuilderService;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Реализация абстрактного сервиса по работе с транзакциями между клиентскими аккаунтами {@link AbstractAccountTransactionService}

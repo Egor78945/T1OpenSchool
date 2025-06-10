@@ -5,16 +5,23 @@ import com.example.transaction_service.service.common.client.WebClientService;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.ClassicHttpRequest;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Service
-public class WebClientServiceManager implements WebClientService<ClassicHttpRequest, CloseableHttpResponse> {
+public class WebClientServiceManager implements WebClientService<ClassicHttpRequest, String> {
     @Override
-    public CloseableHttpResponse sendRequest(ClassicHttpRequest httpRequest) throws IOException {
+    public String sendRequest(ClassicHttpRequest httpRequest) throws IOException {
         try (CloseableHttpClient client = WebClientConfiguration.httpClient()) {
-            return client.execute(httpRequest, CloseableHttpResponse::adapt);
+            try(CloseableHttpResponse c = client.execute(httpRequest)) {
+                return EntityUtils.toString(c.getEntity());
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

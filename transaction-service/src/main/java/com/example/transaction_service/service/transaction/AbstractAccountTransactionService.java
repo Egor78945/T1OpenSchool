@@ -2,12 +2,15 @@ package com.example.transaction_service.service.transaction;
 
 import com.example.transaction_service.environment.account.AccountEnvironment;
 import com.example.transaction_service.exception.ProcessingException;
+import com.example.transaction_service.model.account.entity.Account;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.model.transaction.entity.Transaction;
 import com.example.transaction_service.model.user.entity.User;
 import com.example.transaction_service.repository.*;
 import com.example.transaction_service.service.client.AbstractClientService;
 import com.example.transaction_service.service.common.authentication.AuthenticationContextService;
+import com.example.transaction_service.service.transaction.builder.AbstractAccountTransactionBuilderService;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -51,18 +54,19 @@ public abstract class AbstractAccountTransactionService<T extends Transaction> {
     }
 
     public Transaction update(Transaction transaction) {
-        if(transactionRepository.existsById(transaction.getId()) && transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())){
+        if(transaction.getId() != null && transaction.getTransaction_id() != null && transactionRepository.existsById(transaction.getId()) && transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())){
             return transactionRepository.save(transaction);
         } else {
-            throw new ProcessingException(String.format("transaction is not exists to update\nTransaction : %s", transaction));
+            throw new ProcessingException(String.format("transaction is not able to update\nTransaction : %s", transaction));
         }
     }
 
     public Transaction save(Transaction transaction){
-        if(!transactionRepository.existsById(transaction.getId()) && !transactionRepository.existsTransactionByTransaction_id(transaction.getTransaction_id())) {
+        if(transaction.getId() == null && transaction.getTransaction_id() == null) {
+            transaction.setTransaction_id(buildUUID());
             return transactionRepository.save(transaction);
         } else {
-            throw new ProcessingException(String.format("transaction is already exists to save\nTransaction : %s", transaction));
+            throw new ProcessingException(String.format("transaction is not able to save\nTransaction : %s", transaction));
         }
     }
 
