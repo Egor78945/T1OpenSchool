@@ -1,5 +1,5 @@
 package com.example.aop_starter.service.common.logging;
 
-public interface LoggingService<L> {
+public interface StarterLoggingService<L> {
     void log(L loggingSubject);
 }

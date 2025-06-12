@@ -9,11 +9,11 @@ import com.example.aop_starter.repository.TimeLimitExceedLogRepository;
 import com.example.aop_starter.service.common.aop.aspect.cache.CommonServiceCachingAspect;
 import com.example.aop_starter.service.common.aop.aspect.log.CommonServiceLoggingAspect;
 import com.example.aop_starter.service.common.kafka.producer.router.StarterKafkaProducerServiceRouter;
-import com.example.aop_starter.service.common.logging.LoggingService;
-import com.example.aop_starter.service.common.logging.implementation.DatasourceErrorLogService;
-import com.example.aop_starter.service.common.logging.implementation.TimeLimitExceedLogService;
-import com.example.aop_starter.service.common.logging.router.LoggingServiceRouter;
-import com.example.aop_starter.service.common.logging.router.implementation.LoggingServiceRouterManager;
+import com.example.aop_starter.service.common.logging.StarterLoggingService;
+import com.example.aop_starter.service.common.logging.implementation.DatasourceErrorLogServiceStarter;
+import com.example.aop_starter.service.common.logging.implementation.TimeLimitExceedLogServiceStarter;
+import com.example.aop_starter.service.common.logging.router.StarterLoggingServiceRouter;
+import com.example.aop_starter.service.common.logging.router.implementation.StarterLoggingServiceRouterManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -34,20 +34,20 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class AOPConfiguration {
     @Bean
     @ConditionalOnMissingBean
-    public LoggingService<DatasourceErrorLog> datasourceErrorLogLoggingService(DatasourceErrorLogRepository datasourceErrorLogRepository){
-        return new DatasourceErrorLogService(datasourceErrorLogRepository);
+    public StarterLoggingService<DatasourceErrorLog> datasourceErrorLogLoggingService(DatasourceErrorLogRepository datasourceErrorLogRepository){
+        return new DatasourceErrorLogServiceStarter(datasourceErrorLogRepository);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public LoggingService<TimeLimitExceedLog> timeLimitExceedLogLoggingService(TimeLimitExceedLogRepository timeLimitExceedLogRepository){
-        return new TimeLimitExceedLogService(timeLimitExceedLogRepository);
+    public StarterLoggingService<TimeLimitExceedLog> timeLimitExceedLogLoggingService(TimeLimitExceedLogRepository timeLimitExceedLogRepository){
+        return new TimeLimitExceedLogServiceStarter(timeLimitExceedLogRepository);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public LoggingServiceRouter loggingServiceRouter(@Qualifier("datasourceErrorLogLoggingService") LoggingService<DatasourceErrorLog> datasourceErrorLogLoggingService, @Qualifier("timeLimitExceedLogLoggingService") LoggingService<TimeLimitExceedLog> timeLimitExceedLogLoggingService){
-        return new LoggingServiceRouterManager((DatasourceErrorLogService) datasourceErrorLogLoggingService, (TimeLimitExceedLogService) timeLimitExceedLogLoggingService);
+    public StarterLoggingServiceRouter loggingServiceRouter(@Qualifier("datasourceErrorLogLoggingService") StarterLoggingService<DatasourceErrorLog> datasourceErrorLogStarterLoggingService, @Qualifier("timeLimitExceedLogLoggingService") StarterLoggingService<TimeLimitExceedLog> timeLimitExceedLogStarterLoggingService){
+        return new StarterLoggingServiceRouterManager((DatasourceErrorLogServiceStarter) datasourceErrorLogStarterLoggingService, (TimeLimitExceedLogServiceStarter) timeLimitExceedLogStarterLoggingService);
     }
 
     @Bean
@@ -58,7 +58,7 @@ public class AOPConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public CommonServiceLoggingAspect commonServiceLoggingAspect(LoggingServiceRouter loggingServiceRouter, StarterKafkaProducerServiceRouter starterKafkaProducerServiceRouter, CommonProperties commonProperties, KafkaProperties kafkaProperties){
-        return new CommonServiceLoggingAspect(loggingServiceRouter, starterKafkaProducerServiceRouter, commonProperties, kafkaProperties);
+    public CommonServiceLoggingAspect commonServiceLoggingAspect(StarterLoggingServiceRouter starterLoggingServiceRouter, StarterKafkaProducerServiceRouter starterKafkaProducerServiceRouter, CommonProperties commonProperties, KafkaProperties kafkaProperties){
+        return new CommonServiceLoggingAspect(starterLoggingServiceRouter, starterKafkaProducerServiceRouter, commonProperties, kafkaProperties);
     }
 }

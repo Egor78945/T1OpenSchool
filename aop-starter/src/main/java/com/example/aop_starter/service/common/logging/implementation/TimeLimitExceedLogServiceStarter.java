@@ -2,14 +2,14 @@ package com.example.aop_starter.service.common.logging.implementation;
 
 import com.example.aop_starter.model.log.entity.TimeLimitExceedLog;
 import com.example.aop_starter.repository.TimeLimitExceedLogRepository;
-import com.example.aop_starter.service.common.logging.LoggingService;
+import com.example.aop_starter.service.common.logging.StarterLoggingService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TimeLimitExceedLogService implements LoggingService<TimeLimitExceedLog> {
+public class TimeLimitExceedLogServiceStarter implements StarterLoggingService<TimeLimitExceedLog> {
     private final TimeLimitExceedLogRepository timeLimitExceedLogRepository;
 
-    public TimeLimitExceedLogService(TimeLimitExceedLogRepository timeLimitExceedLogRepository) {
+    public TimeLimitExceedLogServiceStarter(TimeLimitExceedLogRepository timeLimitExceedLogRepository) {
         this.timeLimitExceedLogRepository = timeLimitExceedLogRepository;
     }
 

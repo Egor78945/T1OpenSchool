@@ -7,7 +7,7 @@ import com.example.aop_starter.model.common.error.enumeration.ErrorTopicEnumerat
 import com.example.aop_starter.model.log.entity.DatasourceErrorLog;
 import com.example.aop_starter.model.log.entity.TimeLimitExceedLog;
 import com.example.aop_starter.service.common.kafka.producer.router.StarterKafkaProducerServiceRouter;
-import com.example.aop_starter.service.common.logging.router.LoggingServiceRouter;
+import com.example.aop_starter.service.common.logging.router.StarterLoggingServiceRouter;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.common.header.internals.RecordHeaders;
@@ -24,14 +24,14 @@ import java.util.List;
 @Aspect
 public class CommonServiceLoggingAspect {
     private final CommonProperties commonProperties;
-    private final LoggingServiceRouter loggingServiceRouter;
+    private final StarterLoggingServiceRouter starterLoggingServiceRouter;
     private final StarterKafkaProducerServiceRouter starterKafkaProducerServiceRouter;
     private final KafkaProperties kafkaProperties;
 
-    public CommonServiceLoggingAspect(LoggingServiceRouter loggingServiceRouter, StarterKafkaProducerServiceRouter starterKafkaProducerServiceRouter, CommonProperties commonProperties, KafkaProperties kafkaProperties) {
+    public CommonServiceLoggingAspect(StarterLoggingServiceRouter starterLoggingServiceRouter, StarterKafkaProducerServiceRouter starterKafkaProducerServiceRouter, CommonProperties commonProperties, KafkaProperties kafkaProperties) {
         this.commonProperties = commonProperties;
         this.kafkaProperties = kafkaProperties;
-        this.loggingServiceRouter = loggingServiceRouter;
+        this.starterLoggingServiceRouter = starterLoggingServiceRouter;
         this.starterKafkaProducerServiceRouter = starterKafkaProducerServiceRouter;
     }
 
@@ -42,7 +42,7 @@ public class CommonServiceLoggingAspect {
             starterKafkaProducerServiceRouter.getKafkaProducerService(DatasourceErrorLog.class)
                     .send(new ProducerRecord<>(kafkaProperties.getMetric().getName(), null, datasourceErrorLog.getTime().toString(), datasourceErrorLog, new RecordHeaders(List.of(new RecordHeader("error type", ErrorTopicEnumeration.DATA_SOURCE.name().getBytes())))));
         } catch (Exception exception) {
-            loggingServiceRouter.getByTargetClass(DatasourceErrorLog.class).orElseThrow(() -> new ObjectNotFoundException(String.format("logging service is not found by class\nClass : %s", DatasourceErrorLog.class))).log(datasourceErrorLog);
+            starterLoggingServiceRouter.getByTargetClass(DatasourceErrorLog.class).orElseThrow(() -> new ObjectNotFoundException(String.format("logging service is not found by class\nClass : %s", DatasourceErrorLog.class))).log(datasourceErrorLog);
         }
     }
 
@@ -59,7 +59,7 @@ public class CommonServiceLoggingAspect {
                     starterKafkaProducerServiceRouter.getKafkaProducerService(TimeLimitExceedLog.class)
                             .send(new ProducerRecord<>(kafkaProperties.getMetric().getName(), null, timeLimitExceedLog.getTime().toString(), timeLimitExceedLog, new RecordHeaders(List.of(new RecordHeader("error type", ErrorTopicEnumeration.METRICS.name().getBytes())))));
                 } catch (Exception e) {
-                    loggingServiceRouter.getByTargetClass(TimeLimitExceedLog.class).orElseThrow(() -> new ObjectNotFoundException(String.format("logging service is not found by class\nClass : %s", TimeLimitExceedLog.class))).log(timeLimitExceedLog);
+                    starterLoggingServiceRouter.getByTargetClass(TimeLimitExceedLog.class).orElseThrow(() -> new ObjectNotFoundException(String.format("logging service is not found by class\nClass : %s", TimeLimitExceedLog.class))).log(timeLimitExceedLog);
                 }
             }
         }
