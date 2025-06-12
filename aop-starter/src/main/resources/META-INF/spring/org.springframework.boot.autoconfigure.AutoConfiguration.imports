@@ -1,4 +1,4 @@
-com.example.aop_starter.configuration.redis.RedisConfiguration
+com.example.aop_starter.configuration.redis.StarterRedisConfiguration
 com.example.aop_starter.configuration.jpa.JpaConfiguration
 com.example.aop_starter.configuration.kafka.KafkaConfiguration
 com.example.aop_starter.configuration.liquibase.LiquibaseConfiguration

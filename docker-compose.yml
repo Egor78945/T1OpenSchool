@@ -25,9 +25,9 @@ services:
         JAVA_VERSION: ${JAVA_VERSION}
         TRANSACTION_SERVICE_PORT_OUTER: ${TRANSACTION_SERVICE_PORT_OUTER}
     restart: on-failure
-    depends_on:
-      - postgres
-      - redis
+#    depends_on:
+#      - postgres
+#      - redis
     env_file:
       - ./env/transaction-service.env
       - ./env/redis.env

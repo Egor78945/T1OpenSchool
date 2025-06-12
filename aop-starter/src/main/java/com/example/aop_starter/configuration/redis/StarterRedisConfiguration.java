@@ -22,7 +22,7 @@ import java.time.Duration;
  */
 @Configuration
 @EnableConfigurationProperties(RedisProperties.class)
-public class RedisConfiguration {
+public class StarterRedisConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public RedisCacheManager redisCacheManager(RedisConnectionFactory connectionFactory, RedisProperties properties) {

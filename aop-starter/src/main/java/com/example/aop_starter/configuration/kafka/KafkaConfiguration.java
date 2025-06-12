@@ -4,11 +4,11 @@ import com.example.aop_starter.configuration.kafka.properties.KafkaProperties;
 import com.example.aop_starter.configuration.kafka.properties.SpringKafkaProperties;
 import com.example.aop_starter.model.log.entity.DatasourceErrorLog;
 import com.example.aop_starter.model.log.entity.TimeLimitExceedLog;
-import com.example.aop_starter.service.common.kafka.producer.KafkaProducerService;
-import com.example.aop_starter.service.common.kafka.producer.implementation.DatasourceErrorLogKafkaProducerService;
-import com.example.aop_starter.service.common.kafka.producer.implementation.TimeLimitExceedLogKafkaProducerService;
-import com.example.aop_starter.service.common.kafka.producer.router.KafkaProducerServiceRouter;
-import com.example.aop_starter.service.common.kafka.producer.router.implementation.KafkaProducerServiceRouterManager;
+import com.example.aop_starter.service.common.kafka.producer.StarterKafkaProducerService;
+import com.example.aop_starter.service.common.kafka.producer.implementation.DatasourceErrorLogStarterKafkaProducerService;
+import com.example.aop_starter.service.common.kafka.producer.implementation.TimeLimitExceedLogStarterKafkaProducerService;
+import com.example.aop_starter.service.common.kafka.producer.router.StarterKafkaProducerServiceRouter;
+import com.example.aop_starter.service.common.kafka.producer.router.implementation.StarterKafkaProducerServiceRouterManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -79,20 +78,20 @@ public class KafkaConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public KafkaProducerService<String, DatasourceErrorLog> datasourceErrorLogKafkaProducerService(KafkaTemplate<String, DatasourceErrorLog> datasourceErrorLogKafkaTemplate){
-        return new DatasourceErrorLogKafkaProducerService(datasourceErrorLogKafkaTemplate);
+    public StarterKafkaProducerService<String, DatasourceErrorLog> datasourceErrorLogKafkaProducerService(KafkaTemplate<String, DatasourceErrorLog> datasourceErrorLogKafkaTemplate){
+        return new DatasourceErrorLogStarterKafkaProducerService(datasourceErrorLogKafkaTemplate);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public KafkaProducerService<String, TimeLimitExceedLog> timeLimitExceedLogKafkaProducerService(KafkaTemplate<String, TimeLimitExceedLog> timeLimitExceedLogKafkaTemplate){
-        return new TimeLimitExceedLogKafkaProducerService(timeLimitExceedLogKafkaTemplate);
+    public StarterKafkaProducerService<String, TimeLimitExceedLog> timeLimitExceedLogKafkaProducerService(KafkaTemplate<String, TimeLimitExceedLog> timeLimitExceedLogKafkaTemplate){
+        return new TimeLimitExceedLogStarterKafkaProducerService(timeLimitExceedLogKafkaTemplate);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public KafkaProducerServiceRouter kafkaProducerServiceRouter(KafkaProducerService<String, DatasourceErrorLog> datasourceErrorLogKafkaProducerService, KafkaProducerService<String, TimeLimitExceedLog> timeLimitExceedLogKafkaProducerService){
-        return new KafkaProducerServiceRouterManager(datasourceErrorLogKafkaProducerService, timeLimitExceedLogKafkaProducerService);
+    public StarterKafkaProducerServiceRouter kafkaProducerServiceRouter(StarterKafkaProducerService<String, DatasourceErrorLog> datasourceErrorLogStarterKafkaProducerService, StarterKafkaProducerService<String, TimeLimitExceedLog> timeLimitExceedLogStarterKafkaProducerService){
+        return new StarterKafkaProducerServiceRouterManager(datasourceErrorLogStarterKafkaProducerService, timeLimitExceedLogStarterKafkaProducerService);
     }
 
     @Bean

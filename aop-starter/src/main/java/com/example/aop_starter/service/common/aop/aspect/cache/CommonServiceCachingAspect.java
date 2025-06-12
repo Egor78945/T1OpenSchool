@@ -1,6 +1,6 @@
 package com.example.aop_starter.service.common.aop.aspect.cache;
 
-import com.example.aop_starter.exception.ProcessingException;
+import com.example.aop_starter.exception.StarterProcessingException;
 import com.example.aop_starter.service.common.aop.annotation.Cached;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -29,7 +29,7 @@ public class CommonServiceCachingAspect {
         }
         Object originalObject = joinPoint.proceed();
         if (!(originalObject instanceof Serializable)) {
-            throw new ProcessingException(String.format("cacheable object is not serializable\nObject : %s", originalObject.getClass().getSimpleName()));
+            throw new StarterProcessingException(String.format("cacheable object is not serializable\nObject : %s", originalObject.getClass().getSimpleName()));
         }
         cacheService.opsForHash().put(cacheKey, hashKey, originalObject);
         return originalObject;
