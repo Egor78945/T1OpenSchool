@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: v2-1
+      author: egor_petrov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: time_limit_exceed_log
+      changes:
+        - createTable:
+            tableName: time_limit_exceed_log
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    unique: true
+                  autoIncrement: true
+              - column:
+                  name: class
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: method
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: runtime
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: timestamp
+                  constraints:
+                    nullable: false

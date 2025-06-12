@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: aop-starter
+
+  liquibase:
+    change-log: /db/changelog/main/main-changelog.yml
+    enabled: true
+
+kafka:
+  topic:
+    replication-factor: 2
+    metric:
+      name: t1-demo-metric
