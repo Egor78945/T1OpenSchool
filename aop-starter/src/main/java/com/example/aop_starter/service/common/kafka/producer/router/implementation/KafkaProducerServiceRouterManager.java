@@ -1,10 +1,10 @@
-package com.example.aop_starter.service.kafka.producer.router.implementation;
+package com.example.aop_starter.service.common.kafka.producer.router.implementation;
 
 import com.example.aop_starter.exception.NotFoundException;
 import com.example.aop_starter.model.log.entity.DatasourceErrorLog;
 import com.example.aop_starter.model.log.entity.TimeLimitExceedLog;
-import com.example.aop_starter.service.kafka.producer.KafkaProducerService;
-import com.example.aop_starter.service.kafka.producer.router.KafkaProducerServiceRouter;
+import com.example.aop_starter.service.common.kafka.producer.KafkaProducerService;
+import com.example.aop_starter.service.common.kafka.producer.router.KafkaProducerServiceRouter;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;

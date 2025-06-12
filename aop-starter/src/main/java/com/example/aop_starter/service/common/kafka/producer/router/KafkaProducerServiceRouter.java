@@ -1,7 +1,7 @@
-package com.example.aop_starter.service.kafka.producer.router;
+package com.example.aop_starter.service.common.kafka.producer.router;
 
 
-import com.example.aop_starter.service.kafka.producer.KafkaProducerService;
+import com.example.aop_starter.service.common.kafka.producer.KafkaProducerService;
 
 import java.io.Serializable;
 
