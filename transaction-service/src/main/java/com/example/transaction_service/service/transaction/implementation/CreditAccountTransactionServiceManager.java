@@ -12,12 +12,8 @@ import com.example.transaction_service.repository.AccountRepository;
 import com.example.transaction_service.repository.TransactionRepository;
 import com.example.transaction_service.repository.TransactionStatusRepository;
 import com.example.transaction_service.repository.TransactionTypeRepository;
-import com.example.transaction_service.service.client.AbstractClientService;
-import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
-import com.example.transaction_service.service.common.aop.annotation.Metric;
 import com.example.transaction_service.service.common.authentication.AuthenticationContextService;
 import com.example.transaction_service.service.transaction.AbstractCreditAccountTransactionService;
-import com.example.transaction_service.service.transaction.builder.AbstractAccountTransactionBuilderService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -36,8 +32,6 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    @LogDatasourceError
-    @Metric
     public Transaction insert(Transaction transaction) {
         Account recipient = transaction.getRecipient();
         if (isValidInsert(transaction)) {
@@ -51,8 +45,6 @@ public class CreditAccountTransactionServiceManager extends AbstractCreditAccoun
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    @LogDatasourceError
-    @Metric
     public Transaction transfer(Transaction transaction) {
         Account recipient = transaction.getRecipient();
         Account sender = transaction.getSender();

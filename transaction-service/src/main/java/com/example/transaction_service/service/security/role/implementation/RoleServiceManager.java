@@ -1,5 +1,6 @@
 package com.example.transaction_service.service.security.role.implementation;
 
+import com.example.aop_starter.service.common.aop.annotation.Cached;
 import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.model.role.entity.Role;
 import com.example.transaction_service.repository.RoleRepository;
@@ -15,6 +16,7 @@ public class RoleServiceManager implements RoleService<Role> {
     }
 
     @Override
+    @Cached
     public Role getById(long id) {
         return roleRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("role is not found by id\nid : %s", id)));
     }

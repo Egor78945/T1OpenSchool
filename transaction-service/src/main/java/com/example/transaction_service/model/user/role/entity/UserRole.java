@@ -4,11 +4,12 @@ import com.example.transaction_service.model.role.entity.Role;
 import com.example.transaction_service.model.user.entity.User;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users_roles")
-public class UserRole {
+public class UserRole implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

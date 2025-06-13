@@ -1,0 +1,18 @@
+spring:
+
+  application:
+    name: aop-starter
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    change-log: /db/changelog/starter-main/starter-main-changelog.yml
+    enabled: true
+
+kafka:
+  topic:
+    replication-factor: 2
+    metric:
+      name: t1-demo-metric

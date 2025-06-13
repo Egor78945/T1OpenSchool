@@ -12,16 +12,6 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 public class KafkaTransactionManagementConfiguration {
-//    @Bean
-//    public PlatformTransactionManager kafkaDatasourceErrorLogTransactionManager(ProducerFactory<String, DatasourceErrorLog> producerFactory){
-//        return new KafkaTransactionManager<>(producerFactory);
-//    }
-//
-//    @Bean
-//    public PlatformTransactionManager kafkaTimeLimitExceedLogTransactionManager(ProducerFactory<String, TimeLimitExceedLog> producerFactory){
-//        return new KafkaTransactionManager<>(producerFactory);
-//    }
-//
     @Bean
     public PlatformTransactionManager kafkaTransactionTransactionManager(ProducerFactory<String, Transaction> producerFactory){
         return new KafkaTransactionManager<>(producerFactory);

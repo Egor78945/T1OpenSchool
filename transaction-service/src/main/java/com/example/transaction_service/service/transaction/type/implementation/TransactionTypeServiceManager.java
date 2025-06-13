@@ -1,9 +1,9 @@
 package com.example.transaction_service.service.transaction.type.implementation;
 
+import com.example.aop_starter.service.common.aop.annotation.Cached;
 import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.model.transaction.type.entity.TransactionType;
 import com.example.transaction_service.repository.TransactionTypeRepository;
-import com.example.transaction_service.service.common.aop.annotation.Cached;
 import com.example.transaction_service.service.transaction.type.TransactionTypeService;
 import org.springframework.stereotype.Service;
 

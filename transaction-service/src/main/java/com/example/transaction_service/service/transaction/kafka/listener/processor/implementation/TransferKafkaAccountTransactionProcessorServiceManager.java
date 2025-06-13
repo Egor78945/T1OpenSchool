@@ -56,8 +56,9 @@ public class TransferKafkaAccountTransactionProcessorServiceManager extends Abst
             return;
         }
         try {
-            kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.TRANSFER.toString(), transactionService.insert(transaction)));
-        } catch (TransactionException e) {
+            transaction = transactionService.transfer(transaction);
+            kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.TRANSFER.toString(), transaction));
+        } catch (Exception e) {
             reject(transaction);
         }
     }
@@ -93,6 +94,6 @@ public class TransferKafkaAccountTransactionProcessorServiceManager extends Abst
     @Override
     protected void reject(Transaction transaction) {
         transaction.setTransactionStatus(transactionStatusService.getById(TransactionStatusEnumeration.REJECTED.getId()));
-        accountTransactionServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.DEBIT).save(transaction);
+        accountTransactionServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.DEBIT).update(transaction);
     }
 }

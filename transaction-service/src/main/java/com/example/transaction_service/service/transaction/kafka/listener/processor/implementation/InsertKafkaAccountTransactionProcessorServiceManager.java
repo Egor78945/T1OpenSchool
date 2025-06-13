@@ -34,6 +34,7 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -55,8 +56,9 @@ public class InsertKafkaAccountTransactionProcessorServiceManager extends Abstra
             return;
         }
         try {
-            kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.INSERT.toString(), transactionService.insert(transaction)));
-        } catch (TransactionException e) {
+            transaction = transactionService.insert(transaction);
+            kafkaProducerService.send(new ProducerRecord<>(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION_ACCEPT(), TransactionTypeEnumeration.INSERT.toString(), transaction));
+        } catch (Exception e) {
             reject(transaction);
         }
     }
@@ -93,6 +95,6 @@ public class InsertKafkaAccountTransactionProcessorServiceManager extends Abstra
     @Override
     protected void reject(Transaction transaction) {
         transaction.setTransactionStatus(transactionStatusService.getById(TransactionStatusEnumeration.REJECTED.getId()));
-        accountTransactionServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.DEBIT).save(transaction);
+        accountTransactionServiceRouter.getByAccountTypeEnumeration(AccountTypeEnumeration.DEBIT).update(transaction);
     }
 }
