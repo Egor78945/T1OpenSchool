@@ -4,9 +4,7 @@ import com.example.aop_starter.model.log.entity.DatasourceErrorLog;
 import com.example.aop_starter.service.common.kafka.producer.StarterKafkaProducerService;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
 
-@Service
 public class DatasourceErrorLogStarterKafkaProducerService implements StarterKafkaProducerService<String, DatasourceErrorLog> {
     private final KafkaTemplate<String, DatasourceErrorLog> kafkaTemplate;
 

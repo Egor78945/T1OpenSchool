@@ -1,9 +1,14 @@
 spring:
+
   application:
     name: aop-starter
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
 
   liquibase:
-    change-log: /db/changelog/main/main-changelog.yml
+    change-log: /db/changelog/starter-main/starter-main-changelog.yml
     enabled: true
 
 kafka:

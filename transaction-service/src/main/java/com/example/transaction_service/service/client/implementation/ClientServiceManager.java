@@ -2,12 +2,9 @@ package com.example.transaction_service.service.client.implementation;
 
 import com.example.transaction_service.exception.AuthenticationException;
 import com.example.transaction_service.exception.NotFoundException;
-import com.example.transaction_service.exception.ProcessingException;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.repository.ClientRepository;
 import com.example.transaction_service.service.client.AbstractClientService;
-import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
-import com.example.transaction_service.service.common.aop.annotation.Metric;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -22,8 +19,6 @@ public class ClientServiceManager extends AbstractClientService<Client> {
     }
 
     @Override
-    @LogDatasourceError
-    @Metric
     public Client save(Client client) {
         if (client.getId() == null && client.getClient_id() == null) {
             client.setClient_id(buildUUID());

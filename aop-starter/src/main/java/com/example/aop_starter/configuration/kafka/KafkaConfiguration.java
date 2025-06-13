@@ -4,17 +4,14 @@ import com.example.aop_starter.configuration.kafka.properties.KafkaProperties;
 import com.example.aop_starter.configuration.kafka.properties.SpringKafkaProperties;
 import com.example.aop_starter.model.log.entity.DatasourceErrorLog;
 import com.example.aop_starter.model.log.entity.TimeLimitExceedLog;
-import com.example.aop_starter.service.common.kafka.producer.StarterKafkaProducerService;
 import com.example.aop_starter.service.common.kafka.producer.implementation.DatasourceErrorLogStarterKafkaProducerService;
 import com.example.aop_starter.service.common.kafka.producer.implementation.TimeLimitExceedLogStarterKafkaProducerService;
-import com.example.aop_starter.service.common.kafka.producer.router.StarterKafkaProducerServiceRouter;
 import com.example.aop_starter.service.common.kafka.producer.router.implementation.StarterKafkaProducerServiceRouterManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +34,11 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    public ObjectMapper jsonMapper() {
+        return new JsonMapper();
+    }
+
+    @Bean
     public NewTopic t1_demo_metricsTopic(KafkaProperties kafkaProperties) {
         return TopicBuilder
                 .name(kafkaProperties.getMetric().getName())
@@ -47,7 +48,6 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public ProducerFactory<String, DatasourceErrorLog> datasourceErrorLogKafkaProducer(ObjectMapper objectMapper) {
         DefaultKafkaProducerFactory<String, DatasourceErrorLog> producerFactory = new DefaultKafkaProducerFactory<>(buildAtMostOnceProducerProperties());
         producerFactory.setValueSerializer(new JsonSerializer<>(objectMapper));
@@ -56,7 +56,6 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public ProducerFactory<String, TimeLimitExceedLog> timeLimitExceedLogKafkaProducer(ObjectMapper objectMapper) {
         DefaultKafkaProducerFactory<String, TimeLimitExceedLog> producerFactory = new DefaultKafkaProducerFactory<>(buildAtMostOnceProducerProperties());
         producerFactory.setValueSerializer(new JsonSerializer<>(objectMapper));
@@ -65,39 +64,28 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public KafkaTemplate<String, DatasourceErrorLog> datasourceErrorLogKafkaTemplate(ProducerFactory<String, DatasourceErrorLog> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public KafkaTemplate<String, TimeLimitExceedLog> timeLimitExceedLogKafkaTemplate(ProducerFactory<String, TimeLimitExceedLog> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public StarterKafkaProducerService<String, DatasourceErrorLog> datasourceErrorLogKafkaProducerService(KafkaTemplate<String, DatasourceErrorLog> datasourceErrorLogKafkaTemplate){
+    public DatasourceErrorLogStarterKafkaProducerService datasourceErrorLogStarterKafkaProducerService(KafkaTemplate<String, DatasourceErrorLog> datasourceErrorLogKafkaTemplate){
         return new DatasourceErrorLogStarterKafkaProducerService(datasourceErrorLogKafkaTemplate);
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public StarterKafkaProducerService<String, TimeLimitExceedLog> timeLimitExceedLogKafkaProducerService(KafkaTemplate<String, TimeLimitExceedLog> timeLimitExceedLogKafkaTemplate){
+    public TimeLimitExceedLogStarterKafkaProducerService timeLimitExceedLogStarterKafkaProducerService(KafkaTemplate<String, TimeLimitExceedLog> timeLimitExceedLogKafkaTemplate){
         return new TimeLimitExceedLogStarterKafkaProducerService(timeLimitExceedLogKafkaTemplate);
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public StarterKafkaProducerServiceRouter kafkaProducerServiceRouter(StarterKafkaProducerService<String, DatasourceErrorLog> datasourceErrorLogStarterKafkaProducerService, StarterKafkaProducerService<String, TimeLimitExceedLog> timeLimitExceedLogStarterKafkaProducerService){
+    public StarterKafkaProducerServiceRouterManager kafkaProducerServiceRouter(DatasourceErrorLogStarterKafkaProducerService datasourceErrorLogStarterKafkaProducerService, TimeLimitExceedLogStarterKafkaProducerService timeLimitExceedLogStarterKafkaProducerService){
         return new StarterKafkaProducerServiceRouterManager(datasourceErrorLogStarterKafkaProducerService, timeLimitExceedLogStarterKafkaProducerService);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public ObjectMapper jsonMapper() {
-        return new JsonMapper();
     }
 
     private Map<String, Object> buildAtMostOnceProducerProperties() {

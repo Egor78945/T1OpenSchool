@@ -4,10 +4,7 @@ import com.example.aop_starter.model.log.entity.TimeLimitExceedLog;
 import com.example.aop_starter.service.common.kafka.producer.StarterKafkaProducerService;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
 
-
-@Service
 public class TimeLimitExceedLogStarterKafkaProducerService implements StarterKafkaProducerService<String, TimeLimitExceedLog> {
     private final KafkaTemplate<String, TimeLimitExceedLog> kafkaTemplate;
 

@@ -25,7 +25,7 @@ public class RequestTransactionKafkaListenerService implements KafkaListenerServ
     private final TransactionStatusService<TransactionStatus> transactionStatusService;
     private final AbstractKafkaAccountTransactionProcessorServiceRouter<String, Transaction> kafkaAccountTransactionProcessorServiceRouter;
 
-    public RequestTransactionKafkaListenerService(@Qualifier("accountTransactionServiceRouterManager") AccountTransactionServiceRouter<AbstractAccountTransactionService<Transaction>> accountTransactionServiceRouter, @Qualifier("transactionStatusServiceManager") TransactionStatusService<TransactionStatus> transactionStatusService, @Qualifier("kafkaAccountTransactionProcessorServiceManager") AbstractKafkaAccountTransactionProcessorServiceRouter<String, Transaction> kafkaAccountTransactionProcessorServiceRouter) {
+    public RequestTransactionKafkaListenerService(@Qualifier("accountTransactionServiceRouterManager") AccountTransactionServiceRouter<AbstractAccountTransactionService<Transaction>> accountTransactionServiceRouter, @Qualifier("transactionStatusServiceManager") TransactionStatusService<TransactionStatus> transactionStatusService, @Qualifier("kafkaAccountTransactionProcessorServiceRouterManager") AbstractKafkaAccountTransactionProcessorServiceRouter<String, Transaction> kafkaAccountTransactionProcessorServiceRouter) {
         this.accountTransactionServiceRouter = accountTransactionServiceRouter;
         this.transactionStatusService = transactionStatusService;
         this.kafkaAccountTransactionProcessorServiceRouter = kafkaAccountTransactionProcessorServiceRouter;

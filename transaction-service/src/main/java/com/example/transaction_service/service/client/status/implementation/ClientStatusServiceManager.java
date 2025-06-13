@@ -1,10 +1,10 @@
 package com.example.transaction_service.service.client.status.implementation;
 
+import com.example.aop_starter.service.common.aop.annotation.Cached;
 import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.model.client.status.entity.ClientStatus;
 import com.example.transaction_service.repository.ClientStatusRepository;
 import com.example.transaction_service.service.client.status.ClientStatusService;
-import com.example.transaction_service.service.common.aop.annotation.Cached;
 import org.springframework.stereotype.Service;
 
 @Service

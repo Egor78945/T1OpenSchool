@@ -13,10 +13,10 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class KafkaAccountTransactionProcessorServiceManager implements AbstractKafkaAccountTransactionProcessorServiceRouter<String, Transaction> {
+public class KafkaAccountTransactionProcessorServiceRouterManager implements AbstractKafkaAccountTransactionProcessorServiceRouter<String, Transaction> {
     private final Map<TransactionTypeEnumeration, AbstractKafkaAccountTransactionProcessorService<String, Transaction>> transactionProcessorServiceMap;
 
-    public KafkaAccountTransactionProcessorServiceManager(InsertKafkaAccountTransactionProcessorServiceManager insertProcessor, TransferKafkaAccountTransactionProcessorServiceManager transferProcessor) {
+    public KafkaAccountTransactionProcessorServiceRouterManager(InsertKafkaAccountTransactionProcessorServiceManager insertProcessor, TransferKafkaAccountTransactionProcessorServiceManager transferProcessor) {
         this.transactionProcessorServiceMap = Map.of(TransactionTypeEnumeration.INSERT, insertProcessor, TransactionTypeEnumeration.TRANSFER, transferProcessor);
     }
 

@@ -5,14 +5,11 @@ import com.example.aop_starter.model.log.entity.DatasourceErrorLog;
 import com.example.aop_starter.model.log.entity.TimeLimitExceedLog;
 import com.example.aop_starter.service.common.kafka.producer.StarterKafkaProducerService;
 import com.example.aop_starter.service.common.kafka.producer.router.StarterKafkaProducerServiceRouter;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
 
-
-@Component
 public class StarterKafkaProducerServiceRouterManager implements StarterKafkaProducerServiceRouter {
     private final Map<Class<? extends Serializable>, StarterKafkaProducerService<? extends Serializable, ? extends Serializable>> kafkaProducerServiceMap;
 

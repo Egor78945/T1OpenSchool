@@ -1,7 +1,6 @@
 package com.example.transaction_service.service.account.implementation;
 
 import com.example.transaction_service.exception.InvalidDataException;
-import com.example.transaction_service.exception.NotFoundException;
 import com.example.transaction_service.model.account.entity.Account;
 import com.example.transaction_service.model.account.status.entity.AccountStatus;
 import com.example.transaction_service.model.account.type.entity.AccountType;
@@ -10,12 +9,8 @@ import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.repository.AccountRepository;
 import com.example.transaction_service.repository.AccountStatusRepository;
 import com.example.transaction_service.repository.AccountTypeRepository;
-import com.example.transaction_service.repository.ClientRepository;
 import com.example.transaction_service.service.account.AbstractDebitAccountService;
 import com.example.transaction_service.service.client.AbstractClientService;
-import com.example.transaction_service.service.common.aop.annotation.Cached;
-import com.example.transaction_service.service.common.aop.annotation.LogDatasourceError;
-import com.example.transaction_service.service.common.aop.annotation.Metric;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +28,6 @@ public class DebitAccountServiceManager extends AbstractDebitAccountService<Acco
     }
 
     @Override
-    @LogDatasourceError
-    @Metric
     public UUID save(UUID clientId, AccountType accountType, AccountStatus accountStatus) {
         Client client = clientService.getByClientId(clientId);
         if (accountType.getId() == AccountTypeEnumeration.DEBIT.getId() && accountRepository.findAccountCountByClientIdAndAccountTypeId(clientId, AccountTypeEnumeration.DEBIT.getId()) < 1) {

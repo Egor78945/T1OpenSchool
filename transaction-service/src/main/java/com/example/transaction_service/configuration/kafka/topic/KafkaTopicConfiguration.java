@@ -18,15 +18,6 @@ public class KafkaTopicConfiguration {
     }
 
     @Bean
-    public NewTopic t1_demo_metricsTopic() {
-        return TopicBuilder
-                .name(kafkaEnvironment.getKAFKA_TOPIC_METRIC_NAME())
-                .replicas(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
-                .partitions(kafkaEnvironment.getKAFKA_TOPIC_REPLICATION_FACTOR())
-                .build();
-    }
-
-    @Bean
     public NewTopic t1_demo_transaction() {
         return TopicBuilder
                 .name(kafkaEnvironment.getKAFKA_TOPIC_TRANSACTION())
