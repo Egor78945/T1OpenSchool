@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ${BLOCKING_SERVICE_HOST}
+
+server:
+  port: ${BLOCKING_SERVICE_PORT_INNER}
