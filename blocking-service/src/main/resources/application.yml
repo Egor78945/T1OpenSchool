@@ -1,6 +1,11 @@
 spring:
   application:
     name: ${BLOCKING_SERVICE_HOST}
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT_INNER}/${POSTGRES_DATABASE_NAME}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
 
 server:
   port: ${BLOCKING_SERVICE_PORT_INNER}

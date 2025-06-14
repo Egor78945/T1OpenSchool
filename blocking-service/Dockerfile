@@ -1,0 +1,10 @@
+ARG JAVA_VERSION
+ARG BLOCKING_SERVICE_PORT_OUTER
+
+FROM openjdk:$JAVA_VERSION
+
+COPY build/libs/*.jar app.jar
+
+EXPOSE $BLOCKING_SERVICE_PORT_OUTER
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,6 +1,8 @@
 package com.example.transaction_service.repository;
 
 import com.example.transaction_service.model.account.entity.Account;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,4 +48,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "join fetch a.accountType " +
             "join fetch a.accountStatus where a.accountId=:accountId")
     Optional<Account> findAccountByAccountId(@Param("accountId") UUID accountId);
+
+    @Query("from Account where accountStatus.id=:accountStatusId")
+    List<Account> findAccountByAccountStatusIdAndLimit(@Param("accountStatusId") long accountStatusId, Pageable pageable);
 }

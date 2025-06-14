@@ -1,8 +1,7 @@
 package com.example.transaction_service.service.transaction.kafka.listener.processor.implementation;
 
-import com.example.transaction_service.environment.client.WebClientEnvironment;
+import com.example.transaction_service.environment.web.WebClientEnvironment;
 import com.example.transaction_service.environment.kafka.KafkaEnvironment;
-import com.example.transaction_service.exception.TransactionException;
 import com.example.transaction_service.model.account.entity.Account;
 import com.example.transaction_service.model.account.status.entity.AccountStatus;
 import com.example.transaction_service.model.account.status.entity.enumeration.AccountStatusEnumeration;
@@ -26,15 +25,10 @@ import com.example.transaction_service.service.transaction.AbstractAccountTransa
 import com.example.transaction_service.service.transaction.kafka.listener.processor.AbstractKafkaAccountTransactionProcessorService;
 import com.example.transaction_service.service.transaction.router.AccountTransactionServiceRouter;
 import com.example.transaction_service.service.transaction.status.TransactionStatusService;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.ClassicHttpRequest;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.ParseException;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

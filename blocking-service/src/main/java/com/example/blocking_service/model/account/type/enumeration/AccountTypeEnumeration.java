@@ -1,6 +1,8 @@
 package com.example.blocking_service.model.account.type.enumeration;
 
-import com.example.transaction_service.exception.NotFoundException;
+
+
+import com.example.blocking_service.exception.NotFoundException;
 
 import java.util.Map;
 import java.util.Optional;

@@ -3,7 +3,9 @@ package com.example.transaction_service.service.client;
 import com.example.transaction_service.exception.ProcessingException;
 import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.repository.ClientRepository;
+import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -36,6 +38,8 @@ public abstract class AbstractClientService<C extends Client> {
 
     public abstract C getByUserId(long userId);
     public abstract C getByUserEmail(String email);
+    public abstract boolean existsByClientId(UUID clientId);
+
     /**
      * Проверить, существует ли клиент {@link Client} по Id
      * @param id Id потенциально существующего клиента {@link Client}
@@ -45,7 +49,9 @@ public abstract class AbstractClientService<C extends Client> {
         return clientRepository.existsById(id);
     }
 
-    public abstract boolean existsByClientId(UUID clientId);
+    public List<Client> getByClientStatusIdAndCount(long clientStatusId, int count){
+        return clientRepository.findClientByClientStatusIdAndCount(clientStatusId, PageRequest.ofSize(count));
+    }
 
     public UUID buildUUID(){
         UUID uuid = UUID.randomUUID();
