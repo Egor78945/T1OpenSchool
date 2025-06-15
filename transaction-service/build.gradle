@@ -36,8 +36,8 @@ dependencies {
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.apache.httpcomponents.client5:httpclient5'
 	implementation 'com.example:aop-starter:0.0.1-SNAPSHOT'
-
-	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 
 	runtimeOnly 'org.postgresql:postgresql'
 

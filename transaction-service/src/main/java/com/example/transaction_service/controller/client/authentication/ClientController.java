@@ -26,16 +26,6 @@ public class ClientController {
         this.userAuthenticationContextService = userAuthenticationContextService;
     }
 
-    /**
-     * Метод, выполняющий регистрацию нового клиента
-     *
-     * @return <b>UUID</b> идентификатор новосозданного клиента
-     */
-//    @PostMapping("/registration")
-//    public ResponseEntity<String> registration(@RequestBody @Valid ClientDTO clientDTO) {
-//        return ResponseEntity.ok(clientAuthenticationService.registration(ClientMapper.mapTo(clientDTO)).getClient_id().toString());
-//    }
-
     @GetMapping
     public ResponseEntity<Client> getByUserEmail() {
         return ResponseEntity.ok(clientService.getByUserEmail(userAuthenticationContextService.getCurrentAuthentication().getEmail()));

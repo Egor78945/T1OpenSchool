@@ -41,9 +41,4 @@ public class RedisConfiguration {
         redisStandaloneConfiguration.setPassword(RedisPassword.of(redisEnvironment.getREDIS_PASSWORD()));
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
-
-    @Bean
-    public JsonMapper jsonMapper(){
-        return new JsonMapper();
-    }
 }

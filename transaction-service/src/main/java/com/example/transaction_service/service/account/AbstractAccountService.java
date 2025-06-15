@@ -10,6 +10,8 @@ import com.example.transaction_service.model.client.entity.Client;
 import com.example.transaction_service.model.account.type.enumeration.AccountTypeEnumeration;
 import com.example.transaction_service.repository.AccountStatusRepository;
 import com.example.transaction_service.repository.AccountTypeRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -66,6 +68,10 @@ public abstract class AbstractAccountService<A extends Account> {
 
     public Account getByAccountId(UUID id) {
         return accountRepository.findAccountByAccountId(id).orElseThrow(() -> new NotFoundException(String.format("account by account id is not found\naccount id : %s", id)));
+    }
+
+    public List<Account> getByAccountStatusIdAndCount(long accountStatusId, int count){
+        return accountRepository.findAccountByAccountStatusIdAndLimit(accountStatusId, PageRequest.ofSize(count));
     }
 
     public UUID buildUUID(){
