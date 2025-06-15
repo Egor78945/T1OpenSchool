@@ -51,4 +51,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("from Account where accountStatus.id=:accountStatusId")
     List<Account> findAccountByAccountStatusIdAndLimit(@Param("accountStatusId") long accountStatusId, Pageable pageable);
+
+    @Query("select count(*) from Account where accountStatus.id=:accountStatusId")
+    long findAccountCountByAccountStatusId(@Param("accountStatusId") long accountStatusId);
 }

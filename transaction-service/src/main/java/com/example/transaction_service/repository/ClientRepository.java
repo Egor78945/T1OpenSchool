@@ -42,4 +42,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     
     @Query("from Client where client_status_id.id=:clientStatusId")
     List<Client> findClientByClientStatusIdAndCount(@Param("clientStatusId") long clientStatusId, Pageable pageable);
+
+    @Query("select count(*) from Client where client_status_id.id=:clientStatusId")
+    long findCountClientsByClientStatusId(@Param("clientStatusId") long clientStatusId);
 }

@@ -25,9 +25,12 @@ services:
         JAVA_VERSION: ${JAVA_VERSION}
         TRANSACTION_SERVICE_PORT_OUTER: ${TRANSACTION_SERVICE_PORT_OUTER}
     restart: on-failure
-#    depends_on:
-#      - postgres
-#      - redis
+    depends_on:
+      - postgres
+      - redis
+      - zookeeper
+      - kafka1
+      - kafka2
     env_file:
       - ./env/transaction-service.env
       - ./env/redis.env
@@ -48,8 +51,7 @@ services:
         TRANSACTION_SERVICE_PORT_OUTER: ${TRANSACTION_MANAGER_SERVICE_PORT_OUTER}
     restart: on-failure
     depends_on:
-      - postgres
-      - redis
+      - transaction-service
     env_file:
       - ./env/transaction-service.env
       - ./env/redis.env
@@ -68,6 +70,8 @@ services:
         JAVA_VERSION: ${JAVA_VERSION}
         BLOCKING_SERVICE_PORT_OUTER: ${BLOCKING_SERVICE_PORT_OUTER}
     restart: on-failure
+    depends_on:
+      - transaction-service
     env_file:
       - .env
     ports:
@@ -120,7 +124,7 @@ services:
     hostname: ${KAFKA2_HOST}
     container_name: ${KAFKA2_HOST}
     depends_on:
-      - zookeeper
+      - kafka1
     ports:
       - ${KAFKA2_PORT_PLAINTEXT_OUTER}:${KAFKA2_PORT_PLAINTEXT_INNER}
       - ${KAFKA2_PORT_OUTER}:${KAFKA2_PORT_INNER}
@@ -133,3 +137,30 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  prometheus:
+    image: prom/prometheus
+    container_name: ${PROMETHEUS_HOST}
+    depends_on:
+      - transaction-service
+    volumes:
+      - ./configuration/prometheus:/etc/prometheus/
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - ${PROMETHEUS_PORT_OUTER}:${PROMETHEUS_PORT_INNER}
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: ${GRAFANA_HOST}
+    depends_on:
+      - prometheus
+    volumes:
+      - ./configuration/grafana/provisioning/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./configuration/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./configuration/grafana/datasources/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    ports:
+      - ${GRAFANA_PORT_OUTER}:${GRAFANA_PORT_INNER}

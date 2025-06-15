@@ -81,6 +81,18 @@ kafka:
       name: ${KAFKA_TOPIC_TRANSACTION_RESULT}
       transaction-id: transaction-result-transaction-id
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  endpoint:
+    prometheus:
+      access: unrestricted
 
 server:
   port: ${TRANSACTION_SERVICE_PORT_INNER}
