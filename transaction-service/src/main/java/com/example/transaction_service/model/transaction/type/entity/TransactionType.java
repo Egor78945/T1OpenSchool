@@ -18,7 +18,8 @@ public class TransactionType implements Serializable {
     @Column(name = "name")
     private String name;
 
-    public TransactionType(String name) {
+    public TransactionType(long id, String name) {
+        this.id = id;
         this.name = name;
     }
 
