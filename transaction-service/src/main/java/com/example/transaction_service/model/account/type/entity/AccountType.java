@@ -18,7 +18,8 @@ public class AccountType implements Serializable {
     @Column(name = "name")
     private String name;
 
-    public AccountType(String name) {
+    public AccountType(long id, String name) {
+        this.id = id;
         this.name = name;
     }
 

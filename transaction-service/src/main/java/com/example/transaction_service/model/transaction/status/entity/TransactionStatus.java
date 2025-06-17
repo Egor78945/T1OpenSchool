@@ -17,7 +17,8 @@ public class TransactionStatus implements Serializable {
     @Column(name = "name")
     private String name;
 
-    public TransactionStatus(String name) {
+    public TransactionStatus(long id, String name) {
+        this.id = id;
         this.name = name;
     }
 

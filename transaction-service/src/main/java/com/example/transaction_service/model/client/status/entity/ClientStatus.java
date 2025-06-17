@@ -15,7 +15,8 @@ public class ClientStatus implements Serializable {
     @Column(name = "name")
     private String name;
 
-    public ClientStatus(String name) {
+    public ClientStatus(long id, String name) {
+        this.id = id;
         this.name = name;
     }
 
